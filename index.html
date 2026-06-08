@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>PMB UTDI 2026 – Pendaftaran Mahasiswa Baru</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -308,6 +308,117 @@ footer{background:#040c1f;color:rgba(255,255,255,0.7);padding:48px 5% 24px;}
   .hero h1{font-size:2.2rem;}
   .nav-links{display:none;}
   .footer-grid{grid-template-columns:1fr 1fr;}
+}
+
+/* ═══ MOBILE FIXES (max-width: 480px) ═══ */
+@media(max-width:480px){
+  /* NAV */
+  nav{padding:0 4%;height:58px;}
+  .nav-logo-text{display:none;}
+  .nav-cta{padding:8px 14px;font-size:0.8rem;}
+
+  /* HERO */
+  .hero{padding:80px 4% 48px;}
+  .hero h1{font-size:1.75rem;line-height:1.15;}
+  .hero-sub{font-size:0.88rem;}
+  .hero-btns{flex-direction:column;gap:10px;}
+  .btn-main,.btn-sec{width:100%;justify-content:center;padding:13px 20px;}
+  .hero-stats{gap:14px;justify-content:space-between;}
+  .hstat-num{font-size:1.2rem;}
+  .hstat-label{font-size:0.65rem;}
+  .sdivider{display:none;}
+
+  /* HERO GELOMBANG CARD */
+  .gel-status-card{padding:18px;}
+  .gel-item{padding:10px 12px;}
+  .gel-name{font-size:0.8rem;}
+  .gel-dates{font-size:0.7rem;}
+  .gel-cut{font-size:0.68rem;}
+
+  /* WIZARD SECTION */
+  .wizard-section{padding:48px 4%;}
+  .section-title{font-size:1.5rem;}
+
+  /* WIZARD PROGRESS - compact on mobile */
+  .wizard-progress{gap:0;margin-bottom:32px;}
+  .wp-circle{width:36px;height:36px;font-size:0.85rem;}
+  .wp-circle svg{width:14px;height:14px;}
+  .wp-label{font-size:0.6rem;max-width:44px;text-align:center;overflow:hidden;white-space:normal;word-break:break-word;}
+  .wp-line{margin-bottom:18px;}
+
+  /* GELOMBANG CARDS - 1 column */
+  .gel-cards{grid-template-columns:1fr;}
+
+  /* SKEMA CARDS - 1 column */
+  .skema-cards{grid-template-columns:1fr;}
+  .skema-card{padding:18px 16px;text-align:left;display:flex;align-items:flex-start;gap:14px;}
+  .skema-icon{margin-bottom:0;flex-shrink:0;}
+  .skema-icon svg{width:28px;height:28px;}
+
+  /* JALUR GRID - 1 column */
+  .jalur-grid{grid-template-columns:1fr;}
+
+  /* PRODI GRID - 1 column */
+  .prodi-grid{grid-template-columns:1fr;}
+  .prodi-card{display:flex;align-items:flex-start;gap:14px;padding:16px;}
+  .prodi-icon{flex-shrink:0;margin-bottom:0;}
+
+  /* ESTIMASI */
+  .estimasi-layout{gap:20px;}
+  .estimasi-summary,.estimasi-biaya{padding:18px;}
+
+  /* SUBMIT */
+  .submit-layout{gap:20px;}
+  .submit-form{padding:18px;}
+  .form-row{grid-template-columns:1fr;}
+
+  /* CEK BIAYA */
+  .cek-biaya-section{padding:48px 4%;}
+  .cek-form,.cek-result{padding:20px;}
+
+  /* CICILAN */
+  .cicilan-section{padding:48px 4%;}
+
+  /* WIZARD NAV BUTTONS */
+  .wizard-nav{flex-direction:row;gap:10px;}
+  .btn-prev,.btn-next,.btn-submit{font-size:0.82rem;padding:11px 16px;}
+
+  /* STICKY BAR */
+  .sticky-bar{padding:10px 4%;}
+  .sticky-bar p{font-size:0.72rem;}
+  .sticky-bar strong{font-size:0.78rem;}
+  .sticky-bar-btn{padding:9px 16px;font-size:0.8rem;}
+
+  /* FOOTER */
+  .footer-grid{grid-template-columns:1fr;}
+  footer{padding:36px 4% 20px;}
+  .footer-bottom{flex-direction:column;gap:6px;text-align:center;}
+
+  /* BEASISWA SECTION */
+  #beasiswa > div:last-child{grid-template-columns:1fr!important;}
+
+  /* PRODI INFO SECTION (dynamic) */
+  .prodi-info-grid{grid-template-columns:1fr!important;}
+  .prodi-filter-tabs{flex-wrap:wrap;gap:6px;}
+  .pf-tab{font-size:0.78rem;padding:7px 12px;}
+
+  /* JALUR INFO */
+  .jalur-info-grid{grid-template-columns:1fr!important;}
+
+  /* SKEMA INFO */
+  .skema-info-grid{grid-template-columns:1fr!important;}
+
+  /* GENERAL section padding */
+  section[id]{padding-left:4%!important;padding-right:4%!important;}
+  .wizard-header{margin-bottom:28px;}
+
+  /* GEL CARD */
+  .gel-card{padding:16px 14px;}
+  .gel-card-badge{font-size:0.62rem;}
+
+  /* MODAL */
+  .modal-box{padding:32px 24px;}
+  .modal-box h2{font-size:1.2rem;}
 }
 </style>
 </head>
@@ -920,7 +1031,7 @@ footer{background:#040c1f;color:rgba(255,255,255,0.7);padding:48px 5% 24px;}
 
 <!-- STICKY BAR -->
 <div class="sticky-bar">
-  <div><p>PMB UTDI 2026 · Potongan SPA hingga</p><strong>50% — Cukup Bayar 35% SPA saat Registrasi</strong></div>
+  <div><p>PMB UTDI 2026 · Potongan SPA hingga</p><strong>50% — Bayar 35% SPA saat Registrasi</strong></div>
   <button class="sticky-bar-btn" onclick="document.getElementById('pendaftaran').scrollIntoView({behavior:'smooth'})">Mulai Daftar →</button>
 </div>
 
@@ -1251,6 +1362,36 @@ document.getElementById('jalurKIPK').classList.add('disabled');
   .jalur-note-box{background:linear-gradient(135deg,#0d1f5c,#1a2e6e);border-radius:16px;padding:24px 28px;margin-top:28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
   .jalur-note-box p{color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.6;flex:1;}
   .jalur-note-box strong{color:#f5a623;}
+
+  /* ═══ INJECTED MOBILE FIXES ═══ */
+  @media(max-width:480px){
+    /* Skema section */
+    .skema-info-section{padding:48px 4%!important;}
+    .skema-compare-grid{grid-template-columns:1fr!important;gap:16px!important;}
+    .skema-info-header{padding:20px 18px 16px!important;}
+    .skema-info-icon{font-size:2.2rem!important;}
+    .skema-info-header h3{font-size:1rem!important;}
+    .skema-info-body{padding:16px 18px!important;}
+
+    /* Prodi section */
+    .prodi-info-section{padding:48px 4%!important;}
+    .prodi-filter-tabs{width:100%!important;border-radius:12px!important;padding:5px!important;gap:4px!important;}
+    .pf-tab{padding:7px 10px!important;font-size:0.75rem!important;flex:1;text-align:center;}
+    .prodi-info-grid{grid-template-columns:1fr!important;gap:14px!important;}
+    .pic-header{padding:16px!important;}
+    .pic-icon{width:44px!important;height:44px!important;font-size:1.2rem!important;}
+    .pic-meta h3{font-size:0.88rem!important;}
+    .pic-body{padding:14px 16px!important;}
+    .pic-detail{padding:0 16px 14px!important;}
+    .pic-spp-row{flex-direction:column;gap:4px;text-align:center;}
+
+    /* Jalur section */
+    .jalur-info-section{padding:48px 4%!important;}
+    .jalur-info-grid{grid-template-columns:1fr!important;gap:14px!important;}
+    .jalur-info-card{padding:18px!important;}
+    .jalur-note-box{padding:18px!important;gap:12px!important;}
+    .jalur-note-box > div:first-child{display:none;}
+  }
   `;
   document.head.appendChild(style);
 
