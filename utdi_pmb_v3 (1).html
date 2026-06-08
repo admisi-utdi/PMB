@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMB UTDI 2026 – Pendaftaran Mahasiswa Baru</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Design System UTDI */
+  --navy:#1E2A44;--navy2:#253352;
+  --teal:#1E2A44;--teal2:#253352;
+  --accent:#F5B041;--accent2:#e09a2f;
+  --surface:#FFFFFF;--bg:#FAFAF8;
+  --success:#22C55E;--info:#3D5AFE;--warning:#F59E0B;--error:#EF4444;--purple:#AB55F7;
+  --white:#fff;--light:#F4F6FA;--muted:#64748b;--border:#E8EDF5;
+  --dark:#1E2A44;--green:#22C55E;--red:#EF4444;
+  /* Typography */
+  --font:'Poppins',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);color:#1e293b;background:var(--white);overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(30,42,68,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.nav-logo-box{background:var(--accent);color:var(--dark);font-family:var(--font);font-weight:900;font-size:1rem;padding:5px 9px;border-radius:7px;}
+.nav-logo-text{font-size:0.72rem;color:rgba(255,255,255,0.6);line-height:1.3;max-width:120px;}
+.nav-links{display:flex;gap:4px;list-style:none;}
+.nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;font-weight:500;padding:6px 14px;border-radius:8px;transition:all .2s;cursor:pointer;}
+.nav-links a:hover{color:var(--white);background:rgba(255,255,255,0.08);}
+.nav-cta{background:var(--accent);color:var(--dark);border:none;border-radius:8px;padding:9px 20px;font-weight:700;font-size:0.88rem;cursor:pointer;font-family:inherit;transition:all .2s;}
+.nav-cta:hover{background:#d4891a;}
+
+/* HERO */
+.hero{min-height:100vh;background:linear-gradient(135deg,#111827 0%,var(--navy) 55%,#1a3050 100%);position:relative;display:flex;align-items:center;padding:100px 5% 60px;overflow:hidden;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(15,157,140,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(15,157,140,0.06) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-orb1{position:absolute;top:-120px;right:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,0.15) 0%,transparent 65%);pointer-events:none;}
+.hero-orb2{position:absolute;bottom:-150px;left:-60px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(15,157,140,0.13) 0%,transparent 65%);pointer-events:none;}
+.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;width:100%;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.3);color:var(--accent);font-size:0.78rem;font-weight:700;padding:6px 14px;border-radius:20px;margin-bottom:20px;}
+.hero-badge-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-family:var(--font);font-size:3rem;font-weight:900;color:var(--white);line-height:1.1;margin-bottom:14px;}
+.hero h1 .hl-teal{color:var(--teal2);}
+.hero h1 .hl-accent{color:var(--accent);}
+.hero-sub{color:rgba(255,255,255,0.62);font-size:0.98rem;line-height:1.7;margin-bottom:32px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px;}
+.btn-main{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--white);border:none;border-radius:12px;padding:14px 30px;font-weight:700;font-size:0.96rem;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 8px 24px rgba(245,166,35,0.3);display:inline-flex;align-items:center;gap:8px;}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(245,166,35,0.4);}
+.btn-sec{background:rgba(255,255,255,0.08);color:var(--white);border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;padding:13px 26px;font-weight:700;font-size:0.96rem;cursor:pointer;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-sec:hover{background:rgba(255,255,255,0.14);}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap;}
+.hstat{text-align:center;}
+.hstat-num{font-family:var(--font);font-size:1.5rem;font-weight:800;color:var(--white);}
+.hstat-label{font-size:0.73rem;color:rgba(255,255,255,0.48);margin-top:2px;}
+.sdivider{width:1px;background:rgba(255,255,255,0.12);align-self:stretch;}
+
+/* Hero Right - Gelombang Status */
+.gel-status-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:26px;backdrop-filter:blur(10px);}
+.gel-status-title{font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.45);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;}
+.gel-item{padding:12px 14px;border-radius:12px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.06);transition:all .2s;}
+.gel-item.current{background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.4);}
+.gel-item.past{opacity:0.45;}
+.gel-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.gel-name{font-size:0.88rem;font-weight:700;color:var(--white);}
+.gel-chip{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;}
+.chip-active{background:rgba(34,197,94,0.2);color:#4ade80;}
+.chip-khusus{background:rgba(245,166,35,0.2);color:var(--accent);}
+.chip-soon{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);}
+.chip-ended{background:rgba(220,38,38,0.15);color:#f87171;}
+.gel-dates{font-size:0.76rem;color:rgba(255,255,255,0.5);}
+.gel-cut{font-size:0.72rem;font-weight:700;color:var(--accent);margin-top:4px;}
+.hero-card-btn{margin-top:16px;width:100%;background:var(--teal);color:var(--white);border:none;border-radius:12px;padding:12px;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:inherit;transition:all .2s;}
+.hero-card-btn:hover{background:var(--teal2);}
+
+/* ═══ WIZARD SECTION ═══ */
+.wizard-section{padding:80px 5%;background:var(--white);}
+.wizard-header{text-align:center;margin-bottom:48px;}
+.section-label{display:inline-flex;align-items:center;gap:6px;background:rgba(30,42,68,0.1);color:var(--navy);font-size:0.75rem;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+.section-title{font-family:var(--font);font-size:2rem;font-weight:800;color:var(--navy);margin-bottom:10px;}
+.section-sub{color:var(--muted);font-size:0.95rem;line-height:1.6;}
+
+/* Progress Bar */
+.wizard-progress{display:flex;align-items:center;margin-bottom:48px;overflow-x:auto;padding-bottom:4px;}
+.wp-step{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:80px;}
+.wp-circle{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:var(--muted);transition:all .3s;position:relative;}
+.wp-circle.done{background:var(--teal);border-color:var(--teal);color:var(--white);}
+.wp-circle.active{background:var(--navy);border-color:var(--navy);color:var(--white);box-shadow:0 0 0 4px rgba(26,46,110,0.15);}
+.wp-label{font-size:0.7rem;font-weight:600;color:var(--muted);text-align:center;white-space:nowrap;}
+.wp-label.active{color:var(--navy);}
+.wp-label.done{color:var(--teal);}
+.wp-line{flex:1;height:2px;background:var(--border);margin:0 4px;margin-bottom:22px;transition:background .3s;}
+.wp-line.done{background:var(--teal);}
+
+/* Step Panels */
+.wizard-panel{display:none;}
+.wizard-panel.active{display:block;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.step-title{font-family:var(--font);font-size:1.25rem;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.step-sub{font-size:0.88rem;color:var(--muted);margin-bottom:24px;}
+
+/* Gelombang Step */
+.gel-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.gel-card{border:2px solid var(--border);border-radius:16px;padding:22px 18px;cursor:pointer;transition:all .25s;position:relative;background:var(--white);}
+.gel-card:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:0 8px 24px rgba(30,42,68,0.12);}
+.gel-card.selected{border-color:var(--navy);background:rgba(26,46,110,0.03);box-shadow:0 8px 24px rgba(26,46,110,0.12);}
+.gel-card.current-gel{border-color:var(--accent)!important;}
+.gel-card-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:0.68rem;font-weight:700;padding:3px 12px;border-radius:20px;white-space:nowrap;}
+.badge-berjalan{background:var(--accent);color:var(--dark);}
+.badge-khusus{background:var(--navy);color:var(--white);}
+.gel-card-icon{font-size:2rem;margin-bottom:12px;}
+.gel-card h3{font-family:var(--font);font-size:0.95rem;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.gel-card .dates{font-size:0.78rem;color:var(--muted);line-height:1.5;margin-bottom:10px;}
+.gel-card .potongan-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(245,166,35,0.12);border-radius:8px;padding:5px 12px;font-size:0.78rem;font-weight:700;color:var(--accent);}
+.gel-card.past-gel{opacity:0.5;pointer-events:none;}
+
+/* Skema Step */
+.skema-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.skema-card{border:2px solid var(--border);border-radius:16px;padding:26px 22px;text-align:center;cursor:pointer;transition:all .25s;}
+.skema-card:hover{border-color:var(--teal);transform:translateY(-3px);}
+.skema-card.selected{border-color:var(--navy);background:rgba(26,46,110,0.03);box-shadow:0 8px 24px rgba(26,46,110,0.12);}
+.skema-icon{font-size:2.8rem;margin-bottom:14px;}
+.skema-card h3{font-family:var(--font);font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.skema-card p{font-size:0.82rem;color:var(--muted);line-height:1.55;}
+.skema-note{margin-top:16px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.25);border-radius:10px;padding:12px 16px;font-size:0.82rem;color:#92400e;display:flex;align-items:flex-start;gap:8px;}
+
+/* Jalur Step */
+.jalur-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.jalur-card{border:2px solid var(--border);border-radius:14px;padding:18px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:all .2s;}
+.jalur-card:hover{border-color:var(--teal);box-shadow:0 4px 16px rgba(30,42,68,0.1);}
+.jalur-card.selected{border-color:var(--navy);background:rgba(26,46,110,0.03);}
+.jalur-card.disabled{opacity:0.35;pointer-events:none;}
+.jalur-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.ji1{background:var(--navy);}.ji2{background:var(--navy);}.ji3{background:var(--navy);}
+.ji4{background:var(--navy);}.ji5{background:var(--navy);}.ji6{background:var(--navy);}
+.jalur-card h4{font-size:0.88rem;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.jalur-card p{font-size:0.76rem;color:var(--muted);line-height:1.4;}
+.jalur-exclusive{font-size:0.68rem;font-weight:700;color:var(--accent);margin-top:4px;}
+
+/* Prodi Step */
+.prodi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.prodi-card{border:2px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .25s;position:relative;}
+.prodi-card:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:0 8px 24px rgba(30,42,68,0.12);}
+.prodi-card.selected{border-color:var(--navy);background:rgba(26,46,110,0.03);box-shadow:0 8px 24px rgba(26,46,110,0.12);}
+.prodi-icon{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:12px;}
+.pi1{background:var(--navy);}.pi2{background:var(--navy);}.pi3{background:var(--navy);}
+.pi4{background:var(--navy);}.pi5{background:var(--navy);}.pi6{background:var(--navy);}
+.prodi-card h3{font-family:var(--font);font-size:0.92rem;font-weight:800;color:var(--navy);margin-bottom:3px;}
+.prodi-jenjang{display:inline-block;background:var(--light);color:var(--muted);font-size:0.68rem;font-weight:700;padding:2px 10px;border-radius:12px;margin-bottom:8px;}
+.prodi-card p{font-size:0.76rem;color:var(--muted);line-height:1.4;margin-bottom:10px;}
+.prodi-spp{font-size:0.76rem;font-weight:600;color:var(--teal);}
+
+/* Estimasi Step */
+.estimasi-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:32px;align-items:start;}
+.estimasi-summary{background:var(--light);border-radius:18px;padding:26px;}
+.estimasi-summary h3{font-family:var(--font);font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:18px;}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.85rem;}
+.sum-row:last-of-type{border-bottom:none;}
+.sum-row span{color:var(--muted);}
+.sum-row strong{color:var(--navy);font-weight:700;}
+.sum-row strong.green{color:var(--green);}
+.sum-row strong.accent{color:var(--accent);}
+.sum-selected{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.sel-chip{display:flex;justify-content:space-between;align-items:center;background:var(--white);border-radius:10px;padding:10px 14px;border:1px solid var(--border);}
+.sel-chip .label{font-size:0.72rem;font-weight:600;color:var(--muted);}
+.sel-chip .value{font-size:0.85rem;font-weight:700;color:var(--navy);}
+
+.estimasi-biaya{background:linear-gradient(135deg,var(--navy),#0d3460);border-radius:18px;padding:26px;color:var(--white);}
+.estimasi-biaya h3{font-family:var(--font);font-size:1rem;font-weight:800;margin-bottom:4px;}
+.estimasi-biaya .note{font-size:0.78rem;opacity:0.6;margin-bottom:20px;}
+.biaya-item{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.biaya-item:last-of-type{border-bottom:none;}
+.bi-left h4{font-size:0.85rem;font-weight:700;margin-bottom:2px;}
+.bi-left p{font-size:0.74rem;opacity:0.6;}
+.bi-val{font-size:0.88rem;font-weight:700;text-align:right;}
+.bi-val.green{color:#4ade80;}
+.bi-val.accent{color:var(--accent);}
+.total-box{margin-top:18px;background:rgba(255,255,255,0.07);border-radius:14px;padding:16px;}
+.total-line{display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.84rem;}
+.total-line span{opacity:0.7;}
+.total-line strong{font-weight:600;}
+.total-line.big span{opacity:1;font-weight:700;font-size:0.92rem;}
+.total-line.big strong{font-size:1.1rem;color:var(--accent);}
+.total-line.big{border-top:1px solid rgba(255,255,255,0.12);padding-top:10px;margin-top:6px;}
+
+/* Submit Step */
+.submit-layout{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:start;}
+.submit-form{background:var(--white);border:1.5px solid var(--border);border-radius:18px;padding:28px;}
+.submit-form h3{font-family:var(--font);font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:20px;}
+.form-group{margin-bottom:16px;}
+.form-label{font-size:0.82rem;font-weight:600;color:var(--navy);margin-bottom:7px;display:block;}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:0.88rem;font-family:inherit;color:#1e293b;background:var(--white);transition:border-color .2s;}
+.form-input:focus{outline:none;border-color:var(--teal);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.submit-summary{background:var(--light);border-radius:18px;padding:24px;position:sticky;top:80px;}
+.submit-summary h3{font-family:var(--font);font-size:0.95rem;font-weight:800;color:var(--navy);margin-bottom:16px;}
+.ss-item{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.83rem;}
+.ss-item:last-of-type{border-bottom:none;}
+.ss-item span{color:var(--muted);}
+.ss-item strong{color:var(--navy);text-align:right;max-width:60%;}
+.ss-total{background:var(--navy);border-radius:12px;padding:14px;margin-top:14px;display:flex;justify-content:space-between;align-items:center;}
+.ss-total span{color:rgba(255,255,255,0.7);font-size:0.85rem;}
+.ss-total strong{color:var(--accent);font-size:1rem;font-weight:800;}
+
+/* NAV BUTTONS */
+.wizard-nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid var(--border);}
+.btn-prev{background:var(--light);color:var(--navy);border:none;border-radius:10px;padding:12px 24px;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-prev:hover{background:var(--border);}
+.btn-next{background:var(--navy);color:var(--white);border:none;border-radius:10px;padding:12px 28px;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:8px;}
+.btn-next:hover{background:#243a8a;}
+.btn-next:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
+.btn-submit{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--white);border:none;border-radius:10px;padding:12px 28px;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 4px 16px rgba(245,166,35,0.3);}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,166,35,0.4);}
+
+/* ═══ CEK BIAYA SECTION ═══ */
+.cek-biaya-section{padding:80px 5%;background:var(--light);}
+.cek-layout{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;}
+.cek-form{background:var(--white);border-radius:20px;padding:30px;border:1.5px solid var(--border);box-shadow:0 4px 24px rgba(0,0,0,0.05);}
+.cek-form h3{font-family:var(--font);font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.cek-form p{font-size:0.82rem;color:var(--muted);margin-bottom:22px;}
+.cek-label{display:flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:600;color:var(--navy);margin-bottom:7px;}
+.cek-label .licon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.82rem;}
+.l1{background:var(--navy);}.l2{background:var(--navy);}.l3{background:rgba(245,166,35,0.12);}
+.form-select{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:0.88rem;font-family:inherit;color:#1e293b;background:var(--white);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%2364748b' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;transition:border-color .2s;margin-bottom:16px;}
+.form-select:focus{outline:none;border-color:var(--teal);}
+.cek-result{background:linear-gradient(135deg,var(--navy),#0d3460);border-radius:20px;padding:28px;color:var(--white);}
+.cek-result h3{font-family:var(--font);font-size:1.05rem;font-weight:800;margin-bottom:4px;}
+.cek-result .note{font-size:0.78rem;opacity:0.6;margin-bottom:18px;}
+.cr-row{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.cr-row:last-of-type{border-bottom:none;}
+.cr-left h4{font-size:0.84rem;font-weight:700;margin-bottom:1px;}
+.cr-left p{font-size:0.73rem;opacity:0.6;}
+.cr-val{font-size:0.86rem;font-weight:700;}
+.cr-val.grn{color:#4ade80;}.cr-val.acc{color:var(--accent);}
+.cr-total{background:rgba(255,255,255,0.07);border-radius:12px;padding:14px;margin-top:16px;}
+.cr-total-row{display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.83rem;}
+.cr-total-row span{opacity:0.65;}
+.cr-total-row.main{border-top:1px solid rgba(255,255,255,0.12);padding-top:9px;margin-top:5px;}
+.cr-total-row.main span{opacity:1;font-weight:700;font-size:0.9rem;}
+.cr-total-row.main strong{font-size:1.1rem;color:var(--accent);}
+
+/* ═══ CICILAN SECTION ═══ */
+.cicilan-section{padding:80px 5%;background:var(--white);}
+.cicilan-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.cicilan-intro h3{font-family:var(--font);font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:12px;}
+.cicilan-intro p{font-size:0.9rem;color:var(--muted);line-height:1.7;margin-bottom:24px;}
+.cicilan-highlight{background:rgba(245,176,65,0.08);border:1px solid rgba(245,176,65,0.25);border-radius:14px;padding:18px;margin-bottom:24px;}
+.cicilan-highlight h4{font-size:0.9rem;font-weight:700;color:var(--teal);margin-bottom:6px;}
+.cicilan-highlight p{font-size:0.82rem;color:var(--muted);line-height:1.6;}
+.cicilan-info{background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.25);border-radius:14px;padding:16px;}
+.cicilan-info p{font-size:0.82rem;color:#92400e;line-height:1.6;}
+
+/* Timeline */
+.timeline{position:relative;}
+.timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--teal),var(--navy));border-radius:2px;}
+.semester-block{margin-bottom:36px;}
+.sem-label{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:var(--white);font-size:0.8rem;font-weight:700;padding:6px 16px;border-radius:20px;margin-left:44px;margin-bottom:18px;}
+.tl-item{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;}
+.tl-dot{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;position:relative;z-index:1;border:2px solid var(--white);}
+.td1{background:var(--accent);}.td2{background:var(--teal);}.td3{background:var(--purple);}
+.td4{background:var(--navy2);}.td5{background:var(--teal);}.td6{background:var(--accent);}.td7{background:var(--purple);}
+.tl-content{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:16px;flex:1;transition:all .2s;}
+.tl-content:hover{border-color:var(--teal);box-shadow:0 4px 16px rgba(30,42,68,0.1);}
+.tl-content h4{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.tl-content .tl-when{font-size:0.76rem;font-weight:600;color:var(--teal);margin-bottom:6px;}
+.tl-content p{font-size:0.82rem;color:var(--muted);line-height:1.5;}
+.tl-content .tl-amount{margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,0.1);border-radius:8px;padding:4px 12px;font-size:0.78rem;font-weight:700;color:var(--accent);}
+
+/* SUCCESS MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(7,15,43,0.8);z-index:9999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--white);border-radius:24px;padding:48px 40px;text-align:center;max-width:460px;width:90%;animation:popIn .4s ease;}
+@keyframes popIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+.modal-icon{font-size:4rem;margin-bottom:16px;}
+.modal-box h2{font-family:var(--font);font-size:1.5rem;font-weight:800;color:var(--navy);margin-bottom:10px;}
+.modal-box p{color:var(--muted);font-size:0.9rem;line-height:1.6;margin-bottom:24px;}
+.modal-box .modal-btn{background:var(--navy);color:var(--white);border:none;border-radius:12px;padding:13px 28px;font-weight:700;font-size:0.92rem;cursor:pointer;font-family:inherit;width:100%;}
+
+/* FOOTER */
+footer{background:#040c1f;color:rgba(255,255,255,0.7);padding:48px 5% 24px;}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:40px;margin-bottom:32px;}
+.footer-logo{display:inline-block;background:var(--accent);color:var(--dark);font-family:var(--font);font-weight:900;font-size:1rem;padding:5px 9px;border-radius:7px;margin-bottom:10px;}
+.footer-brand p{font-size:0.8rem;line-height:1.65;opacity:0.5;margin-top:8px;}
+.footer-col h4{font-weight:700;font-size:0.88rem;color:var(--white);margin-bottom:12px;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:7px;}
+.footer-col ul li a{color:rgba(255,255,255,0.48);text-decoration:none;font-size:0.8rem;transition:color .2s;cursor:pointer;}
+.footer-col ul li a:hover{color:var(--accent);}
+.footer-contact div{display:flex;align-items:flex-start;gap:8px;font-size:0.8rem;margin-bottom:6px;opacity:0.5;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.07);padding-top:20px;display:flex;justify-content:space-between;font-size:0.76rem;opacity:0.35;flex-wrap:wrap;gap:10px;}
+.socials{display:flex;gap:8px;margin-top:12px;}
+.social-btn{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.07);border:none;cursor:pointer;color:var(--white);font-size:0.82rem;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.social-btn:hover{background:var(--accent);color:var(--dark);}
+
+/* STICKY BTN */
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:997;background:rgba(30,42,68,0.97);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.08);padding:12px 5%;display:flex;align-items:center;justify-content:space-between;}
+.sticky-bar p{font-size:0.8rem;color:rgba(255,255,255,0.6);}
+.sticky-bar strong{display:block;font-size:0.88rem;color:var(--white);}
+.sticky-bar-btn{background:var(--accent);color:var(--dark);border:none;border-radius:10px;padding:10px 22px;font-weight:700;font-size:0.88rem;cursor:pointer;font-family:inherit;white-space:nowrap;}
+
+@media(max-width:900px){
+  .hero-inner,.cek-layout,.cicilan-layout,.submit-layout,.estimasi-layout{grid-template-columns:1fr;}
+  .gel-cards,.prodi-grid{grid-template-columns:repeat(2,1fr);}
+  .skema-cards,.jalur-grid{grid-template-columns:1fr 1fr;}
+  .hero h1{font-size:2.2rem;}
+  .nav-links{display:none;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-box">UTDi</div>
+    <div class="nav-logo-text">Universitas Teknologi Digital Indonesia</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#pendaftaran">Pendaftaran</a></li>
+    <li><a href="#cek-biaya">Cek Biaya</a></li>
+    <li><a href="#cicilan">Cara Bayar</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('pendaftaran').scrollIntoView({behavior:'smooth'})">🚀 Mulai Daftar</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span class="hero-badge-dot"></span> PMB UTDI Tahun Akademik 2025/2026</div>
+      <h1>Daftarkan Dirimu<br>di Kampus<br><span class="hl-teal">Digital</span> <span class="hl-accent">Terbaik</span></h1>
+      <p class="hero-sub">Pilih skema belajar, jalur, dan prodi yang tepat. Cek estimasi biaya secara transparan — lalu daftar dalam hitungan menit.</p>
+      <div class="hero-btns">
+        <button class="btn-main" onclick="document.getElementById('pendaftaran').scrollIntoView({behavior:'smooth'})">🚀 Mulai Pendaftaran</button>
+        <button class="btn-sec" onclick="document.getElementById('cicilan').scrollIntoView({behavior:'smooth'})">💳 Lihat Cara Bayar</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-num">6</div><div class="hstat-label">Program Studi</div></div>
+        <div class="sdivider"></div>
+        <div class="hstat"><div class="hstat-num">4</div><div class="hstat-label">Gelombang</div></div>
+        <div class="sdivider"></div>
+        <div class="hstat"><div class="hstat-num">50%</div><div class="hstat-label">Potongan SPA</div></div>
+        <div class="sdivider"></div>
+        <div class="hstat"><div class="hstat-num">4x</div><div class="hstat-label">Cicilan SPA</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="gel-status-card">
+        <div class="gel-status-title">📅 Status Gelombang Saat Ini</div>
+        <div class="gel-item" id="hGelK">
+          <div class="gel-item-top"><span class="gel-name">🌟 Gelombang Khusus</span><span class="gel-chip chip-khusus" id="chipK">POTONGAN 50%</span></div>
+          <div class="gel-dates">12 Okt 2025 – 4 Mei 2026</div>
+          <div class="gel-cut">✂️ Potongan SPA 50%</div>
+        </div>
+        <div class="gel-item" id="hGel1">
+          <div class="gel-item-top"><span class="gel-name">Gelombang 1</span><span class="gel-chip chip-soon" id="chip1">POTONGAN 40%</span></div>
+          <div class="gel-dates">5 Mei – 13 Juni 2026</div>
+          <div class="gel-cut">✂️ Potongan SPA 40%</div>
+        </div>
+        <div class="gel-item" id="hGel2">
+          <div class="gel-item-top"><span class="gel-name">Gelombang 2</span><span class="gel-chip chip-soon" id="chip2">POTONGAN 30%</span></div>
+          <div class="gel-dates">14 Juni – 31 Juli 2026</div>
+          <div class="gel-cut">✂️ Potongan SPA 30%</div>
+        </div>
+        <div class="gel-item" id="hGel3">
+          <div class="gel-item-top"><span class="gel-name">Gelombang 3</span><span class="gel-chip chip-soon" id="chip3">POTONGAN 25%</span></div>
+          <div class="gel-dates">1 Agustus – 12 September 2026</div>
+          <div class="gel-cut">✂️ Potongan SPA 25%</div>
+        </div>
+        <button class="hero-card-btn" onclick="document.getElementById('pendaftaran').scrollIntoView({behavior:'smooth'})">Mulai Pendaftaran Sekarang →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WIZARD PENDAFTARAN -->
+<section class="wizard-section" id="pendaftaran">
+  <div class="wizard-header">
+    <div class="section-label">ALUR PENDAFTARAN</div>
+    <h2 class="section-title">Daftar Langkah demi Langkah</h2>
+    <p class="section-sub">Ikuti 6 langkah mudah untuk menyelesaikan pendaftaran mahasiswa baru UTDI.</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="wizard-progress" id="wizardProgress">
+    <div class="wp-step">
+      <div class="wp-circle active" id="wc0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="wp-label active" id="wl0">Gelombang</div>
+    </div>
+    <div class="wp-line" id="wline0"></div>
+    <div class="wp-step">
+      <div class="wp-circle" id="wc1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div class="wp-label" id="wl1">Skema</div>
+    </div>
+    <div class="wp-line" id="wline1"></div>
+    <div class="wp-step">
+      <div class="wp-circle" id="wc2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="wp-label" id="wl2">Jalur</div>
+    </div>
+    <div class="wp-line" id="wline2"></div>
+    <div class="wp-step">
+      <div class="wp-circle" id="wc3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+      <div class="wp-label" id="wl3">Prodi</div>
+    </div>
+    <div class="wp-line" id="wline3"></div>
+    <div class="wp-step">
+      <div class="wp-circle" id="wc4"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+      <div class="wp-label" id="wl4">Estimasi</div>
+    </div>
+    <div class="wp-line" id="wline4"></div>
+    <div class="wp-step">
+      <div class="wp-circle" id="wc5">✅</div>
+      <div class="wp-label" id="wl5">Daftar</div>
+    </div>
+  </div>
+
+  <!-- STEP 0: GELOMBANG -->
+  <div class="wizard-panel active" id="panel0">
+    <div class="step-title">Langkah 1 dari 6 — Gelombang Pendaftaran</div>
+    <p class="step-sub">Gelombang ditentukan otomatis berdasarkan tanggal pendaftaran kamu hari ini. Daftar lebih awal = potongan SPA lebih besar!</p>
+    <div class="gel-cards" id="gelCardsAuto"></div>
+    <div id="gelAutoInfo" style="margin-top:16px;background:rgba(245,176,65,0.1);border:1px solid rgba(245,176,65,0.35);border-radius:12px;padding:14px 18px;font-size:0.84rem;color:#92400e;line-height:1.6;"></div>
+    <div class="wizard-nav">
+      <div></div>
+      <button class="btn-next" id="nextBtn0" onclick="nextStep(1)">Lanjut: Pilih Skema →</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: SKEMA -->
+  <div class="wizard-panel" id="panel1">
+    <div class="step-title">Langkah 2 dari 6 — Pilih Skema Pembelajaran</div>
+    <p class="step-sub">Pilih metode belajar yang paling sesuai dengan aktivitas dan kebutuhanmu.</p>
+    <div class="skema-cards">
+      <div class="skema-card" onclick="pilihSkema(this,'Smart Learning')">
+        <div class="skema-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <h3>Smart Learning</h3>
+        <p>Belajar fleksibel secara online. Akses materi kapan saja dan di mana saja sesuai jadwalmu.</p>
+      </div>
+      <div class="skema-card" onclick="pilihSkema(this,'Reguler / Offline')">
+        <div class="skema-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h3>Reguler / Offline</h3>
+        <p>Kuliah tatap muka di kampus. Interaksi langsung dengan dosen dan teman sekelas. Tersedia jalur KIPK.</p>
+      </div>
+      <div class="skema-card" onclick="pilihSkema(this,'Jalur Kerjasama')">
+        <div class="skema-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Jalur Kerjasama</h3>
+        <p>Daftar melalui sekolah atau instansi mitra UTDI. Hubungi admisi untuk info mitra terdekat.</p>
+      </div>
+    </div>
+    <div class="skema-note" id="skemaNoteKIPK" style="display:none;">⭐ <strong>Info:</strong> Jalur <strong>KIPK</strong> (Kartu Indonesia Pintar Kuliah) hanya tersedia untuk metode <strong>Reguler / Offline</strong>.</div>
+    <div class="wizard-nav">
+      <button class="btn-prev" onclick="prevStep(0)">← Kembali</button>
+      <button class="btn-next" id="nextBtn1" onclick="nextStep(2)" disabled>Lanjut: Pilih Jalur →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: JALUR -->
+  <div class="wizard-panel" id="panel2">
+    <div class="step-title">Langkah 3 dari 6 — Pilih Jalur Pendaftaran</div>
+    <p class="step-sub">Pilih jalur yang sesuai dengan latar belakang dan dokumenmu.</p>
+    <div class="jalur-grid" id="jalurGrid">
+      <div class="jalur-card" onclick="pilihJalur(this,'Raport')">
+        <div class="jalur-icon ji1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+        <div><h4>Raport</h4><p>Berdasarkan nilai rapor SMA/SMK/sederajat</p></div>
+      </div>
+      <div class="jalur-card" onclick="pilihJalur(this,'UTBK')">
+        <div class="jalur-icon ji2"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div><h4>UTBK</h4><p>Ujian Tulis Berbasis Komputer</p></div>
+      </div>
+      <div class="jalur-card" onclick="pilihJalur(this,'RPL')">
+        <div class="jalur-icon ji3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg></div>
+        <div><h4>RPL</h4><p>Rekognisi Pembelajaran Lampau (pengalaman kerja)</p></div>
+      </div>
+      <div class="jalur-card" onclick="pilihJalur(this,'Alumni')">
+        <div class="jalur-icon ji4"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <div><h4>Alumni</h4><p>Jalur khusus alumni UTDI</p></div>
+      </div>
+      <div class="jalur-card" onclick="pilihJalur(this,'Kemitraan')">
+        <div class="jalur-icon ji5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div><h4>Kemitraan</h4><p>Jalur kerja sama dengan instansi mitra</p></div>
+      </div>
+      <div class="jalur-card" id="jalurKIPK" onclick="pilihJalur(this,'KIPK')">
+        <div class="jalur-icon ji6"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><h4>KIPK ⭐</h4><p>Kartu Indonesia Pintar Kuliah</p><div class="jalur-exclusive">Khusus Reguler / Offline</div></div>
+      </div>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn-prev" onclick="prevStep(1)">← Kembali</button>
+      <button class="btn-next" id="nextBtn2" onclick="nextStep(3)" disabled>Lanjut: Pilih Prodi →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: PRODI -->
+  <div class="wizard-panel" id="panel3">
+    <div class="step-title">Langkah 4 dari 6 — Pilih Program Studi</div>
+    <p class="step-sub">Pilih program studi yang paling sesuai dengan minat dan rencana karirmu.</p>
+    <div class="prodi-grid">
+      <div class="prodi-card" onclick="pilihProdi(this,'IF')">
+        <div class="prodi-icon pi1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h3>Informatika</h3><span class="prodi-jenjang">S1 · 22 SKS</span>
+        <p>AI, software engineering, data science, dan cloud computing.</p>
+        <div class="prodi-spp">SPP: Rp 1.900.000/sem</div>
+      </div>
+      <div class="prodi-card" onclick="pilihProdi(this,'SI')">
+        <div class="prodi-icon pi2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+        <h3>Sistem Informasi</h3><span class="prodi-jenjang">S1 · 22 SKS</span>
+        <p>Teknologi informasi untuk kebutuhan bisnis dan organisasi.</p>
+        <div class="prodi-spp">SPP: Rp 1.600.000/sem</div>
+      </div>
+      <div class="prodi-card" onclick="pilihProdi(this,'TK')">
+        <div class="prodi-icon pi3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
+        <h3>Teknik Komputer</h3><span class="prodi-jenjang">S1 · 23 SKS</span>
+        <p>Hardware, jaringan, IoT, dan embedded system.</p>
+        <div class="prodi-spp">SPP: Rp 1.200.000/sem</div>
+      </div>
+      <div class="prodi-card" onclick="pilihProdi(this,'BD')">
+        <div class="prodi-icon pi4"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <h3>Bisnis Digital</h3><span class="prodi-jenjang">S1 · 23 SKS</span>
+        <p>Strategi bisnis, e-commerce, dan digital marketing.</p>
+        <div class="prodi-spp">SPP: Rp 1.500.000/sem</div>
+      </div>
+      <div class="prodi-card" onclick="pilihProdi(this,'MR')">
+        <div class="prodi-icon pi5"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
+        <h3>Manajemen Ritel</h3><span class="prodi-jenjang">S1 · 23 SKS</span>
+        <p>Ritel modern, marketplace, dan customer experience.</p>
+        <div class="prodi-spp">SPP: Rp 1.200.000/sem</div>
+      </div>
+      <div class="prodi-card" onclick="pilihProdi(this,'MTI')">
+        <div class="prodi-icon pi6"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path></svg></div>
+        <h3>Teknologi Informasi</h3><span class="prodi-jenjang">S2 · Magister</span>
+        <p>Program pascasarjana untuk pemimpin teknologi TI.</p>
+        <div class="prodi-spp">SPP: Rp 1.666.667/sem</div>
+      </div>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn-prev" onclick="prevStep(2)">← Kembali</button>
+      <button class="btn-next" id="nextBtn3" onclick="nextStep(4)" disabled>Lanjut: Estimasi Biaya →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: ESTIMASI -->
+  <div class="wizard-panel" id="panel4">
+    <div class="step-title">Langkah 5 dari 6 — Estimasi Biaya</div>
+    <p class="step-sub">Berdasarkan pilihan kamu, berikut estimasi biaya yang perlu disiapkan.</p>
+    <div class="estimasi-layout">
+      <div class="estimasi-summary">
+        <h3>📋 Pilihan Kamu</h3>
+        <div class="sum-selected">
+          <div class="sel-chip"><span class="label">GELOMBANG</span><span class="value" id="sumGel">—</span></div>
+          <div class="sel-chip"><span class="label">SKEMA</span><span class="value" id="sumSkema">—</span></div>
+          <div class="sel-chip"><span class="label">JALUR</span><span class="value" id="sumJalur">—</span></div>
+          <div class="sel-chip"><span class="label">PROGRAM STUDI</span><span class="value" id="sumProdi">—</span></div>
+        </div>
+        <div style="background:rgba(15,157,140,0.08);border:1px solid rgba(15,157,140,0.2);border-radius:12px;padding:14px;font-size:0.82rem;color:#065f46;line-height:1.6;">
+          💡 Biaya dapat berubah sesuai hasil validasi admisi. Estimasi ini bersifat indikatif.
+        </div>
+      </div>
+      <div class="estimasi-biaya">
+        <h3>💰 Estimasi Biaya Kuliah</h3>
+        <p class="note">Berdasarkan pilihan gelombang dan program studi.</p>
+        <div class="biaya-item">
+          <div class="bi-left"><h4>SPA (Normal)</h4><p>Sumbangan Pengembangan Akademik</p></div>
+          <div class="bi-val" id="eSPANorm">—</div>
+        </div>
+        <div class="biaya-item">
+          <div class="bi-left"><h4>Potongan Gelombang</h4><p>Diskon SPA sesuai gelombang</p></div>
+          <div class="bi-val green" id="eSPAPot">—</div>
+        </div>
+        <div class="biaya-item">
+          <div class="bi-left"><h4>SPA yang Dibayar</h4><p>Total setelah potongan</p></div>
+          <div class="bi-val accent" id="eSPABayar">—</div>
+        </div>
+        <div class="biaya-item">
+          <div class="bi-left"><h4>SPP / Semester</h4><p>Sumbangan Penyelenggaraan Pendidikan</p></div>
+          <div class="bi-val" id="eSPP">—</div>
+        </div>
+        <div class="biaya-item">
+          <div class="bi-left"><h4>Biaya SKS</h4><p>Per satuan kredit semester</p></div>
+          <div class="bi-val" id="eSKS">—</div>
+        </div>
+        <div class="biaya-item">
+          <div class="bi-left"><h4>Aanvullen</h4><p>Biaya tambahan per SKS</p></div>
+          <div class="bi-val" id="eAnv">—</div>
+        </div>
+        <div class="total-box">
+          <div class="total-line"><span>Angsuran Pertama (35% SPA + SPP)</span><strong id="eBayarAwal">—</strong></div>
+          <div class="total-line big"><span>Total SPA (Cicilan 4x)</span><strong id="eTotalSPA">—</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn-prev" onclick="prevStep(3)">← Kembali</button>
+      <button class="btn-next" onclick="nextStep(5)">Lanjut: Isi Data Diri →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: SUBMIT -->
+  <div class="wizard-panel" id="panel5">
+    <div class="step-title">Langkah 6 dari 6 — Lengkapi Data Diri</div>
+    <p class="step-sub">Isi data dirimu dengan benar. Tim admisi akan menghubungimu untuk proses selanjutnya.</p>
+    <div class="submit-layout">
+      <div class="submit-form">
+        <h3>📝 Data Calon Mahasiswa</h3>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Nama Lengkap *</label><input type="text" class="form-input" id="fNama" placeholder="Sesuai KTP/Akte"></div>
+          <div class="form-group"><label class="form-label">Tempat Lahir *</label><input type="text" class="form-input" id="fTtl" placeholder="Kota"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Tanggal Lahir *</label><input type="date" class="form-input" id="fTgl"></div>
+          <div class="form-group"><label class="form-label">Jenis Kelamin *</label>
+            <select class="form-input" id="fJk" style="cursor:pointer;"><option value="">Pilih</option><option>Laki-laki</option><option>Perempuan</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Nomor HP / WhatsApp *</label><input type="tel" class="form-input" id="fHp" placeholder="08xxxxxxxxxx"></div>
+        <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-input" id="fEmail" placeholder="email@gmail.com"></div>
+        <div class="form-group"><label class="form-label">Asal Sekolah *</label><input type="text" class="form-input" id="fSekolah" placeholder="Nama SMA/SMK/sederajat"></div>
+        <div class="form-group"><label class="form-label">Tahun Lulus</label>
+          <select class="form-input" id="fLulus" style="cursor:pointer;"><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>Sebelumnya</option></select>
+        </div>
+      </div>
+      <div class="submit-summary">
+        <h3>📋 Ringkasan Pendaftaran</h3>
+        <div class="ss-item"><span>Gelombang</span><strong id="ssGel">—</strong></div>
+        <div class="ss-item"><span>Skema</span><strong id="ssSkema">—</strong></div>
+        <div class="ss-item"><span>Jalur</span><strong id="ssJalur">—</strong></div>
+        <div class="ss-item"><span>Program Studi</span><strong id="ssProdi">—</strong></div>
+        <div class="ss-item"><span>SPA (setelah potongan)</span><strong id="ssSPA">—</strong></div>
+        <div class="ss-item"><span>SPP per Semester</span><strong id="ssSPP">—</strong></div>
+        <div class="ss-item"><span>Angsuran Pertama</span><strong id="ssAwal">—</strong></div>
+        <div class="ss-total"><span>Bayar Saat Registrasi</span><strong id="ssBayarAwal">—</strong></div>
+        <button class="btn-submit" style="width:100%;margin-top:16px;" onclick="submitDaftar()">🚀 Kirim Pendaftaran</button>
+        <p style="font-size:0.74rem;color:var(--muted);text-align:center;margin-top:10px;">Tim admisi akan menghubungi dalam 1×24 jam kerja.</p>
+      </div>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn-prev" onclick="prevStep(4)">← Kembali</button>
+      <div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CEK BIAYA MANDIRI -->
+<section class="cek-biaya-section" id="cek-biaya">
+  <div class="section-label">CEK BIAYA</div>
+  <h2 class="section-title">Cek Biaya Kuliah Kamu</h2>
+  <p class="section-sub" style="margin-bottom:36px;">Estimasi biaya untuk jalur <strong>Non-RPL</strong> (S1 Reguler & Smart Learning). Gelombang ditentukan otomatis sesuai tanggal pendaftaran.</p>
+  <div class="cek-layout">
+    <div class="cek-form">
+      <h3>Kalkulator Biaya PMB</h3>
+      <p>Pilih program studi untuk melihat estimasi biaya.</p>
+      <div class="form-group">
+        <div class="cek-label"><span class="licon l1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span> Program Studi</div>
+        <select class="form-select" id="cekProdi" onchange="cekBiaya()">
+          <option value="IF">Informatika – S1</option>
+          <option value="SI">Sistem Informasi – S1</option>
+          <option value="TK">Teknik Komputer – S1</option>
+          <option value="BD">Bisnis Digital – S1</option>
+          <option value="MR">Manajemen Ritel – S1</option>
+        </select>
+      </div>
+      <div id="cekGelInfo" style="background:rgba(30,42,68,0.06);border:1px solid rgba(30,42,68,0.15);border-radius:10px;padding:12px 14px;font-size:0.82rem;color:var(--navy);margin-bottom:16px;line-height:1.6;">
+        <strong>📅 Gelombang aktif:</strong> <span id="cekGelLabel">—</span>
+      </div>
+      <div style="background:#fef9ec;border:1px solid rgba(245,176,65,0.3);border-radius:10px;padding:10px 14px;font-size:0.79rem;color:#92400e;">
+        📌 Kalkulator ini untuk jalur <strong>Non-RPL</strong>. Untuk RPL / S2, hubungi admisi.
+      </div>
+    </div>
+    <div class="cek-result">
+      <h3>Hasil Estimasi</h3>
+      <p class="note">Estimasi indikatif sebelum validasi admisi.</p>
+      <div class="cr-row"><div class="cr-left"><h4>SPA Normal</h4><p>Sebelum potongan</p></div><div class="cr-val" id="crSNorm">—</div></div>
+      <div class="cr-row"><div class="cr-left"><h4>Potongan SPA</h4><p>Sesuai gelombang</p></div><div class="cr-val grn" id="crSPot">—</div></div>
+      <div class="cr-row"><div class="cr-left"><h4>SPA Dibayar</h4><p>Total setelah potongan</p></div><div class="cr-val acc" id="crSBayar">—</div></div>
+      <div class="cr-row"><div class="cr-left"><h4>SPP / Semester</h4><p>Per semester</p></div><div class="cr-val" id="crSPP">—</div></div>
+      <div class="cr-row"><div class="cr-left"><h4>Biaya SKS</h4><p>Per SKS</p></div><div class="cr-val" id="crSKS">—</div></div>
+      <div class="cr-row"><div class="cr-left"><h4>Aanvullen</h4><p>Per SKS</p></div><div class="cr-val" id="crAnv">—</div></div>
+      <div class="cr-total">
+        <div class="cr-total-row"><span>Angsuran 1 (35% SPA + SPP)</span><strong id="crAwal">—</strong></div>
+        <div class="cr-total-row"><span>Angsuran 2 (25% SPA)</span><strong id="crA2">—</strong></div>
+        <div class="cr-total-row"><span>Angsuran 3 (25% SPA)</span><strong id="crA3">—</strong></div>
+        <div class="cr-total-row"><span>Angsuran 4 (15% SPA)</span><strong id="crA4">—</strong></div>
+        <div class="cr-total-row main"><span>Total SPA</span><strong id="crTotal">—</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CICILAN / CARA BAYAR -->
+<section class="cicilan-section" id="cicilan">
+  <div class="section-label">CARA PEMBAYARAN</div>
+  <h2 class="section-title">Sistem Cicilan yang Ringan</h2>
+  <p class="section-sub" style="margin-bottom:40px;">Pembayaran dilakukan secara bertahap agar lebih terjangkau. Cukup bayar angsuran pertama saat registrasi untuk mendapatkan NIM.</p>
+  <div class="cicilan-layout">
+    <div>
+      <div class="cicilan-intro">
+        <div class="cicilan-highlight">
+          <h4>✅ Yang Perlu Dibayar Saat Registrasi Awal</h4>
+          <p>Cukup bayar <strong>35% SPA + SPP Tetap Semester 1</strong> untuk mendapatkan NIM dan status mahasiswa aktif. Sisa SPA dicicil 3 kali dalam setahun.</p>
+        </div>
+        <div style="background:rgba(26,46,110,0.06);border-radius:14px;padding:18px;margin-bottom:20px;">
+          <h4 style="font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:10px;">📊 Struktur Cicilan SPA</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--white);border-radius:8px;font-size:0.83rem;">
+              <span style="font-weight:600;color:var(--navy);">Angsuran 1 (Saat Registrasi)</span>
+              <span style="font-weight:800;color:var(--accent);">35% SPA</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--white);border-radius:8px;font-size:0.83rem;">
+              <span style="font-weight:600;color:var(--navy);">Angsuran 2 (15 Desember 2025)</span>
+              <span style="font-weight:800;color:var(--teal);">25% SPA</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--white);border-radius:8px;font-size:0.83rem;">
+              <span style="font-weight:600;color:var(--navy);">Angsuran 3 (15 Februari 2026)</span>
+              <span style="font-weight:800;color:var(--teal);">25% SPA</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--white);border-radius:8px;font-size:0.83rem;">
+              <span style="font-weight:600;color:var(--navy);">Angsuran 4 (15 Juni 2026)</span>
+              <span style="font-weight:800;color:var(--purple);">15% SPA</span>
+            </div>
+          </div>
+        </div>
+        <div class="cicilan-info">
+          <p>⚠️ <strong>Catatan:</strong> SPP Variabel (biaya SKS) dibayarkan terpisah sebelum UTS setiap semester. SPP Tetap dibayarkan di awal setiap semester sebelum pengisian KRS.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="timeline">
+        <div class="semester-block">
+          <div class="sem-label">📚 Semester 1 (2025/2026)</div>
+          <div class="tl-item">
+            <div class="tl-dot td1">🏁</div>
+            <div class="tl-content">
+              <div class="tl-when">Saat Daftar Ulang / Registrasi</div>
+              <h4>Registrasi Awal — Angsuran 1</h4>
+              <p>Bayar 35% SPA (setelah potongan gelombang) + SPP Tetap Semester 1. Setelah ini kamu mendapatkan NIM dan status mahasiswa aktif.</p>
+              <div class="tl-amount">35% SPA + SPP Tetap</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot td2">📝</div>
+            <div class="tl-content">
+              <div class="tl-when">Oktober 2025 (Sebelum UTS)</div>
+              <h4>Bayar SPP Variabel Semester 1</h4>
+              <p>Pembayaran biaya SKS sesuai jumlah mata kuliah yang diambil pada semester 1.</p>
+              <div class="tl-amount">SPP Variabel (Biaya SKS)</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot td3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+            <div class="tl-content">
+              <div class="tl-when">15 Desember 2025</div>
+              <h4>Angsuran ke-2 SPA</h4>
+              <p>Pembayaran cicilan SPA tahap kedua sebesar 25% dari total SPA yang harus dibayar.</p>
+              <div class="tl-amount">25% SPA</div>
+            </div>
+          </div>
+        </div>
+        <div class="semester-block">
+          <div class="sem-label">📚 Semester 2 (2026)</div>
+          <div class="tl-item">
+            <div class="tl-dot td4">📋</div>
+            <div class="tl-content">
+              <div class="tl-when">Februari 2026 (Sebelum KRS)</div>
+              <h4>SPP Tetap Semester 2</h4>
+              <p>Pembayaran SPP Tetap sebelum pengisian Kartu Rencana Studi (KRS) semester 2.</p>
+              <div class="tl-amount">SPP Tetap Sem. 2</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot td5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+            <div class="tl-content">
+              <div class="tl-when">15 Februari 2026</div>
+              <h4>Angsuran ke-3 SPA</h4>
+              <p>Pembayaran cicilan SPA tahap ketiga sebesar 25% dari total SPA yang harus dibayar.</p>
+              <div class="tl-amount">25% SPA</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot td6">📝</div>
+            <div class="tl-content">
+              <div class="tl-when">April 2026</div>
+              <h4>SPP Variabel Semester 2</h4>
+              <p>Pembayaran biaya SKS sesuai jumlah mata kuliah yang diambil pada semester 2.</p>
+              <div class="tl-amount">SPP Variabel (Biaya SKS)</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot td7">🏆</div>
+            <div class="tl-content">
+              <div class="tl-when">15 Juni 2026</div>
+              <h4>Angsuran ke-4 SPA (Lunas!)</h4>
+              <p>Pembayaran cicilan SPA tahap terakhir sebesar 15%. Setelah ini SPA dinyatakan lunas!</p>
+              <div class="tl-amount">15% SPA — LUNAS! 🎉</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+<!-- ═══ BEASISWA SECTION ═══ -->
+<section style="padding:80px 5%;background:var(--white);" id="beasiswa">
+  <div style="text-align:center;margin-bottom:48px;">
+    <div class="section-label">PROGRAM BEASISWA</div>
+    <h2 class="section-title">Wujudkan Impianmu dengan Beasiswa</h2>
+    <p class="section-sub">UTDI menyediakan berbagai jalur beasiswa agar pendidikan berkualitas bisa diakses semua kalangan.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:900px;margin:0 auto;">
+    <!-- KIP Kuliah -->
+    <div style="border:2px solid var(--border);border-radius:20px;padding:28px;transition:all .25s;cursor:pointer;" onmouseover="this.style.borderColor='var(--accent)';this.style.boxShadow='0 8px 32px rgba(245,176,65,0.15)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:1.6rem;">🛡️</div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;">Pemerintah RI</div>
+          <h3 style="font-family:var(--font);font-size:1rem;font-weight:800;color:var(--navy);">KIP Kuliah</h3>
+        </div>
+      </div>
+      <p style="font-size:0.84rem;color:var(--muted);line-height:1.65;margin-bottom:16px;">Beasiswa penuh dari pemerintah bagi calon mahasiswa berprestasi dengan keterbatasan ekonomi. Biaya pendidikan ditanggung sepenuhnya.</p>
+      <div style="background:#fef9ec;border-radius:10px;padding:12px 14px;font-size:0.79rem;color:#92400e;margin-bottom:14px;"><strong>Khusus:</strong> Hanya untuk skema Reguler / Offline</div>
+      <a href="https://utdi.id/kip-kuliah" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:var(--white);text-decoration:none;padding:9px 18px;border-radius:9px;font-weight:700;font-size:0.82rem;">Info Lengkap →</a>
+    </div>
+    <!-- Beasiswa Unggulan -->
+    <div style="border:2px solid var(--border);border-radius:20px;padding:28px;transition:all .25s;cursor:pointer;" onmouseover="this.style.borderColor='var(--accent)';this.style.boxShadow='0 8px 32px rgba(245,176,65,0.15)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:1.6rem;">⭐</div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;color:#3D5AFE;letter-spacing:1px;text-transform:uppercase;">UTDI</div>
+          <h3 style="font-family:var(--font);font-size:1rem;font-weight:800;color:var(--navy);">Beasiswa Unggulan</h3>
+        </div>
+      </div>
+      <p style="font-size:0.84rem;color:var(--muted);line-height:1.65;margin-bottom:16px;">Beasiswa bagi calon mahasiswa berprestasi akademik atau berpotensi unggul. Bantuan pembiayaan pendidikan sesuai ketentuan universitas.</p>
+      <div style="background:#eff6ff;border-radius:10px;padding:12px 14px;font-size:0.79rem;color:#1e40af;margin-bottom:14px;"><strong>Tersedia:</strong> Smart Learning & Reguler / Offline</div>
+      <a href="http://utdi.id/c/beasiswa-unggulan" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:var(--white);text-decoration:none;padding:9px 18px;border-radius:9px;font-weight:700;font-size:0.82rem;">Daftar Sekarang →</a>
+    </div>
+    <!-- Sleman Pintar -->
+    <div style="border:2px solid var(--border);border-radius:20px;padding:28px;transition:all .25s;cursor:pointer;" onmouseover="this.style.borderColor='var(--accent)';this.style.boxShadow='0 8px 32px rgba(245,176,65,0.15)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:#d1fae5;display:flex;align-items:center;justify-content:center;font-size:1.6rem;">🏡</div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;color:#22C55E;letter-spacing:1px;text-transform:uppercase;">Kab. Sleman</div>
+          <h3 style="font-family:var(--font);font-size:1rem;font-weight:800;color:var(--navy);">Beasiswa Sleman Pintar</h3>
+        </div>
+      </div>
+      <p style="font-size:0.84rem;color:var(--muted);line-height:1.65;margin-bottom:16px;">Program bantuan pendidikan dari Pemerintah Kabupaten Sleman bagi mahasiswa yang memenuhi persyaratan yang ditetapkan.</p>
+      <div style="background:#f0fdf4;border-radius:10px;padding:12px 14px;font-size:0.79rem;color:#166534;margin-bottom:14px;"><strong>Penyelenggara:</strong> Pemerintah Kabupaten Sleman</div>
+      <a href="http://utdi.id/c/sleman-pintar" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:var(--white);text-decoration:none;padding:9px 18px;border-radius:9px;font-weight:700;font-size:0.82rem;">Info Lengkap →</a>
+    </div>
+    <!-- Berani Cerdas Sulteng -->
+    <div style="border:2px solid var(--border);border-radius:20px;padding:28px;transition:all .25s;cursor:pointer;" onmouseover="this.style.borderColor='var(--accent)';this.style.boxShadow='0 8px 32px rgba(245,176,65,0.15)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-size:1.6rem;">🌴</div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;color:#AB55F7;letter-spacing:1px;text-transform:uppercase;">Prov. Sulteng</div>
+          <h3 style="font-family:var(--font);font-size:1rem;font-weight:800;color:var(--navy);">Berani Cerdas Sulteng</h3>
+        </div>
+      </div>
+      <p style="font-size:0.84rem;color:var(--muted);line-height:1.65;margin-bottom:16px;">Program bantuan dari Pemerintah Provinsi Sulawesi Tengah. Daftar PMB UTDI → Registrasi Awal Rp1 juta → dapatkan NIM → daftar beasiswa.</p>
+      <div style="background:#faf5ff;border-radius:10px;padding:12px 14px;font-size:0.79rem;color:#6b21a8;margin-bottom:14px;"><strong>Biaya studi ditanggung</strong> jika diterima sebagai penerima beasiswa</div>
+      <a href="https://pmb.utdi.ac.id" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:var(--white);text-decoration:none;padding:9px 18px;border-radius:9px;font-weight:700;font-size:0.82rem;">Daftar PMB Dulu →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">UTDi</div>
+      <p>Universitas Teknologi Digital Indonesia<br>Kampus teknologi untuk masa depan digital. PMB 2025/2026 kini dibuka!</p>
+      <div class="socials">
+        <button class="social-btn">▶</button>
+        <button class="social-btn">f</button>
+        <button class="social-btn">in</button>
+        <button class="social-btn">♪</button>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Pendaftaran</h4>
+      <ul>
+        <li><a href="#pendaftaran">Mulai Daftar</a></li>
+        <li><a href="#cek-biaya">Cek Biaya</a></li>
+        <li><a href="#cicilan">Cara Pembayaran</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Program Studi</h4>
+      <ul>
+        <li><a>Informatika (S1)</a></li>
+        <li><a>Sistem Informasi (S1)</a></li>
+        <li><a>Teknik Komputer (S1)</a></li>
+        <li><a>Bisnis Digital (S1)</a></li>
+        <li><a>Manajemen Ritel (S1)</a></li>
+        <li><a>Teknologi Informasi (S2)</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Kontak Admisi</h4>
+      <div class="footer-contact">
+        <div>📍 Jl. Raya Daan Mogot No.KM 11, Kalideres, Jakarta Barat 11850</div>
+        <div>📞 (021) 1234 5678</div>
+        <div>✉️ admisi@utdi.ac.id</div>
+        <div>🌐 www.utdi.ac.id</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 UTDI – Universitas Teknologi Digital Indonesia. Hak cipta dilindungi.</span>
+    <span>Kebijakan Privasi · Syarat & Ketentuan</span>
+  </div>
+</footer>
+
+<!-- STICKY BAR -->
+<div class="sticky-bar">
+  <div><p>PMB UTDI 2026 · Potongan SPA hingga</p><strong>50% — Cukup Bayar 35% SPA saat Registrasi</strong></div>
+  <button class="sticky-bar-btn" onclick="document.getElementById('pendaftaran').scrollIntoView({behavior:'smooth'})">Mulai Daftar →</button>
+</div>
+
+<!-- MODAL SUCCESS -->
+<div class="modal-overlay" id="modalSuccess">
+  <div class="modal-box">
+    <div class="modal-icon">🎉</div>
+    <h2>Pendaftaran Terkirim!</h2>
+    <p>Terima kasih! Tim admisi UTDI akan menghubungi kamu melalui WhatsApp/Email dalam 1×24 jam kerja untuk konfirmasi dan langkah selanjutnya.</p>
+    <button class="modal-btn" onclick="document.getElementById('modalSuccess').classList.remove('show')">Tutup</button>
+  </div>
+</div>
+
+<script>
+// ═══ DATA ═══
+var biaya={
+  IF:{spa:{K:13300000,1:12000000,2:10500000,3:8800000},spp:1900000,sks:150000,anv:0,nama:"Informatika – S1"},
+  SI:{spa:{K:12600000,1:11400000,2:10000000,3:8400000},spp:1600000,sks:150000,anv:0,nama:"Sistem Informasi – S1"},
+  TK:{spa:{K:10500000,1:9600000,2:8500000,3:7200000},spp:1200000,sks:150000,anv:0,nama:"Teknik Komputer – S1"},
+  BD:{spa:{K:12600000,1:11400000,2:10000000,3:8400000},spp:1500000,sks:150000,anv:0,nama:"Bisnis Digital – S1"},
+  MR:{spa:{K:10500000,1:9600000,2:8500000,3:7200000},spp:1200000,sks:150000,anv:0,nama:"Manajemen Ritel – S1"},
+  MTI:{spa:{K:0,1:0,2:0,3:0},spp:1666667,sks:0,anv:0,nama:"Teknologi Informasi – S2"}
+};
+var pot={K:0.5,1:0.4,2:0.3,3:0.25};
+var potLabel={K:"50%",1:"40%",2:"30%",3:"25%"};
+var gelLabel={K:"Gelombang Khusus",1:"Gelombang 1",2:"Gelombang 2",3:"Gelombang 3"};
+
+// State
+var sel={gel:null,skema:null,jalur:null,prodi:null};
+var currentStep=0;
+
+function fmt(n){return n===0?'—':'Rp '+n.toLocaleString('id-ID');}
+function fmtShort(n){return n===0?'—':'Rp '+n.toLocaleString('id-ID');}
+
+// ═══ WIZARD STEPS ═══
+function nextStep(n){
+  document.getElementById('panel'+currentStep).classList.remove('active');
+  document.getElementById('panel'+n).classList.add('active');
+  // Progress
+  var wc=document.getElementById('wc'+currentStep);
+  wc.classList.remove('active');wc.classList.add('done');wc.textContent='✓';
+  document.getElementById('wl'+currentStep).classList.remove('active');document.getElementById('wl'+currentStep).classList.add('done');
+  if(currentStep<5)document.getElementById('wline'+currentStep).classList.add('done');
+  currentStep=n;
+  var nc=document.getElementById('wc'+n);
+  nc.classList.add('active');
+  document.getElementById('wl'+n).classList.add('active');
+  if(n===4)updateEstimasi();
+  if(n===5)updateSubmitSummary();
+  window.scrollTo({top:document.getElementById('pendaftaran').offsetTop-80,behavior:'smooth'});
+}
+function prevStep(n){
+  document.getElementById('panel'+currentStep).classList.remove('active');
+  document.getElementById('panel'+n).classList.add('active');
+  var wc=document.getElementById('wc'+currentStep);
+  wc.classList.remove('active','done');
+  var icons=['📅','🎓','🛤️','📚','💰','✅'];
+  wc.textContent=icons[currentStep];
+  document.getElementById('wl'+currentStep).classList.remove('active','done');
+  if(currentStep<=5&&currentStep>0)document.getElementById('wline'+(currentStep-1)).classList.remove('done');
+  currentStep=n;
+  document.getElementById('wc'+n).classList.add('active');
+  document.getElementById('wl'+n).classList.add('active');
+  window.scrollTo({top:document.getElementById('pendaftaran').offsetTop-80,behavior:'smooth'});
+}
+
+// ═══ STEP PICKERS ═══
+// ═══ AUTO-DETECT GELOMBANG ═══
+var gelRanges=[
+  {id:'K',nama:'Gelombang Khusus',start:new Date('2025-10-12'),end:new Date('2026-05-04'),pot:'50%',icon:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',tgl:'12 Oktober 2025 – 4 Mei 2026'},
+  {id:'1',nama:'Gelombang 1',start:new Date('2026-05-05'),end:new Date('2026-06-13'),pot:'40%',icon:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>',tgl:'5 Mei – 13 Juni 2026'},
+  {id:'2',nama:'Gelombang 2',start:new Date('2026-06-14'),end:new Date('2026-07-31'),pot:'30%',icon:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>',tgl:'14 Juni – 31 Juli 2026'},
+  {id:'3',nama:'Gelombang 3',start:new Date('2026-08-01'),end:new Date('2026-09-12'),pot:'25%',icon:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>',tgl:'1 Agustus – 12 September 2026'}
+];
+
+function initGelombangAuto(){
+  var today=new Date();
+  var activeGel=null;
+  var container=document.getElementById('gelCardsAuto');
+  var infoBox=document.getElementById('gelAutoInfo');
+  var html='';
+  gelRanges.forEach(function(g){
+    var isCurrent=today>=g.start&&today<=g.end;
+    var isPast=today>g.end;
+    var isFuture=today<g.start;
+    if(isCurrent) activeGel=g;
+    var borderStyle=isCurrent?'border-color:var(--accent);background:rgba(245,176,65,0.04);':
+                    isPast?'opacity:0.45;':'';
+    var badgeHtml=isCurrent?'<span class="gel-card-badge badge-berjalan">✦ BERLAKU SEKARANG</span>':'';
+    var iconBg=isCurrent?'var(--accent)':'var(--navy)';
+    html+=`<div class="gel-card ${isCurrent?'current-gel':''}" style="cursor:default;${borderStyle};${isPast?'pointer-events:none;':''}">
+      ${badgeHtml}
+      <div style="margin-top:${isCurrent?'10':'0'}px;width:48px;height:48px;border-radius:12px;background:${iconBg};display:flex;align-items:center;justify-content:center;margin-bottom:12px;">${g.icon}</div>
+      <h3>${g.nama}</h3>
+      <div class="dates">${g.tgl}</div>
+      <div class="potongan-chip" style="${isCurrent?'':'background:var(--light);color:var(--muted);'}">✂ Potongan SPA ${g.pot}</div>
+      ${isFuture?'<div style="font-size:0.72rem;color:var(--muted);margin-top:6px;">Belum dibuka</div>':''}
+      ${isPast?'<div style="font-size:0.72rem;color:var(--red);margin-top:6px;">Sudah berakhir</div>':''}
+    </div>`;
+  });
+  container.innerHTML=html;
+  if(activeGel){
+    sel.gel=activeGel.id;
+    infoBox.innerHTML='<strong>✦ Kamu mendaftar pada '+activeGel.nama+'</strong> — Potongan SPA <strong>'+activeGel.pot+'</strong> otomatis berlaku. Gelombang ditentukan sistem berdasarkan tanggal pendaftaran, bukan pilihan manual.';
+  } else {
+    infoBox.innerHTML='<strong>ℹ️ Info:</strong> Saat ini belum ada gelombang yang aktif. Silakan cek kembali jadwal pendaftaran atau hubungi admisi UTDI.';
+    infoBox.style.background='rgba(239,68,68,0.08)';
+    infoBox.style.borderColor='rgba(239,68,68,0.3)';
+    infoBox.style.color='#991b1b';
+  }
+}
+
+function pilihGel(card,val){
+  // kept for backward compat but auto-detect is primary
+  document.querySelectorAll('.gel-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');sel.gel=val;
+  document.getElementById('nextBtn0').disabled=false;
+}
+function pilihSkema(card,val){
+  document.querySelectorAll('.skema-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');sel.skema=val;
+  document.getElementById('nextBtn1').disabled=false;
+  // KIPK visibility
+  var kipk=document.getElementById('jalurKIPK');
+  var note=document.getElementById('skemaNoteKIPK');
+  if(val==='Reguler / Offline'){kipk.classList.remove('disabled');note.style.display='flex';}
+  else{kipk.classList.add('disabled');note.style.display='none';if(sel.jalur==='KIPK'){sel.jalur=null;document.querySelectorAll('.jalur-card').forEach(c=>c.classList.remove('selected'));document.getElementById('nextBtn2').disabled=true;}}
+}
+function pilihJalur(card,val){
+  document.querySelectorAll('.jalur-card:not(.disabled)').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');sel.jalur=val;
+  document.getElementById('nextBtn2').disabled=false;
+}
+function pilihProdi(card,val){
+  document.querySelectorAll('.prodi-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');sel.prodi=val;
+  document.getElementById('nextBtn3').disabled=false;
+}
+
+// ═══ ESTIMASI ═══
+function updateEstimasi(){
+  if(!sel.prodi||!sel.gel)return;
+  var d=biaya[sel.prodi];var g=sel.gel;
+  var spaN=d.spa[g];var potAmt=Math.round(spaN*pot[g]);var spaBayar=spaN-potAmt;
+  var ang1=Math.round(spaBayar*0.35)+d.spp;
+  document.getElementById('sumGel').textContent=gelLabel[g]+' (Potongan '+potLabel[g]+')';
+  document.getElementById('sumSkema').textContent=sel.skema||'—';
+  document.getElementById('sumJalur').textContent=sel.jalur||'—';
+  document.getElementById('sumProdi').textContent=d.nama;
+  document.getElementById('eSPANorm').textContent=fmt(spaN);
+  document.getElementById('eSPAPot').textContent=spaN===0?'—':'– '+fmt(potAmt);
+  document.getElementById('eSPABayar').textContent=fmt(spaBayar);
+  document.getElementById('eSPP').textContent=fmt(d.spp)+'/semester';
+  document.getElementById('eSKS').textContent=d.sks===0?'—':fmt(d.sks)+'/SKS';
+  document.getElementById('eAnv').textContent=d.anv===0?'—':fmt(d.anv)+'/SKS';
+  document.getElementById('eBayarAwal').textContent=fmt(ang1);
+  document.getElementById('eTotalSPA').textContent=fmt(spaBayar);
+}
+function updateSubmitSummary(){
+  if(!sel.prodi||!sel.gel)return;
+  var d=biaya[sel.prodi];var g=sel.gel;
+  var spaN=d.spa[g];var potAmt=Math.round(spaN*pot[g]);var spaBayar=spaN-potAmt;
+  var ang1=Math.round(spaBayar*0.35)+d.spp;
+  document.getElementById('ssGel').textContent=gelLabel[g];
+  document.getElementById('ssSkema').textContent=sel.skema||'—';
+  document.getElementById('ssJalur').textContent=sel.jalur||'—';
+  document.getElementById('ssProdi').textContent=d.nama;
+  document.getElementById('ssSPA').textContent=fmt(spaBayar);
+  document.getElementById('ssSPP').textContent=fmt(d.spp)+'/sem';
+  document.getElementById('ssAwal').textContent='35% SPA + SPP';
+  document.getElementById('ssBayarAwal').textContent=fmt(ang1);
+}
+
+// ═══ CEK BIAYA MANDIRI ═══
+function cekBiaya(){
+  var p=document.getElementById('cekProdi').value;
+  // Auto-detect gelombang dari tanggal hari ini
+  var today=new Date();
+  var g='1'; // default fallback
+  gelRanges.forEach(function(r){ if(today>=r.start&&today<=r.end) g=r.id; });
+  var gelLabelEl=document.getElementById('cekGelLabel');
+  var gelNameMap={K:'Gelombang Khusus (Potongan 50%)',1:'Gelombang 1 (Potongan 40%)',2:'Gelombang 2 (Potongan 30%)',3:'Gelombang 3 (Potongan 25%)'};
+  if(gelLabelEl) gelLabelEl.textContent=gelNameMap[g]||'—';
+  var d=biaya[p];
+  var spaN=d.spa[g];var potAmt=Math.round(spaN*pot[g]);var spaBayar=spaN-potAmt;
+  var a1=Math.round(spaBayar*0.35)+d.spp;
+  var a2=Math.round(spaBayar*0.25);
+  var a3=Math.round(spaBayar*0.25);
+  var a4=spaBayar-Math.round(spaBayar*0.35)-a2-a3;
+  document.getElementById('crSNorm').textContent=fmt(spaN);
+  document.getElementById('crSPot').textContent=spaN===0?'—':'– '+fmt(potAmt);
+  document.getElementById('crSBayar').textContent=fmt(spaBayar);
+  document.getElementById('crSPP').textContent=fmt(d.spp)+'/sem';
+  document.getElementById('crSKS').textContent=d.sks===0?'—':fmt(d.sks)+'/SKS';
+  document.getElementById('crAnv').textContent=d.anv===0?'—':fmt(d.anv)+'/SKS';
+  document.getElementById('crAwal').textContent=fmt(a1);
+  document.getElementById('crA2').textContent=fmt(a2);
+  document.getElementById('crA3').textContent=fmt(a3);
+  document.getElementById('crA4').textContent=fmt(a4);
+  document.getElementById('crTotal').textContent=fmt(spaBayar);
+}
+
+// ═══ GELOMBANG STATUS HERO ═══
+function updateGelStatus(){
+  var today=new Date();
+  var ranges=[
+    {id:'K',start:new Date('2025-10-12'),end:new Date('2026-05-04')},
+    {id:'1',start:new Date('2026-05-05'),end:new Date('2026-06-13')},
+    {id:'2',start:new Date('2026-06-14'),end:new Date('2026-07-31')},
+    {id:'3',start:new Date('2026-08-01'),end:new Date('2026-09-12')}
+  ];
+  ranges.forEach(function(r){
+    var chipEl=document.getElementById('chip'+r.id);
+    var itemEl=document.getElementById('hGel'+r.id);
+    if(today>=r.start&&today<=r.end){
+      chipEl.className='gel-chip chip-active';chipEl.textContent='SEDANG BERJALAN';
+      itemEl.classList.add('current');
+    } else if(today>r.end){
+      itemEl.classList.add('past');
+    }
+  });
+}
+
+// ═══ SUBMIT ═══
+function submitDaftar(){
+  var nama=document.getElementById('fNama').value.trim();
+  var hp=document.getElementById('fHp').value.trim();
+  var email=document.getElementById('fEmail').value.trim();
+  if(!nama||!hp||!email){alert('Harap lengkapi Nama, Nomor HP, dan Email terlebih dahulu.');return;}
+  document.getElementById('modalSuccess').classList.add('show');
+}
+
+// INIT
+cekBiaya();
+updateGelStatus();
+initGelombangAuto();
+// Set jalur KIPK disabled by default
+document.getElementById('jalurKIPK').classList.add('disabled');
+</script>
+</body>
+</html>
+<!-- INJECT SECTIONS VIA JS -->
+<script>
+(function(){
+  // ═══ INJECT STYLES ═══
+  var style=document.createElement('style');
+  style.textContent=`
+  /* SKEMA SECTION */
+  .skema-info-section{padding:80px 5%;background:#f8faff;}
+  .skema-compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px;}
+  .skema-info-card{background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid #e2e8f0;transition:all .25s;}
+  .skema-info-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(26,46,110,0.12);}
+  .skema-info-header{padding:28px 24px 20px;text-align:center;}
+  .skema-info-header.blue{background:linear-gradient(135deg,#0d1f5c,#1a2e6e);}
+  .skema-info-header.teal{background:linear-gradient(135deg,var(--navy),#253352);}
+  .skema-info-header.purple{background:linear-gradient(135deg,#6c3fc5,#8b5cf6);}
+  .skema-info-icon{font-size:3rem;margin-bottom:12px;}
+  .skema-info-header h3{font-family:var(--font);font-size:1.15rem;font-weight:800;color:#fff;margin-bottom:6px;}
+  .skema-info-header p{font-size:0.8rem;color:rgba(255,255,255,0.75);line-height:1.5;}
+  .skema-info-body{padding:22px 24px;}
+  .skema-feature{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;}
+  .skema-feature-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;margin-top:1px;}
+  .dot-blue{background:rgba(26,46,110,0.12);color:#1a2e6e;}
+  .dot-teal{background:rgba(245,176,65,0.15);color:var(--accent);}
+  .dot-purple{background:rgba(108,63,197,0.12);color:#6c3fc5;}
+  .skema-feature p{font-size:0.82rem;color:#475569;line-height:1.5;}
+  .skema-feature p strong{color:#1e293b;}
+  .skema-tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;padding-top:14px;border-top:1px solid #e2e8f0;}
+  .skema-tag{font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:20px;}
+  .tag-blue{background:rgba(26,46,110,0.08);color:#1a2e6e;}
+  .tag-teal{background:rgba(15,157,140,0.1);color:#0f9d8c;}
+  .tag-purple{background:rgba(108,63,197,0.1);color:#6c3fc5;}
+  .skema-cta-row{text-align:center;margin-top:36px;}
+
+  /* PRODI SECTION */
+  .prodi-info-section{padding:80px 5%;background:#fff;}
+  .prodi-filter-tabs{display:flex;gap:8px;margin-bottom:32px;background:#f0f4ff;padding:6px;border-radius:14px;width:fit-content;flex-wrap:wrap;}
+  .pf-tab{border:none;border-radius:10px;padding:9px 20px;font-weight:600;font-size:0.85rem;cursor:pointer;font-family:inherit;color:#64748b;background:transparent;transition:all .2s;}
+  .pf-tab.active{background:#fff;color:#0d1f5c;font-weight:700;box-shadow:0 2px 12px rgba(0,0,0,0.08);}
+  .prodi-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .prodi-info-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:18px;overflow:hidden;cursor:pointer;transition:all .25s;}
+  .prodi-info-card:hover{border-color:#0f9d8c;box-shadow:0 12px 36px rgba(15,157,140,0.12);transform:translateY(-4px);}
+  .prodi-info-card.expanded{border-color:#0d1f5c;box-shadow:0 12px 36px rgba(26,46,110,0.14);}
+  .pic-header{padding:20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #e2e8f0;}
+  .pic-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+  .pic-meta h3{font-family:var(--font);font-size:0.95rem;font-weight:800;color:#0d1f5c;margin-bottom:3px;}
+  .pic-jenjang{display:inline-block;background:#f0f4ff;color:#64748b;font-size:0.7rem;font-weight:700;padding:2px 10px;border-radius:12px;}
+  .pic-body{padding:18px 20px;}
+  .pic-body p{font-size:0.82rem;color:#64748b;line-height:1.55;margin-bottom:14px;}
+  .pic-detail{display:none;padding:0 20px 18px;}
+  .prodi-info-card.expanded .pic-detail{display:block;}
+  .pic-section-title{font-size:0.75rem;font-weight:700;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;margin-top:14px;}
+  .pic-kurikulum{display:flex;flex-direction:column;gap:8px;}
+  .kur-item{display:flex;align-items:flex-start;gap:10px;background:#f8faff;border-radius:10px;padding:10px 12px;}
+  .kur-icon{font-size:1rem;flex-shrink:0;}
+  .kur-text h5{font-size:0.82rem;font-weight:700;color:#0d1f5c;margin-bottom:2px;}
+  .kur-text p{font-size:0.75rem;color:#64748b;line-height:1.4;}
+  .karir-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .karir-tag{font-size:0.73rem;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(15,157,140,0.1);color:#0f9d8c;}
+  .jalur-tersedia{display:flex;flex-direction:column;gap:6px;}
+  .jalur-t-item{display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;padding:6px 0;border-bottom:1px solid #e2e8f0;}
+  .jalur-t-item:last-child{border-bottom:none;}
+  .jalur-t-item span{color:#64748b;}
+  .jalur-t-item strong{color:#0d1f5c;font-weight:600;}
+  .pic-spp-row{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#0d1f5c,#1a2e6e);border-radius:12px;padding:12px 16px;margin-top:12px;}
+  .pic-spp-row span{font-size:0.8rem;color:rgba(255,255,255,0.7);}
+  .pic-spp-row strong{font-size:0.95rem;font-weight:800;color:#f5a623;}
+  .expand-btn{width:100%;background:none;border:none;border-top:1px solid #e2e8f0;padding:12px;font-size:0.82rem;font-weight:600;color:#0f9d8c;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s;}
+  .expand-btn:hover{background:#f0f4ff;}
+
+  /* JALUR SECTION */
+  .jalur-info-section{padding:80px 5%;background:#f8faff;}
+  .jalur-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .jalur-info-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:18px;padding:24px;transition:all .25s;}
+  .jalur-info-card:hover{border-color:#0f9d8c;box-shadow:0 10px 30px rgba(15,157,140,0.1);transform:translateY(-4px);}
+  .jic-top{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+  .jic-icon{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+  .jic-top h3{font-family:var(--font);font-size:1rem;font-weight:800;color:#0d1f5c;}
+  .jic-desc{font-size:0.83rem;color:#64748b;line-height:1.6;margin-bottom:14px;}
+  .jic-syarat-title{font-size:0.74rem;font-weight:700;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+  .jic-syarat{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+  .jic-syarat-item{display:flex;align-items:flex-start;gap:8px;font-size:0.8rem;color:#475569;}
+  .jic-syarat-item::before{content:'✓';color:#0f9d8c;font-weight:700;flex-shrink:0;}
+  .jic-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #e2e8f0;}
+  .jic-avail{font-size:0.75rem;color:#64748b;}
+  .jic-avail strong{color:#0d1f5c;}
+  .jic-kipk-badge{background:rgba(245,166,35,0.12);color:#f5a623;font-size:0.72rem;font-weight:700;padding:4px 12px;border-radius:20px;}
+  .jalur-note-box{background:linear-gradient(135deg,#0d1f5c,#1a2e6e);border-radius:16px;padding:24px 28px;margin-top:28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+  .jalur-note-box p{color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.6;flex:1;}
+  .jalur-note-box strong{color:#f5a623;}
+  `;
+  document.head.appendChild(style);
+
+  // ═══ FIND ANCHOR POINT (before wizard section) ═══
+  var wizardSection=document.getElementById('pendaftaran');
+
+  // ══════════════════════════════════════
+  // 1. SKEMA SECTION
+  // ══════════════════════════════════════
+  var skemaHTML=`
+  <section class="skema-info-section" id="skema-info">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="section-label" style="margin:0 auto 14px;">SKEMA PEMBELAJARAN</div>
+      <h2 class="section-title">Pilih Cara Belajar yang Paling Cocok</h2>
+      <p class="section-sub" style="max-width:580px;margin:0 auto;">UTDI menyediakan 3 skema pembelajaran yang fleksibel sesuai kebutuhanmu — online, tatap muka, atau melalui instansi mitra.</p>
+    </div>
+    <div class="skema-compare-grid">
+      <!-- Smart Learning -->
+      <div class="skema-info-card">
+        <div class="skema-info-header blue">
+          <div class="skema-info-icon">🎓</div>
+          <h3>Smart Learning</h3>
+          <p>Pembelajaran fleksibel & digital. Belajar kapan saja, di mana saja.</p>
+        </div>
+        <div class="skema-info-body">
+          <div class="skema-feature"><div class="skema-feature-dot dot-blue">✓</div><p><strong>Akses 24/7</strong> — Materi bisa diakses kapan saja dan di mana saja melalui platform digital UTDI.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-blue">✓</div><p><strong>Jadwal Fleksibel</strong> — Tidak terikat jadwal kelas tetap, cocok untuk kamu yang aktif.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-blue">✓</div><p><strong>Live Session</strong> — Tetap ada sesi tatap muka virtual bersama dosen secara berkala.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-blue">✓</div><p><strong>Semua Prodi Tersedia</strong> — Informatika, SI, TK, BD, MR, dan MTI.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-blue">✗</div><p style="color:#94a3b8;"><strong>KIPK tidak tersedia</strong> untuk skema ini.</p></div>
+          <div class="skema-tag-list">
+            <span class="skema-tag tag-blue">Raport</span>
+            <span class="skema-tag tag-blue">UTBK</span>
+            <span class="skema-tag tag-blue">RPL</span>
+            <span class="skema-tag tag-blue">Alumni</span>
+            <span class="skema-tag tag-blue">Kemitraan</span>
+          </div>
+        </div>
+      </div>
+      <!-- Reguler -->
+      <div class="skema-info-card">
+        <div class="skema-info-header teal">
+          <div class="skema-info-icon">🏫</div>
+          <h3>Reguler / Offline</h3>
+          <p>Pembelajaran tatap muka langsung di kampus UTDI.</p>
+        </div>
+        <div class="skema-info-body">
+          <div class="skema-feature"><div class="skema-feature-dot dot-teal">✓</div><p><strong>Tatap Muka</strong> — Kuliah langsung di kampus dengan interaksi penuh bersama dosen dan teman.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-teal">✓</div><p><strong>Fasilitas Kampus</strong> — Akses penuh ke laboratorium, perpustakaan, dan fasilitas kampus.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-teal">✓</div><p><strong>Jadwal Terstruktur</strong> — Jadwal kuliah tetap setiap minggu, lebih disiplin dan teratur.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-teal">✓</div><p><strong>KIPK Tersedia</strong> — Satu-satunya skema yang mendukung jalur Kartu Indonesia Pintar Kuliah.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-teal">✓</div><p><strong>Semua Prodi Tersedia</strong> — Informatika, SI, TK, BD, MR, dan MTI.</p></div>
+          <div class="skema-tag-list">
+            <span class="skema-tag tag-teal">Raport</span>
+            <span class="skema-tag tag-teal">UTBK</span>
+            <span class="skema-tag tag-teal">RPL</span>
+            <span class="skema-tag tag-teal">Alumni</span>
+            <span class="skema-tag tag-teal">Kemitraan</span>
+            <span class="skema-tag tag-teal">⭐ KIPK</span>
+          </div>
+        </div>
+      </div>
+      <!-- Kerjasama -->
+      <div class="skema-info-card">
+        <div class="skema-info-header purple">
+          <div class="skema-info-icon">🤝</div>
+          <h3>Jalur Kerjasama</h3>
+          <p>Pendaftaran melalui sekolah atau instansi mitra UTDI.</p>
+        </div>
+        <div class="skema-info-body">
+          <div class="skema-feature"><div class="skema-feature-dot dot-purple">✓</div><p><strong>Melalui Mitra</strong> — Daftar melalui sekolah atau instansi yang telah bekerja sama dengan UTDI.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-purple">✓</div><p><strong>Proses Dipermudah</strong> — Administrasi dibantu oleh pihak instansi mitra, lebih praktis.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-purple">✓</div><p><strong>Semua Prodi Tersedia</strong> — Pilih dari 6 program studi sesuai minat.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-purple">✓</div><p><strong>Gelombang Fleksibel</strong> — Bisa memilih gelombang Khusus, 1, 2, atau 3.</p></div>
+          <div class="skema-feature"><div class="skema-feature-dot dot-purple">ℹ</div><p><strong>Syarat Tambahan</strong> — Kamu perlu memilih nama instansi/mitra yang terdaftar di UTDI.</p></div>
+          <div class="skema-tag-list">
+            <span class="skema-tag tag-purple">SMA N 1 Yogyakarta</span>
+            <span class="skema-tag tag-purple">SMK Bina Nusantara</span>
+            <span class="skema-tag tag-purple">Yayasan Maju Bersama</span>
+            <span class="skema-tag tag-purple">+ Instansi Lainnya</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="skema-cta-row">
+      <button onclick="document.getElementById('pendaftaran').scrollIntoView({behavior:'smooth'})" style="background:#0d1f5c;color:#fff;border:none;border-radius:12px;padding:13px 30px;font-weight:700;font-size:0.95rem;cursor:pointer;font-family:inherit;">Mulai Pilih Skema di Wizard →</button>
+    </div>
+  </section>`;
+
+  // ══════════════════════════════════════
+  // 2. PRODI SECTION
+  // ══════════════════════════════════════
+  var prodiHTML=`
+  <section class="prodi-info-section" id="prodi-info">
+    <div style="text-align:center;margin-bottom:36px;">
+      <div class="section-label" style="margin:0 auto 14px;">PROGRAM STUDI</div>
+      <h2 class="section-title">6 Prodi untuk Masa Depan Digital</h2>
+      <p class="section-sub" style="max-width:560px;margin:0 auto;">Klik tiap prodi untuk melihat detail kurikulum, prospek karir, dan jalur pendaftaran yang tersedia.</p>
+    </div>
+    <div class="prodi-filter-tabs">
+      <button class="pf-tab active" onclick="filterProdi(this,'semua')">Semua</button>
+      <button class="pf-tab" onclick="filterProdi(this,'s1')">Sarjana (S1)</button>
+      <button class="pf-tab" onclick="filterProdi(this,'s2')">Magister (S2)</button>
+      <button class="pf-tab" onclick="filterProdi(this,'teknologi')">Teknologi</button>
+      <button class="pf-tab" onclick="filterProdi(this,'bisnis')">Bisnis</button>
+    </div>
+    <div class="prodi-info-grid" id="prodiInfoGrid">
+
+      <!-- IF -->
+      <div class="prodi-info-card" data-cat="s1 teknologi" id="pic-IF">
+        <div class="pic-header">
+          <div class="pic-icon" style="background:#dbeafe;">💻</div>
+          <div class="pic-meta"><h3>Informatika</h3><span class="pic-jenjang">S1 · 22 SKS/Semester</span></div>
+        </div>
+        <div class="pic-body">
+          <p>Pelajari pemrograman, AI, data science, cloud computing, dan sistem cerdas untuk menciptakan solusi digital yang berdampak besar.</p>
+        </div>
+        <div class="pic-detail">
+          <div class="pic-section-title">Fokus Kurikulum</div>
+          <div class="pic-kurikulum">
+            <div class="kur-item"><div class="kur-icon">⚙️</div><div class="kur-text"><h5>Software Engineering</h5><p>Pengembangan aplikasi web, mobile, dan sistem skala besar</p></div></div>
+            <div class="kur-item"><div class="kur-icon">🤖</div><div class="kur-text"><h5>Artificial Intelligence & Data</h5><p>Machine learning, deep learning, dan analisis data</p></div></div>
+            <div class="kur-item"><div class="kur-icon">☁️</div><div class="kur-text"><h5>Cloud Computing & DevOps</h5><p>Infrastruktur cloud, containerisasi, dan CI/CD pipeline</p></div></div>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Prospek Karir</div>
+          <div class="karir-tags">
+            <span class="karir-tag">Software Engineer</span>
+            <span class="karir-tag">Data Scientist</span>
+            <span class="karir-tag">AI Engineer</span>
+            <span class="karir-tag">Cloud Architect</span>
+            <span class="karir-tag">DevOps Engineer</span>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Jalur Masuk</div>
+          <div class="jalur-tersedia">
+            <div class="jalur-t-item"><span>Raport / UTBK / RPL</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>Alumni / Kemitraan</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>KIPK</span><strong>✓ (Reguler only)</strong></div>
+          </div>
+          <div class="pic-spp-row"><span>SPP per Semester</span><strong>Rp 1.900.000</strong></div>
+        </div>
+        <button class="expand-btn" onclick="expandProdi('IF')">
+          <span id="expandTxt-IF">▼ Lihat Detail Prodi</span>
+        </button>
+      </div>
+
+      <!-- SI -->
+      <div class="prodi-info-card" data-cat="s1 teknologi bisnis" id="pic-SI">
+        <div class="pic-header">
+          <div class="pic-icon" style="background:#d1fae5;">🗄️</div>
+          <div class="pic-meta"><h3>Sistem Informasi</h3><span class="pic-jenjang">S1 · 22 SKS/Semester</span></div>
+        </div>
+        <div class="pic-body">
+          <p>Integrasikan teknologi dengan proses bisnis. Pelajari manajemen data, transformasi digital, dan analisis sistem untuk kebutuhan organisasi modern.</p>
+        </div>
+        <div class="pic-detail">
+          <div class="pic-section-title">Fokus Kurikulum</div>
+          <div class="pic-kurikulum">
+            <div class="kur-item"><div class="kur-icon">🗃️</div><div class="kur-text"><h5>Manajemen Basis Data</h5><p>Perancangan, optimasi, dan administrasi database</p></div></div>
+            <div class="kur-item"><div class="kur-icon">🔄</div><div class="kur-text"><h5>Transformasi Digital</h5><p>ERP, CRM, dan implementasi sistem informasi bisnis</p></div></div>
+            <div class="kur-item"><div class="kur-icon">📊</div><div class="kur-text"><h5>Business Intelligence</h5><p>Analisis data bisnis, dashboard, dan pengambilan keputusan</p></div></div>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Prospek Karir</div>
+          <div class="karir-tags">
+            <span class="karir-tag">System Analyst</span>
+            <span class="karir-tag">IT Business Analyst</span>
+            <span class="karir-tag">Database Administrator</span>
+            <span class="karir-tag">ERP Consultant</span>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Jalur Masuk</div>
+          <div class="jalur-tersedia">
+            <div class="jalur-t-item"><span>Raport / UTBK / RPL</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>Alumni / Kemitraan</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>KIPK</span><strong>✓ (Reguler only)</strong></div>
+          </div>
+          <div class="pic-spp-row"><span>SPP per Semester</span><strong>Rp 1.600.000</strong></div>
+        </div>
+        <button class="expand-btn" onclick="expandProdi('SI')"><span id="expandTxt-SI">▼ Lihat Detail Prodi</span></button>
+      </div>
+
+      <!-- TK -->
+      <div class="prodi-info-card" data-cat="s1 teknologi" id="pic-TK">
+        <div class="pic-header">
+          <div class="pic-icon" style="background:#ede9fe;">🔧</div>
+          <div class="pic-meta"><h3>Teknik Komputer</h3><span class="pic-jenjang">S1 · 23 SKS/Semester</span></div>
+        </div>
+        <div class="pic-body">
+          <p>Kuasai perangkat keras, jaringan komputer, IoT, dan embedded system. Bangun infrastruktur digital yang andal dan efisien.</p>
+        </div>
+        <div class="pic-detail">
+          <div class="pic-section-title">Fokus Kurikulum</div>
+          <div class="pic-kurikulum">
+            <div class="kur-item"><div class="kur-icon">🌐</div><div class="kur-text"><h5>Jaringan Komputer</h5><p>Desain, konfigurasi, dan keamanan jaringan komputer</p></div></div>
+            <div class="kur-item"><div class="kur-icon">📡</div><div class="kur-text"><h5>Internet of Things (IoT)</h5><p>Sensor, mikrokontroler, dan sistem tertanam</p></div></div>
+            <div class="kur-item"><div class="kur-icon">💾</div><div class="kur-text"><h5>Arsitektur Komputer</h5><p>Desain hardware, FPGA, dan sistem digital</p></div></div>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Prospek Karir</div>
+          <div class="karir-tags">
+            <span class="karir-tag">Network Engineer</span>
+            <span class="karir-tag">IoT Developer</span>
+            <span class="karir-tag">Embedded Systems Engineer</span>
+            <span class="karir-tag">Hardware Engineer</span>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Jalur Masuk</div>
+          <div class="jalur-tersedia">
+            <div class="jalur-t-item"><span>Raport / UTBK / RPL</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>Alumni / Kemitraan</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>KIPK</span><strong>✓ (Reguler only)</strong></div>
+          </div>
+          <div class="pic-spp-row"><span>SPP per Semester</span><strong>Rp 900.000</strong></div>
+        </div>
+        <button class="expand-btn" onclick="expandProdi('TK')"><span id="expandTxt-TK">▼ Lihat Detail Prodi</span></button>
+      </div>
+
+      <!-- BD -->
+      <div class="prodi-info-card" data-cat="s1 bisnis" id="pic-BD">
+        <div class="pic-header">
+          <div class="pic-icon" style="background:#fff7ed;">📊</div>
+          <div class="pic-meta"><h3>Bisnis Digital</h3><span class="pic-jenjang">S1 · 23 SKS/Semester</span></div>
+        </div>
+        <div class="pic-body">
+          <p>Pelajari strategi bisnis berbasis teknologi, digital marketing, e-commerce, dan pengembangan platform digital untuk era industri 4.0.</p>
+        </div>
+        <div class="pic-detail">
+          <div class="pic-section-title">Fokus Kurikulum</div>
+          <div class="pic-kurikulum">
+            <div class="kur-item"><div class="kur-icon">📱</div><div class="kur-text"><h5>Digital Marketing</h5><p>SEO, SEM, social media marketing, dan content strategy</p></div></div>
+            <div class="kur-item"><div class="kur-icon">🛍️</div><div class="kur-text"><h5>E-Commerce & Platform</h5><p>Pengembangan toko online, marketplace, dan payment gateway</p></div></div>
+            <div class="kur-item"><div class="kur-icon">💡</div><div class="kur-text"><h5>Startup & Inovasi</h5><p>Business model canvas, lean startup, dan product development</p></div></div>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Prospek Karir</div>
+          <div class="karir-tags">
+            <span class="karir-tag">Digital Marketing Specialist</span>
+            <span class="karir-tag">Product Manager</span>
+            <span class="karir-tag">E-Commerce Manager</span>
+            <span class="karir-tag">Business Analyst</span>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Jalur Masuk</div>
+          <div class="jalur-tersedia">
+            <div class="jalur-t-item"><span>Raport / UTBK / RPL</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>Alumni / Kemitraan</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>KIPK</span><strong>✓ (Reguler only)</strong></div>
+          </div>
+          <div class="pic-spp-row"><span>SPP per Semester</span><strong>Rp 1.500.000</strong></div>
+        </div>
+        <button class="expand-btn" onclick="expandProdi('BD')"><span id="expandTxt-BD">▼ Lihat Detail Prodi</span></button>
+      </div>
+
+      <!-- MR -->
+      <div class="prodi-info-card" data-cat="s1 bisnis" id="pic-MR">
+        <div class="pic-header">
+          <div class="pic-icon" style="background:#fce7f3;">🛒</div>
+          <div class="pic-meta"><h3>Manajemen Ritel</h3><span class="pic-jenjang">S1 · 23 SKS/Semester</span></div>
+        </div>
+        <div class="pic-body">
+          <p>Kuasai operasional ritel modern, manajemen rantai pasok, marketplace digital, dan strategi customer experience untuk bisnis ritel masa kini.</p>
+        </div>
+        <div class="pic-detail">
+          <div class="pic-section-title">Fokus Kurikulum</div>
+          <div class="pic-kurikulum">
+            <div class="kur-item"><div class="kur-icon">🏪</div><div class="kur-text"><h5>Manajemen Toko & Merchandising</h5><p>Operasional toko, display produk, dan pengelolaan stok</p></div></div>
+            <div class="kur-item"><div class="kur-icon">🔗</div><div class="kur-text"><h5>Supply Chain Management</h5><p>Pengadaan, logistik, dan manajemen rantai pasok ritel</p></div></div>
+            <div class="kur-item"><div class="kur-icon">🤳</div><div class="kur-text"><h5>Omnichannel & Digital Retail</h5><p>Integrasi toko fisik dan online, marketplace strategy</p></div></div>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Prospek Karir</div>
+          <div class="karir-tags">
+            <span class="karir-tag">Retail Manager</span>
+            <span class="karir-tag">Category Manager</span>
+            <span class="karir-tag">Supply Chain Analyst</span>
+            <span class="karir-tag">Marketplace Specialist</span>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Jalur Masuk</div>
+          <div class="jalur-tersedia">
+            <div class="jalur-t-item"><span>Raport / UTBK / RPL</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>Alumni / Kemitraan</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>KIPK</span><strong>✓ (Reguler only)</strong></div>
+          </div>
+          <div class="pic-spp-row"><span>SPP per Semester</span><strong>Rp 1.200.000</strong></div>
+        </div>
+        <button class="expand-btn" onclick="expandProdi('MR')"><span id="expandTxt-MR">▼ Lihat Detail Prodi</span></button>
+      </div>
+
+      <!-- MTI -->
+      <div class="prodi-info-card" data-cat="s2 teknologi" id="pic-MTI">
+        <div class="pic-header">
+          <div class="pic-icon" style="background:#f0f9ff;">🏆</div>
+          <div class="pic-meta"><h3>Teknologi Informasi</h3><span class="pic-jenjang">S2 · Magister</span></div>
+        </div>
+        <div class="pic-body">
+          <p>Program pascasarjana yang mempersiapkan pemimpin teknologi dengan keahlian strategis, manajerial, dan riset di bidang TI.</p>
+        </div>
+        <div class="pic-detail">
+          <div class="pic-section-title">Fokus Kurikulum</div>
+          <div class="pic-kurikulum">
+            <div class="kur-item"><div class="kur-icon">🧠</div><div class="kur-text"><h5>IT Strategic Management</h5><p>Perencanaan strategis TI, IT governance, dan enterprise architecture</p></div></div>
+            <div class="kur-item"><div class="kur-icon">🔬</div><div class="kur-text"><h5>Riset & Inovasi TI</h5><p>Metodologi riset, publikasi ilmiah, dan pengembangan teknologi</p></div></div>
+            <div class="kur-item"><div class="kur-icon">👥</div><div class="kur-text"><h5>IT Leadership</h5><p>Kepemimpinan, manajemen proyek TI, dan transformasi digital</p></div></div>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Prospek Karir</div>
+          <div class="karir-tags">
+            <span class="karir-tag">CTO / CIO</span>
+            <span class="karir-tag">IT Director</span>
+            <span class="karir-tag">IT Consultant</span>
+            <span class="karir-tag">Researcher / Akademisi</span>
+          </div>
+          <div class="pic-section-title" style="margin-top:16px;">Jalur Masuk</div>
+          <div class="jalur-tersedia">
+            <div class="jalur-t-item"><span>Semester Ganjil</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>Semester Genap</span><strong>✓ Tersedia</strong></div>
+            <div class="jalur-t-item"><span>KIPK</span><strong>✗ Tidak Tersedia</strong></div>
+          </div>
+          <div class="pic-spp-row"><span>SPP per Semester</span><strong>Rp 1.666.667</strong></div>
+        </div>
+        <button class="expand-btn" onclick="expandProdi('MTI')"><span id="expandTxt-MTI">▼ Lihat Detail Prodi</span></button>
+      </div>
+
+    </div>
+  </section>`;
+
+  // ══════════════════════════════════════
+  // 3. JALUR SECTION
+  // ══════════════════════════════════════
+  var jalurHTML=`
+  <section class="jalur-info-section" id="jalur-info">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="section-label" style="margin:0 auto 14px;">🛤️ JALUR PENDAFTARAN</div>
+      <h2 class="section-title">6 Jalur Masuk yang Tersedia</h2>
+      <p class="section-sub" style="max-width:560px;margin:0 auto;">Pilih jalur yang paling sesuai dengan latar belakang dan dokumen yang kamu miliki.</p>
+    </div>
+    <div class="jalur-info-grid">
+
+      <div class="jalur-info-card">
+        <div class="jic-top"><div class="jic-icon" style="background:var(--navy);color:white;">&#128203;</div><h3>Raport</h3></div>
+        <p class="jic-desc">Jalur masuk berdasarkan nilai rapor SMA/SMK/MA sederajat. Cocok untuk lulusan baru yang memiliki rekam jejak nilai akademik yang baik.</p>
+        <div class="jic-syarat-title">Persyaratan Dokumen</div>
+        <div class="jic-syarat">
+          <div class="jic-syarat-item">Fotokopi rapor kelas 10–12 (semua semester)</div>
+          <div class="jic-syarat-item">Surat keterangan aktif / ijazah SMA/SMK</div>
+          <div class="jic-syarat-item">Foto 3×4 terbaru (background merah)</div>
+          <div class="jic-syarat-item">KTP / KK (untuk verifikasi data)</div>
+        </div>
+        <div class="jic-bottom"><span class="jic-avail">Tersedia di: <strong>Smart Learning & Reguler</strong></span></div>
+      </div>
+
+      <div class="jalur-info-card">
+        <div class="jic-top"><div class="jic-icon" style="background:var(--navy);color:white;">&#128187;</div><h3>UTBK</h3></div>
+        <p class="jic-desc">Ujian Tulis Berbasis Komputer — jalur masuk berdasarkan hasil ujian seleksi yang diselenggarakan oleh UTDI atau lembaga terkait.</p>
+        <div class="jic-syarat-title">Persyaratan Dokumen</div>
+        <div class="jic-syarat">
+          <div class="jic-syarat-item">Sertifikat / hasil UTBK yang masih berlaku</div>
+          <div class="jic-syarat-item">Ijazah / surat keterangan lulus SMA/SMK</div>
+          <div class="jic-syarat-item">Foto 3×4 terbaru</div>
+          <div class="jic-syarat-item">KTP untuk verifikasi identitas</div>
+        </div>
+        <div class="jic-bottom"><span class="jic-avail">Tersedia di: <strong>Smart Learning & Reguler</strong></span></div>
+      </div>
+
+      <div class="jalur-info-card">
+        <div class="jic-top"><div class="jic-icon" style="background:var(--navy);color:white;">&#128260;</div><h3>RPL</h3></div>
+        <p class="jic-desc">Rekognisi Pembelajaran Lampau — pengalaman kerja atau pendidikan non-formal diakui sebagai kredit SKS, sehingga masa studi lebih singkat.</p>
+        <div class="jic-syarat-title">Persyaratan Dokumen</div>
+        <div class="jic-syarat">
+          <div class="jic-syarat-item">Portofolio pengalaman kerja / sertifikat keahlian</div>
+          <div class="jic-syarat-item">Surat keterangan kerja dari perusahaan</div>
+          <div class="jic-syarat-item">Ijazah SMA/SMK / Diploma terakhir</div>
+          <div class="jic-syarat-item">CV lengkap dan foto terbaru</div>
+        </div>
+        <div class="jic-bottom"><span class="jic-avail">Tersedia di: <strong>Smart Learning & Reguler</strong></span></div>
+      </div>
+
+      <div class="jalur-info-card">
+        <div class="jic-top"><div class="jic-icon" style="background:var(--navy);color:white;">&#127891;</div><h3>Alumni</h3></div>
+        <p class="jic-desc">Jalur khusus bagi alumni UTDI yang ingin melanjutkan studi ke jenjang lebih tinggi atau mengambil program studi tambahan.</p>
+        <div class="jic-syarat-title">Persyaratan Dokumen</div>
+        <div class="jic-syarat">
+          <div class="jic-syarat-item">Ijazah / transkrip nilai dari UTDI</div>
+          <div class="jic-syarat-item">Nomor Induk Mahasiswa (NIM) lama</div>
+          <div class="jic-syarat-item">Foto 3×4 terbaru</div>
+          <div class="jic-syarat-item">KTP untuk verifikasi identitas</div>
+        </div>
+        <div class="jic-bottom"><span class="jic-avail">Tersedia di: <strong>Smart Learning & Reguler</strong></span></div>
+      </div>
+
+      <div class="jalur-info-card">
+        <div class="jic-top"><div class="jic-icon" style="background:var(--navy);color:white;">&#129309;</div><h3>Kemitraan</h3></div>
+        <p class="jic-desc">Jalur kerjasama antara UTDI dengan sekolah atau instansi mitra. Proses pendaftaran difasilitasi oleh pihak mitra UTDI.</p>
+        <div class="jic-syarat-title">Persyaratan Dokumen</div>
+        <div class="jic-syarat">
+          <div class="jic-syarat-item">Surat rekomendasi dari instansi / sekolah mitra</div>
+          <div class="jic-syarat-item">Rapor / ijazah SMA/SMK sederajat</div>
+          <div class="jic-syarat-item">Foto 3×4 terbaru</div>
+          <div class="jic-syarat-item">KTP / KK untuk verifikasi data</div>
+        </div>
+        <div class="jic-bottom"><span class="jic-avail">Tersedia di: <strong>Jalur Kerjasama</strong></span></div>
+      </div>
+
+      <div class="jalur-info-card" style="border-color:rgba(245,166,35,0.4);background:rgba(245,166,35,0.02);">
+        <div class="jic-top"><div class="jic-icon" style="background:var(--accent);color:var(--navy);">&#128737;</div><h3>KIPK ⭐</h3></div>
+        <p class="jic-desc">Kartu Indonesia Pintar Kuliah — program beasiswa pemerintah untuk mahasiswa berprestasi dari keluarga kurang mampu. <strong>Hanya tersedia untuk Reguler/Offline.</strong></p>
+        <div class="jic-syarat-title">Persyaratan Dokumen</div>
+        <div class="jic-syarat">
+          <div class="jic-syarat-item">Kartu KIPK yang masih aktif</div>
+          <div class="jic-syarat-item">Surat Keterangan Tidak Mampu (SKTM)</div>
+          <div class="jic-syarat-item">Rapor / ijazah SMA/SMK sederajat</div>
+          <div class="jic-syarat-item">KK dan KTP orang tua / wali</div>
+        </div>
+        <div class="jic-bottom">
+          <span class="jic-avail">Tersedia di: <strong>Reguler / Offline saja</strong></span>
+          <span class="jic-kipk-badge">Beasiswa Pemerintah</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="jalur-note-box">
+      <div style="font-size:2rem;">⭐</div>
+      <p><strong>Catatan Penting:</strong> Jalur <strong>KIPK</strong> hanya tersedia untuk skema <strong>Reguler / Offline</strong>. Jika kamu ingin mendaftar melalui KIPK, pastikan memilih metode Reguler pada langkah pendaftaran. Semua jalur lainnya tersedia untuk Smart Learning maupun Reguler.</p>
+      <button onclick="document.getElementById('pendaftaran').scrollIntoView({behavior:'smooth'})" style="background:#f5a623;color:#070f2b;border:none;border-radius:10px;padding:11px 22px;font-weight:700;font-size:0.88rem;cursor:pointer;font-family:inherit;white-space:nowrap;">Mulai Daftar →</button>
+    </div>
+  </section>`;
+
+  // ══ INSERT before wizard section ══
+  wizardSection.insertAdjacentHTML('beforebegin', skemaHTML + prodiHTML + jalurHTML);
+
+  // ══ UPDATE NAV ══
+  var navLinks=document.querySelector('.nav-links');
+  navLinks.innerHTML=`
+    <li><a href="#skema-info">Skema</a></li>
+    <li><a href="#prodi-info">Prodi</a></li>
+    <li><a href="#jalur-info">Jalur Masuk</a></li>
+    <li><a href="#pendaftaran">Daftar</a></li>
+    <li><a href="#cek-biaya">Cek Biaya</a></li>
+    <li><a href="#beasiswa">Beasiswa</a></li>
+    <li><a href="#cicilan">Cara Bayar</a></li>`;
+
+  // ══ PRODI EXPAND FUNCTION ══
+  window.expandProdi=function(id){
+    var card=document.getElementById('pic-'+id);
+    var txt=document.getElementById('expandTxt-'+id);
+    var isExp=card.classList.contains('expanded');
+    document.querySelectorAll('.prodi-info-card').forEach(function(c){
+      c.classList.remove('expanded');
+    });
+    document.querySelectorAll('[id^="expandTxt-"]').forEach(function(t){
+      t.textContent='▼ Lihat Detail Prodi';
+    });
+    if(!isExp){
+      card.classList.add('expanded');
+      txt.textContent='▲ Sembunyikan Detail';
+      card.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+  };
+
+  // ══ FILTER PRODI ══
+  window.filterProdi=function(tab,cat){
+    document.querySelectorAll('.pf-tab').forEach(function(t){t.classList.remove('active');});
+    tab.classList.add('active');
+    document.querySelectorAll('.prodi-info-card').forEach(function(card){
+      if(cat==='semua'||card.dataset.cat.includes(cat)){
+        card.style.display='';
+      } else {
+        card.style.display='none';
+      }
+    });
+  };
+
+})();
+</script>
