@@ -809,24 +809,23 @@ function cfg(key, fallback){ return (D.config && D.config[key]) ? D.config[key] 
 function txt(key, fallback){ return (D.teks_ui && D.teks_ui[key]) ? D.teks_ui[key] : (fallback||''); }
 
 // ─── TIMEZONE FIX (WIB = GMT+7) ─────────────────────────
-// Parse tanggal dari string "YYYY-MM-DD" sebagai waktu lokal
-// ─── TIMEZONE FIX (WIB = GMT+7) ─────────────────────────
-// Semua perbandingan tanggal gelombang menggunakan WIB
-
-// "Hari ini" dalam WIB — hasilkan angka YYYYMMDD untuk perbandingan mudah
-function todayWIB() {
-  var now    = new Date();
-  var wibMs  = now.getTime() + (7 * 60 * 60 * 1000); // geser +7 jam ke WIB
-  var wib    = new Date(wibMs);
-  // Format YYYYMMDD sebagai integer untuk perbandingan sederhana
-  var y = wib.getUTCFullYear();
-  var m = wib.getUTCMonth() + 1;
-  var d = wib.getUTCDate();
-  return y * 10000 + m * 100 + d; // contoh: 20260613
+// ─── DATE UTILS ──────────────────────────────────────────
+// Parse 'YYYY-MM-DD' dari Sheets sebagai local date (hindari UTC shift)
+function parseDate(str) {
+  if (!str) return new Date(0);
+  var d = String(str).split('T')[0].split(' ')[0];
+  var p = d.split('-');
+  if (p.length !== 3) return new Date(0);
+  return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
 }
 
-// Parse tanggal string 'YYYY-MM-DD' → integer YYYYMMDD
-// Sheets kadang kirim '2026-06-13T00:00:00.000Z' → kita ambil bagian tanggalnya saja
+// Hari ini sebagai midnight lokal browser
+function todayLocal() {
+  var n = new Date();
+  return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+}
+
+// Integer YYYYMMDD dari string tanggal — untuk perbandingan cepat tanpa timezone issue
 function parseDateInt(str) {
   if (!str) return 0;
   var d = String(str).split('T')[0].split(' ')[0];
@@ -835,25 +834,16 @@ function parseDateInt(str) {
   return Number(p[0]) * 10000 + Number(p[1]) * 100 + Number(p[2]);
 }
 
-// Cek apakah gelombang aktif hari ini (WIB)
-// tanggal_selesai INKLUSIF: hari terakhir masih aktif sampai akhir hari
-function isGelombangAktif(g) {
-  var today = todayWIB();
-  var start = parseDateInt(g.tanggal_mulai);
-  var end   = parseDateInt(g.tanggal_selesai);
-  return today >= start && today <= end;
+// Hari ini sebagai integer YYYYMMDD dari browser local time
+function todayWIB() {
+  var n = new Date();
+  return n.getFullYear() * 10000 + (n.getMonth()+1) * 100 + n.getDate();
 }
 
-// Untuk kompatibilitas dengan kode lama yang pakai parseDate()
-function parseDate(str) {
-  if (!str) return new Date(0);
-  var d = String(str).split('T')[0].split(' ')[0];
-  var p = d.split('-');
-  if (p.length !== 3) return new Date(0);
-  return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
-}
-function todayLocal() {
-  return parseDate(String(todayWIB()).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
+// Cek gelombang aktif — tanggal_selesai inklusif
+function isGelombangAktif(g) {
+  var today = todayWIB();
+  return today >= parseDateInt(g.tanggal_mulai) && today <= parseDateInt(g.tanggal_selesai);
 }
 
 // ═══════════════════════════════════════════════════════
