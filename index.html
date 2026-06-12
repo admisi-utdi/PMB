@@ -607,6 +607,7 @@ footer{background:#040c1f;color:rgba(255,255,255,0.9);padding:48px 5% 24px;}
           <div class="total-line"><span id="cicilanLabel1">Angsuran Pertama (35% SPA + SPP)</span><strong id="eBayarAwal">—</strong></div>
           <div class="total-line big"><span>Total SPA (Cicilan)</span><strong id="eTotalSPA">—</strong></div>
         </div>
+        <div id="eCatatanJalur" style="display:none;margin-top:12px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:10px;padding:10px 14px;font-size:0.75rem;color:#4ade80;line-height:1.5;"></div>
       </div>
     </div>
     <div class="wizard-nav">
@@ -810,16 +811,28 @@ function txt(key, fallback){ return (D.teks_ui && D.teks_ui[key]) ? D.teks_ui[ke
 // ─── TIMEZONE FIX (WIB = GMT+7) ─────────────────────────
 // Parse tanggal dari string "YYYY-MM-DD" sebagai waktu lokal
 // Menghindari UTC-shift yang membuat tanggal geser 1 hari
-function parseDate(str) {
-  if (!str) return new Date(0);
-  var d = String(str).split("T")[0].split(" ")[0];
-  var p = d.split("-");
-  if (p.length !== 3) return new Date(str);
-  return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
-}
+// ─── TIMEZONE FIX: paksa WIB (GMT+7) ────────────────────
+var WIB_OFFSET = 7 * 60; // menit
+
+// "Hari ini" dalam WIB — tidak peduli timezone browser/server
 function todayLocal() {
   var now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  // Geser ke WIB: UTC + 7 jam
+  var wibMs = now.getTime() + (WIB_OFFSET * 60 * 1000);
+  var wib   = new Date(wibMs);
+  // Kembalikan sebagai midnight lokal agar bisa dibandingkan dengan parseDate
+  return new Date(wib.getUTCFullYear(), wib.getUTCMonth(), wib.getUTCDate());
+}
+
+// Parse 'YYYY-MM-DD' (dari Google Sheets) sebagai local midnight
+// Sheets menyimpan tanggal sebagai string tanpa timezone → kita baca apa adanya
+function parseDate(str) {
+  if (!str) return new Date(0);
+  var d = String(str).split('T')[0].split(' ')[0]; // ambil YYYY-MM-DD saja
+  var p = d.split('-');
+  if (p.length !== 3) return new Date(0);
+  // new Date(y, m-1, d) → local midnight, tidak ada UTC-shift
+  return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1456,52 +1469,109 @@ function getCicilanDP() {
   return Number(D.cicilan[0].persen_bayar) || 35;
 }
 
+// ─── Helper: ambil data jalur aktif ────────────────────────
+function getJalurData() {
+  if (!D.jalur || !sel.jalur) return null;
+  return D.jalur.find(function(j){ return j.id === sel.jalur.id; });
+}
+
+// ─── Helper: hitung biaya final dengan override jalur ──────
+// override_spa/spp/sks: -1 = pakai normal, 0 = gratis, angka lain = nilai custom
+function hitungBiaya(b, jalurData) {
+  var spaNorm = Number(b.spa_normal)            || 0;
+  var spaAft  = Number(b.spa_setelah_potongan)  || 0;
+  var sppBase = Number(b.spp_tetap)             || 0;
+  var sksBase = Number(b.spp_per_sks)           || 0;
+  var anvBase = Number(b.aanvullen)             || 0;
+
+  var overrideSPA = jalurData ? Number(jalurData.override_spa) : -1;
+  var overrideSPP = jalurData ? Number(jalurData.override_spp) : -1;
+  var overrideSKS = jalurData ? Number(jalurData.override_sks) : -1;
+  var catatanJalur = jalurData ? (jalurData.catatan_biaya_jalur || '') : '';
+
+  var spaFinal = (overrideSPA >= 0) ? overrideSPA : spaAft;
+  var sppFinal = (overrideSPP >= 0) ? overrideSPP : sppBase;
+  var sksFinal = (overrideSKS >= 0) ? overrideSKS : sksBase;
+  var potAmt   = spaNorm - spaAft; // potongan gelombang (tetap tampil)
+
+  return {
+    spaNorm     : spaNorm,
+    spaAft      : spaAft,       // SPA setelah potongan gelombang (sebelum override)
+    spaFinal    : spaFinal,     // SPA yang benar-benar ditagih
+    potAmt      : potAmt,
+    sppFinal    : sppFinal,
+    sksFinal    : sksFinal,
+    anvFinal    : anvBase,
+    catatan     : catatanJalur,
+    adaOverride : (overrideSPA >= 0 || overrideSPP >= 0 || overrideSKS >= 0)
+  };
+}
+
 function updateEstimasi() {
   var g = getGelData();
   var b = getBiayaData();
   var p = getProdiData();
+  var j = getJalurData();
   if (!g || !b || !p) return;
 
-  var dpPct    = getCicilanDP() / 100;
-  var spaNorm  = Number(b.spa_normal) || 0;
-  var spaAft   = Number(b.spa_setelah_potongan) || 0;
-  var potAmt   = spaNorm - spaAft;
-  var spp      = Number(b.spp_tetap) || 0;
-  var sks      = Number(b.spp_per_sks) || 0;
-  var anv      = Number(b.aanvullen) || 0;
-  var ang1     = Math.round(spaAft * dpPct) + spp;
+  var dpPct = getCicilanDP() / 100;
+  var hb    = hitungBiaya(b, j);
+  var ang1  = Math.round(hb.spaFinal * dpPct) + hb.sppFinal;
 
   document.getElementById('sumGel').textContent   = g.nama + ' (Potongan '+g.label_potongan+')';
   document.getElementById('sumSkema').textContent = sel.skema ? sel.skema.nama : '—';
   document.getElementById('sumJalur').textContent = sel.jalur ? sel.jalur.nama : '—';
   document.getElementById('sumProdi').textContent = p.nama + ' – ' + p.jenjang;
 
-  document.getElementById('eSPANorm').textContent  = fmt(spaNorm);
-  document.getElementById('eSPAPot').textContent   = spaNorm===0 ? '—' : '– '+fmt(potAmt);
-  document.getElementById('eSPABayar').textContent = fmt(spaAft);
-  document.getElementById('eSPP').textContent      = fmt(spp)+'/semester';
-  document.getElementById('eSKS').textContent      = sks===0 ? '—' : fmt(sks)+'/SKS';
-  document.getElementById('eAnv').textContent      = anv===0 ? '—' : fmt(anv)+'/SKS';
+  document.getElementById('eSPANorm').textContent  = fmt(hb.spaNorm);
+  document.getElementById('eSPAPot').textContent   = hb.spaNorm===0 ? '—' : '– '+fmt(hb.potAmt);
+  // Jika ada override SPA, tampilkan label berbeda
+  var eSPABayarEl = document.getElementById('eSPABayar');
+  if (hb.adaOverride && hb.spaFinal === 0) {
+    eSPABayarEl.textContent = 'Rp 0 (Ditanggung)';
+    eSPABayarEl.style.color = '#4ade80';
+  } else if (hb.adaOverride) {
+    eSPABayarEl.textContent = fmt(hb.spaFinal) + ' (Disesuaikan)';
+    eSPABayarEl.style.color = 'var(--accent)';
+  } else {
+    eSPABayarEl.textContent = fmt(hb.spaFinal);
+    eSPABayarEl.style.color = '';
+  }
+  document.getElementById('eSPP').textContent = hb.sppFinal === 0
+    ? 'Rp 0 (Ditanggung)' : fmt(hb.sppFinal)+'/semester';
+  document.getElementById('eSKS').textContent = hb.sksFinal === 0
+    ? 'Rp 0 (Ditanggung)' : (hb.sksFinal < 0 ? '—' : fmt(hb.sksFinal)+'/SKS');
+  document.getElementById('eAnv').textContent = hb.anvFinal === 0 ? '—' : fmt(hb.anvFinal)+'/SKS';
   document.getElementById('eBayarAwal').textContent = fmt(ang1);
-  document.getElementById('eTotalSPA').textContent  = fmt(spaAft);
+  document.getElementById('eTotalSPA').textContent  = fmt(hb.spaFinal);
+
+  // Tampilkan catatan biaya jalur jika ada
+  var catatanEl = document.getElementById('eCatatanJalur');
+  if (catatanEl) {
+    if (hb.catatan) {
+      catatanEl.textContent = '📌 ' + hb.catatan;
+      catatanEl.style.display = 'block';
+    } else {
+      catatanEl.style.display = 'none';
+    }
+  }
 }
 
 function updateSubmitSummary() {
-  var g = getGelData(); var b = getBiayaData(); var p = getProdiData();
+  var g = getGelData(); var b = getBiayaData(); var p = getProdiData(); var j = getJalurData();
   if (!g || !b || !p) return;
-  var dpPct   = getCicilanDP() / 100;
-  var spaAft  = Number(b.spa_setelah_potongan) || 0;
-  var spp     = Number(b.spp_tetap) || 0;
-  var ang1    = Math.round(spaAft * dpPct) + spp;
+  var dpPct  = getCicilanDP() / 100;
+  var hb     = hitungBiaya(b, j);
+  var ang1   = Math.round(hb.spaFinal * dpPct) + hb.sppFinal;
 
   document.getElementById('ssGel').textContent    = g.nama;
   document.getElementById('ssSkema').textContent  = sel.skema ? sel.skema.nama + (sel.mitra?' ('+sel.mitra.nama+')':'') : '—';
   document.getElementById('ssJalur').textContent  = sel.jalur ? sel.jalur.nama : '—';
   document.getElementById('ssProdi').textContent  = p.nama + ' – ' + p.jenjang;
-  document.getElementById('ssSPA').textContent    = fmt(spaAft);
-  document.getElementById('ssSPP').textContent    = fmt(spp)+'/sem';
+  document.getElementById('ssSPA').textContent    = hb.spaFinal === 0 ? 'Rp 0 (Ditanggung)' : fmt(hb.spaFinal);
+  document.getElementById('ssSPP').textContent    = hb.sppFinal === 0 ? 'Rp 0 (Ditanggung)' : fmt(hb.sppFinal)+'/sem';
   document.getElementById('ssAwal').textContent   = getCicilanDP()+'% SPA + SPP';
-  document.getElementById('ssBayarAwal').textContent = fmt(ang1);
+  document.getElementById('ssBayarAwal').textContent = ang1 === 0 ? 'Rp 0 (Bebas Biaya)' : fmt(ang1);
 }
 
 // ═══════════════════════════════════════════════════════
