@@ -809,7 +809,34 @@ function cfg(key, fallback){ return (D.config && D.config[key]) ? D.config[key] 
 function txt(key, fallback){ return (D.teks_ui && D.teks_ui[key]) ? D.teks_ui[key] : (fallback||''); }
 
 // ─── TIMEZONE FIX (WIB = GMT+7) ─────────────────────────
-// ─── DATE UTILS ──────────────────────────────────────────
+// ─── ICON HELPER ─────────────────────────────────────────
+// Prioritas: icon_url (gambar dari GitHub raw) → icon_emoji → fallback
+function renderIcon(iconUrl, iconEmoji, fallbackEmoji, size, bgColor, borderRadius) {
+  size         = size         || 40;
+  bgColor      = bgColor      || 'var(--navy)';
+  borderRadius = borderRadius || '10px';
+
+  if (iconUrl && iconUrl.trim() !== '') {
+    // PNG solid — background putih, gambar fill penuh
+    var style = 'width:'+size+'px;height:'+size+'px;border-radius:'+borderRadius
+              + ';background:#ffffff;display:flex;align-items:center;'
+              + 'justify-content:center;flex-shrink:0;overflow:hidden;';
+    return '<div style="'+style+'">'
+         + '<img src="'+iconUrl.trim()+'" alt="icon" '
+         + 'style="width:100%;height:100%;object-fit:cover;" '
+         + 'onerror="this.parentNode.style.background=\''+bgColor+'\';'
+         + 'this.parentNode.innerHTML=\''+(iconEmoji||fallbackEmoji||'📌')+'\'">'
+         + '</div>';
+  }
+
+  // Emoji fallback
+  var em       = (iconEmoji && iconEmoji.trim()) ? iconEmoji.trim() : (fallbackEmoji||'📌');
+  var fontSize = Math.round(size * 0.45)+'px';
+  var styleEm  = 'width:'+size+'px;height:'+size+'px;border-radius:'+borderRadius
+               + ';background:'+bgColor+';display:flex;align-items:center;'
+               + 'justify-content:center;flex-shrink:0;font-size:'+fontSize+';';
+  return '<div style="'+styleEm+'">'+em+'</div>';
+}
 // Parse 'YYYY-MM-DD' dari Sheets sebagai local date (hindari UTC shift)
 function parseDate(str) {
   if (!str) return new Date(0);
@@ -980,7 +1007,9 @@ function renderSkemaInfo() {
       if (t) tagHtml += '<span class="skema-tag '+tag+'">'+t+'</span>';
     }
     html += '<div class="skema-info-card">';
-    html += '<div class="skema-info-header '+col+'"><div class="skema-info-icon">🎓</div><h3>'+s.nama+'</h3><p>'+s.deskripsi+'</p></div>';
+    html += '<div class="skema-info-header '+col+'">';
+    html += '<div class="skema-info-icon">'+renderIcon(s.icon_url, s.icon_emoji, '🎓', 52, 'rgba(255,255,255,0.15)', '14px')+'</div>';
+    html += '<h3>'+s.nama+'</h3><p>'+s.deskripsi+'</p></div>';
     html += '<div class="skema-info-body">'+fiturHtml+'<div class="skema-tag-list">'+tagHtml+'</div></div>';
     html += '</div>';
   });
@@ -1022,7 +1051,7 @@ function renderProdiInfo() {
     var sppVal = sppBiaya.spp_tetap ? fmt(sppBiaya.spp_tetap) : fmt(p.spp_per_sem);
 
     html += '<div class="prodi-info-card" data-cat="'+cat+'" id="pic-'+p.id+'">';
-    html += '<div class="pic-header"><div class="pic-icon" style="background:'+p.warna+';">📘</div>';
+    html += '<div class="pic-header">'+renderIcon(p.icon_url, p.icon_emoji, '📘', 52, p.warna||'var(--navy)', '14px');
     html += '<div class="pic-meta"><h3>'+p.nama+'</h3><span class="pic-jenjang">'+p.jenjang+'</span></div></div>';
     html += '<div class="pic-body"><p>'+p.deskripsi_singkat+'</p></div>';
     html += '<div class="pic-detail">';
@@ -1042,7 +1071,7 @@ function renderJalurInfo() {
   if (!D.jalur || !D.jalur.length) return;
   var html = '';
   D.jalur.forEach(function(j) {
-    var iconBg = j.is_kipk==='TRUE'||j.is_kipk===true ? 'var(--accent)' : 'var(--navy)';
+    var iconBg = (j.is_kipk==='TRUE'||j.is_kipk===true) ? 'var(--accent)' : (j.warna_icon||'var(--navy)');
     var syaratHtml = '';
     for (var i=1; i<=5; i++) {
       var s = j['syarat_'+i];
@@ -1050,7 +1079,7 @@ function renderJalurInfo() {
     }
     var cardStyle = (j.is_kipk==='TRUE'||j.is_kipk===true) ? 'border-color:rgba(245,166,35,0.4);background:rgba(245,166,35,0.02);' : '';
     html += '<div class="jalur-info-card" style="'+cardStyle+'">';
-    html += '<div class="jic-top"><div class="jic-icon" style="background:'+iconBg+';">📋</div><h3>'+j.nama+(j.exclusive_note?'</h3>':' </h3>')+'</div>';
+    html += '<div class="jic-top">'+renderIcon(j.icon_url, j.icon_emoji, '📋', 50, iconBg, '13px')+'<h3>'+j.nama+'</h3></div>';
     html += '<p class="jic-desc">'+j.deskripsi+(j.catatan_khusus?' <strong>'+j.catatan_khusus+'</strong>':'')+'</p>';
     html += '<div class="jic-syarat-title">Persyaratan Dokumen</div><div class="jic-syarat">'+syaratHtml+'</div>';
     html += '<div class="jic-bottom"><span class="jic-avail">Tersedia di: <strong>'+j.tersedia_di+'</strong></span>';
@@ -1109,7 +1138,8 @@ function renderWizardSkema() {
   var html = '';
   D.skema.forEach(function(s) {
     html += '<div class="skema-card" onclick="pilihSkema(this,\''+s.id+'\',\''+s.nama+'\')" data-id="'+s.id+'" data-nama="'+s.nama+'" data-kipk="'+s.note_kipk+'">';
-    html += '<div class="skema-icon">🎓</div><h3>'+s.nama+'</h3><p>'+s.deskripsi+'</p>';
+    html += '<div class="skema-icon">'+renderIcon(s.icon_url, s.icon_emoji, '🎓', 48, 'rgba(30,42,68,0.08)', '12px')+'</div>';
+    html += '<h3>'+s.nama+'</h3><p>'+s.deskripsi+'</p>';
     html += '</div>';
   });
 
@@ -1118,7 +1148,7 @@ function renderWizardSkema() {
   if (D.mitra) {
     D.mitra.forEach(function(m) {
       mitraHtml += '<div class="mitra-card" onclick="pilihMitra(this,\''+m.id+'\',\''+m.nama+'\')" style="border:1.5px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px;">';
-      mitraHtml += '<div style="width:40px;height:40px;border-radius:10px;background:'+m.warna_icon+';display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;">🏛️</div>';
+      mitraHtml += renderIcon(m.icon_url, m.icon_emoji, '🏛️', 40, m.warna_icon||'var(--navy)', '10px');
       mitraHtml += '<div><div style="font-size:0.875rem;font-weight:500;color:var(--navy);">'+m.nama+'</div><div style="font-size:0.75rem;color:var(--muted);">'+m.deskripsi+'</div></div>';
       mitraHtml += '</div>';
     });
@@ -1134,9 +1164,9 @@ function renderWizardJalur() {
   var html = '';
   D.jalur.forEach(function(j) {
     var isKIPK = j.is_kipk==='TRUE'||j.is_kipk===true;
-    var iconBg = isKIPK ? 'var(--accent)' : 'var(--navy)';
+    var iconBg = isKIPK ? 'var(--accent)' : (j.warna_icon||'var(--navy)');
     html += '<div class="jalur-card'+(isKIPK?' disabled':'')+'" id="jalurCard-'+j.id+'" onclick="pilihJalur(this,\''+j.id+'\',\''+j.nama+'\')" data-kipk="'+j.is_kipk+'">';
-    html += '<div class="jalur-icon" style="background:'+iconBg+';">📋</div>';
+    html += renderIcon(j.icon_url, j.icon_emoji, '📋', 42, iconBg, '10px');
     html += '<div><h4>'+j.nama+'</h4><p>'+j.deskripsi+'</p>';
     if (j.exclusive_note) html += '<div class="jalur-exclusive">'+j.exclusive_note+'</div>';
     html += '</div></div>';
@@ -1153,7 +1183,7 @@ function renderWizardProdi() {
     var sppBiaya = D.biaya_spa && D.biaya_spa[p.id] ? (D.biaya_spa[p.id][activeGelId]||D.biaya_spa[p.id]['1']||{}) : {};
     var sppVal = sppBiaya.spp_tetap ? fmt(sppBiaya.spp_tetap) : fmt(p.spp_per_sem);
     html += '<div class="prodi-card" onclick="pilihProdi(this,\''+p.id+'\')">';
-    html += '<div class="prodi-icon" style="background:'+(p.warna||'var(--navy)')+';">📘</div>';
+    html += renderIcon(p.icon_url, p.icon_emoji, '📘', 48, p.warna||'var(--navy)', '13px');
     html += '<h3>'+p.nama+'</h3><span class="prodi-jenjang">'+p.jenjang+'</span>';
     html += '<p>'+p.deskripsi_singkat+'</p>';
     html += '<div class="prodi-spp">SPP: '+sppVal+'/sem</div>';
@@ -1242,7 +1272,7 @@ function renderBeasiswa() {
     var notifText = textMap[b.warna] || '#1e40af';
     html += '<div style="border:2px solid var(--border);border-radius:20px;padding:28px;transition:all .25s;cursor:pointer;" onmouseover="this.style.borderColor=\'var(--accent)\';this.style.boxShadow=\'0 8px 32px rgba(245,176,65,0.15)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.boxShadow=\'none\'">';
     html += '<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">';
-    html += '<div style="width:52px;height:52px;border-radius:14px;background:'+iconBg+';display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🏆</div>';
+    html += renderIcon(b.icon_url, b.icon_emoji, '🏆', 52, iconBg, '14px');
     html += '<div><div style="font-size:0.75rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:'+notifText+';">'+b.penyelenggara+'</div>';
     html += '<h3 style="font-family:var(--font);font-size:1rem;font-weight:500;color:var(--navy);">'+b.nama+'</h3></div></div>';
     html += '<p style="font-size:0.875rem;color:var(--muted);line-height:1.65;margin-bottom:16px;">'+b.deskripsi+'</p>';
@@ -1413,9 +1443,9 @@ function filterJalurBySkema(skemaId) {
     if (!jalurTersedia(j.tersedia_di, skemaId, skemaNama)) return;
     count++;
     var isKIPK = j.is_kipk === 'TRUE' || j.is_kipk === true;
-    var iconBg = isKIPK ? 'var(--accent)' : 'var(--navy)';
+    var iconBg = isKIPK ? 'var(--accent)' : (j.warna_icon||'var(--navy)');
     html += '<div class="jalur-card" id="jalurCard-'+j.id+'" onclick="pilihJalur(this,\''+j.id+'\',\''+j.nama+'\')" data-kipk="'+j.is_kipk+'">';
-    html += '<div class="jalur-icon" style="background:'+iconBg+';">📋</div>';
+    html += renderIcon(j.icon_url, j.icon_emoji, '📋', 42, iconBg, '10px');
     html += '<div><h4>'+j.nama+'</h4><p>'+j.deskripsi+'</p>';
     if (j.exclusive_note) html += '<div class="jalur-exclusive">'+j.exclusive_note+'</div>';
     html += '</div></div>';
