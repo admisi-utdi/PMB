@@ -807,6 +807,21 @@ function goTo(id){ var el=document.getElementById(id); if(!el) return; var top=e
 function cfg(key, fallback){ return (D.config && D.config[key]) ? D.config[key] : (fallback||''); }
 function txt(key, fallback){ return (D.teks_ui && D.teks_ui[key]) ? D.teks_ui[key] : (fallback||''); }
 
+// ─── TIMEZONE FIX (WIB = GMT+7) ─────────────────────────
+// Parse tanggal dari string "YYYY-MM-DD" sebagai waktu lokal
+// Menghindari UTC-shift yang membuat tanggal geser 1 hari
+function parseDate(str) {
+  if (!str) return new Date(0);
+  var d = String(str).split("T")[0].split(" ")[0];
+  var p = d.split("-");
+  if (p.length !== 3) return new Date(str);
+  return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+}
+function todayLocal() {
+  var now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
 // ═══════════════════════════════════════════════════════
 //  LOAD DATA DARI API
 // ═══════════════════════════════════════════════════════
@@ -899,11 +914,11 @@ function renderHero() {
 // ─── HERO GELOMBANG STATUS ────────────────────────────────
 function renderHeroGelombang() {
   if (!D.gelombang) return;
-  var today = new Date();
+  var today = todayLocal();
   var html = '';
   D.gelombang.forEach(function(g) {
-    var start = new Date(g.tanggal_mulai);
-    var end   = new Date(g.tanggal_selesai);
+    var start = parseDate(g.tanggal_mulai);
+    var end   = parseDate(g.tanggal_selesai);
     var isCurrent = today >= start && today <= end;
     var isPast    = today > end;
     var cls = isCurrent ? 'current' : (isPast ? 'past' : '');
@@ -1030,11 +1045,11 @@ function renderJalurInfo() {
 // ─── WIZARD: GELOMBANG ─────────────────────────────────────
 function renderWizardGelombang() {
   if (!D.gelombang) return;
-  var today = new Date();
+  var today = todayLocal();
   var html = '';
   D.gelombang.forEach(function(g) {
-    var start = new Date(g.tanggal_mulai);
-    var end   = new Date(g.tanggal_selesai);
+    var start = parseDate(g.tanggal_mulai);
+    var end   = parseDate(g.tanggal_selesai);
     var isCurrent = today >= start && today <= end;
     var isPast    = today > end;
     var isFuture  = today < start;
@@ -1140,10 +1155,10 @@ function renderCekBiayaSelect() {
 
   // Gelombang select — semua gelombang bisa dipilih untuk simulasi
   var gelHtml = '';
-  var today = new Date();
+  var today = todayLocal();
   D.gelombang.forEach(function(g){
-    var start = new Date(g.tanggal_mulai);
-    var end   = new Date(g.tanggal_selesai);
+    var start = parseDate(g.tanggal_mulai);
+    var end   = parseDate(g.tanggal_selesai);
     var isCurrent = today >= start && today <= end;
     var label = g.nama + ' — Potongan ' + g.label_potongan + (isCurrent ? ' ★ AKTIF' : '');
     gelHtml += '<option value="'+g.id+'"'+(isCurrent?' selected':'')+'>'+label+'</option>';
@@ -1503,9 +1518,9 @@ function cekBiaya() {
   D.gelombang.forEach(function(g){ if(g.id === gelSelId) selectedGel = g; });
   // Fallback: gelombang aktif hari ini
   if (!selectedGel) {
-    var today = new Date();
+    var today = todayLocal();
     D.gelombang.forEach(function(g){
-      var s=new Date(g.tanggal_mulai), e=new Date(g.tanggal_selesai);
+      var s=parseDate(g.tanggal_mulai), e=parseDate(g.tanggal_selesai);
       if(today>=s && today<=e) selectedGel=g;
     });
   }
@@ -1513,8 +1528,8 @@ function cekBiaya() {
   if (!selectedGel) return;
 
   // Update info label gelombang
-  var today2 = new Date();
-  var isActive = today2>=new Date(selectedGel.tanggal_mulai) && today2<=new Date(selectedGel.tanggal_selesai);
+  var today2 = todayLocal();
+  var isActive = today2>=parseDate(selectedGel.tanggal_mulai) && today2<=parseDate(selectedGel.tanggal_selesai);
   var infoEl = document.getElementById('cekGelLabel');
   if(infoEl) infoEl.innerHTML = '📅 <strong>'+selectedGel.nama+'</strong> &nbsp;·&nbsp; Potongan SPA <strong style="color:var(--accent)">'+selectedGel.label_potongan+'</strong>'
     +(isActive?' &nbsp;<span style="color:#22c55e;font-weight:500;">● Aktif sekarang</span>':'');
@@ -1643,7 +1658,7 @@ function filterProdi(tab, cat) {
 // ═══════════════════════════════════════════════════════
 function formatTanggal(dateStr) {
   if (!dateStr) return '';
-  var d = new Date(dateStr);
+  var d = parseDate(dateStr);
   var months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
   return d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
 }
