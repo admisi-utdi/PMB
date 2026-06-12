@@ -810,29 +810,50 @@ function txt(key, fallback){ return (D.teks_ui && D.teks_ui[key]) ? D.teks_ui[ke
 
 // ─── TIMEZONE FIX (WIB = GMT+7) ─────────────────────────
 // Parse tanggal dari string "YYYY-MM-DD" sebagai waktu lokal
-// Menghindari UTC-shift yang membuat tanggal geser 1 hari
-// ─── TIMEZONE FIX: paksa WIB (GMT+7) ────────────────────
-var WIB_OFFSET = 7 * 60; // menit
+// ─── TIMEZONE FIX (WIB = GMT+7) ─────────────────────────
+// Semua perbandingan tanggal gelombang menggunakan WIB
 
-// "Hari ini" dalam WIB — tidak peduli timezone browser/server
-function todayLocal() {
-  var now = new Date();
-  // Geser ke WIB: UTC + 7 jam
-  var wibMs = now.getTime() + (WIB_OFFSET * 60 * 1000);
-  var wib   = new Date(wibMs);
-  // Kembalikan sebagai midnight lokal agar bisa dibandingkan dengan parseDate
-  return new Date(wib.getUTCFullYear(), wib.getUTCMonth(), wib.getUTCDate());
+// "Hari ini" dalam WIB — hasilkan angka YYYYMMDD untuk perbandingan mudah
+function todayWIB() {
+  var now    = new Date();
+  var wibMs  = now.getTime() + (7 * 60 * 60 * 1000); // geser +7 jam ke WIB
+  var wib    = new Date(wibMs);
+  // Format YYYYMMDD sebagai integer untuk perbandingan sederhana
+  var y = wib.getUTCFullYear();
+  var m = wib.getUTCMonth() + 1;
+  var d = wib.getUTCDate();
+  return y * 10000 + m * 100 + d; // contoh: 20260613
 }
 
-// Parse 'YYYY-MM-DD' (dari Google Sheets) sebagai local midnight
-// Sheets menyimpan tanggal sebagai string tanpa timezone → kita baca apa adanya
+// Parse tanggal string 'YYYY-MM-DD' → integer YYYYMMDD
+// Sheets kadang kirim '2026-06-13T00:00:00.000Z' → kita ambil bagian tanggalnya saja
+function parseDateInt(str) {
+  if (!str) return 0;
+  var d = String(str).split('T')[0].split(' ')[0];
+  var p = d.split('-');
+  if (p.length !== 3) return 0;
+  return Number(p[0]) * 10000 + Number(p[1]) * 100 + Number(p[2]);
+}
+
+// Cek apakah gelombang aktif hari ini (WIB)
+// tanggal_selesai INKLUSIF: hari terakhir masih aktif sampai akhir hari
+function isGelombangAktif(g) {
+  var today = todayWIB();
+  var start = parseDateInt(g.tanggal_mulai);
+  var end   = parseDateInt(g.tanggal_selesai);
+  return today >= start && today <= end;
+}
+
+// Untuk kompatibilitas dengan kode lama yang pakai parseDate()
 function parseDate(str) {
   if (!str) return new Date(0);
-  var d = String(str).split('T')[0].split(' ')[0]; // ambil YYYY-MM-DD saja
+  var d = String(str).split('T')[0].split(' ')[0];
   var p = d.split('-');
   if (p.length !== 3) return new Date(0);
-  // new Date(y, m-1, d) → local midnight, tidak ada UTC-shift
   return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+}
+function todayLocal() {
+  return parseDate(String(todayWIB()).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
 }
 
 // ═══════════════════════════════════════════════════════
@@ -927,14 +948,12 @@ function renderHero() {
 // ─── HERO GELOMBANG STATUS ────────────────────────────────
 function renderHeroGelombang() {
   if (!D.gelombang) return;
-  var today = todayLocal();
+  var todayInt = todayWIB();
   var html = '';
   D.gelombang.forEach(function(g) {
-    var start = parseDate(g.tanggal_mulai);
-    var end   = parseDate(g.tanggal_selesai);
-    var isCurrent = today >= start && today <= end;
-    var isPast    = today > end;
-    var cls = isCurrent ? 'current' : (isPast ? 'past' : '');
+    var isCurrent = isGelombangAktif(g);
+    var isPast    = todayInt > parseDateInt(g.tanggal_selesai);
+    var cls     = isCurrent ? 'current' : (isPast ? 'past' : '');
     var chipCls = isCurrent ? 'chip-active' : (isPast ? 'chip-ended' : 'chip-soon');
     var chipTxt = isCurrent ? 'SEDANG BERJALAN' : (isPast ? 'BERAKHIR' : 'POTONGAN '+g.label_potongan);
     if (isCurrent) activeGelId = g.id;
@@ -1058,14 +1077,12 @@ function renderJalurInfo() {
 // ─── WIZARD: GELOMBANG ─────────────────────────────────────
 function renderWizardGelombang() {
   if (!D.gelombang) return;
-  var today = todayLocal();
+  var todayInt = todayWIB();
   var html = '';
   D.gelombang.forEach(function(g) {
-    var start = parseDate(g.tanggal_mulai);
-    var end   = parseDate(g.tanggal_selesai);
-    var isCurrent = today >= start && today <= end;
-    var isPast    = today > end;
-    var isFuture  = today < start;
+    var isCurrent = isGelombangAktif(g);
+    var isPast    = todayInt > parseDateInt(g.tanggal_selesai);
+    var isFuture  = todayInt < parseDateInt(g.tanggal_mulai);
     if (isCurrent) { sel.gel = g.id; activeGelId = g.id; }
 
     var borderStyle = isCurrent ? 'border-color:var(--accent);background:rgba(245,176,65,0.04);' : (isPast?'opacity:0.45;':'');
@@ -1168,11 +1185,8 @@ function renderCekBiayaSelect() {
 
   // Gelombang select — semua gelombang bisa dipilih untuk simulasi
   var gelHtml = '';
-  var today = todayLocal();
   D.gelombang.forEach(function(g){
-    var start = parseDate(g.tanggal_mulai);
-    var end   = parseDate(g.tanggal_selesai);
-    var isCurrent = today >= start && today <= end;
+    var isCurrent = isGelombangAktif(g);
     var label = g.nama + ' — Potongan ' + g.label_potongan + (isCurrent ? ' ★ AKTIF' : '');
     gelHtml += '<option value="'+g.id+'"'+(isCurrent?' selected':'')+'>'+label+'</option>';
   });
@@ -1518,13 +1532,19 @@ function updateEstimasi() {
   var hb    = hitungBiaya(b, j);
   var ang1  = Math.round(hb.spaFinal * dpPct) + hb.sppFinal;
 
-  document.getElementById('sumGel').textContent   = g.nama + ' (Potongan '+g.label_potongan+')';
+  var isKIPK = sel.jalur && sel.jalur.isKIPK;
+
+  document.getElementById('sumGel').textContent   = isKIPK ? g.nama + ' (Potongan tidak berlaku)' : g.nama + ' (Potongan '+g.label_potongan+')';
   document.getElementById('sumSkema').textContent = sel.skema ? sel.skema.nama : '—';
   document.getElementById('sumJalur').textContent = sel.jalur ? sel.jalur.nama : '—';
   document.getElementById('sumProdi').textContent = p.nama + ' – ' + p.jenjang;
 
-  document.getElementById('eSPANorm').textContent  = fmt(hb.spaNorm);
-  document.getElementById('eSPAPot').textContent   = hb.spaNorm===0 ? '—' : '– '+fmt(hb.potAmt);
+  document.getElementById('eSPANorm').textContent = fmt(hb.spaNorm);
+
+  // Baris potongan gelombang: sembunyikan jika KIPK (karena biaya sudah 0)
+  var potRow = document.getElementById('eSPAPot').closest('.biaya-item');
+  if (potRow) potRow.style.display = isKIPK ? 'none' : '';
+  document.getElementById('eSPAPot').textContent = hb.spaNorm===0 ? '—' : '– '+fmt(hb.potAmt);
   // Jika ada override SPA, tampilkan label berbeda
   var eSPABayarEl = document.getElementById('eSPABayar');
   if (hb.adaOverride && hb.spaFinal === 0) {
@@ -1588,18 +1608,15 @@ function cekBiaya() {
   D.gelombang.forEach(function(g){ if(g.id === gelSelId) selectedGel = g; });
   // Fallback: gelombang aktif hari ini
   if (!selectedGel) {
-    var today = todayLocal();
     D.gelombang.forEach(function(g){
-      var s=parseDate(g.tanggal_mulai), e=parseDate(g.tanggal_selesai);
-      if(today>=s && today<=e) selectedGel=g;
+      if(isGelombangAktif(g)) selectedGel=g;
     });
   }
   if (!selectedGel && D.gelombang.length) selectedGel = D.gelombang[0];
   if (!selectedGel) return;
 
   // Update info label gelombang
-  var today2 = todayLocal();
-  var isActive = today2>=parseDate(selectedGel.tanggal_mulai) && today2<=parseDate(selectedGel.tanggal_selesai);
+  var isActive = isGelombangAktif(selectedGel);
   var infoEl = document.getElementById('cekGelLabel');
   if(infoEl) infoEl.innerHTML = '📅 <strong>'+selectedGel.nama+'</strong> &nbsp;·&nbsp; Potongan SPA <strong style="color:var(--accent)">'+selectedGel.label_potongan+'</strong>'
     +(isActive?' &nbsp;<span style="color:#22c55e;font-weight:500;">● Aktif sekarang</span>':'');
