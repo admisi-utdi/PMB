@@ -1333,28 +1333,66 @@ function pilihSkema(card, id, nama) {
   card.classList.add('selected');
   sel.skema = { id:id, nama:nama };
   sel.mitra = null;
+  // Reset jalur yang sudah dipilih jika tidak tersedia di skema baru
+  sel.jalur = null;
+  document.getElementById('nextBtn2').disabled = true;
 
-  var skemaData = D.skema ? D.skema.find(function(s){ return s.id===id; }) : null;
   var isKerjasama = id === 'kerjasama';
   var isReguler   = id === 'reguler';
 
-  // KIPK visibility
-  document.querySelectorAll('[data-kipk="TRUE"],[data-kipk="true"]').forEach(function(c){
-    c.classList.toggle('disabled', !isReguler);
-  });
+  // Tampilkan note KIPK hanya untuk reguler
   document.getElementById('skemaNoteKIPK').style.display = isReguler ? 'flex' : 'none';
 
-  if (!isReguler && sel.jalur && (sel.jalur.isKIPK)) {
-    sel.jalur = null;
-    document.querySelectorAll('.jalur-card').forEach(function(c){ c.classList.remove('selected'); });
-    document.getElementById('nextBtn2').disabled = true;
-  }
+  // Filter jalur sesuai skema terpilih
+  filterJalurBySkema(id);
 
-  // Mitra panel
+  // Mitra panel hanya untuk kerjasama
   var mitraPanel = document.getElementById('mitraPanel');
   mitraPanel.style.display = isKerjasama ? 'block' : 'none';
-  document.getElementById('nextBtn1').disabled = isKerjasama; // tunggu pilih mitra
-  if (!isKerjasama) document.getElementById('nextBtn1').disabled = false;
+  document.getElementById('nextBtn1').disabled = isKerjasama;
+}
+
+// Filter dan render ulang kartu jalur sesuai skema aktif
+function filterJalurBySkema(skemaId) {
+  if (!D.jalur) return;
+
+  // Ambil nama skema dari D.skema berdasarkan id
+  var skemaObj = D.skema ? D.skema.find(function(s){ return s.id === skemaId; }) : null;
+  var skemaNama = skemaObj ? skemaObj.nama.trim().toLowerCase() : skemaId.toLowerCase();
+
+  // Map alias — sheet bisa pakai berbagai variasi penulisan
+  // Kita normalisasi dengan contains-check
+  function jalurTersedia(tersediaDi, skId, skNama) {
+    if (!tersediaDi) return false;
+    return tersediaDi.split(',').some(function(s) {
+      var t = s.trim().toLowerCase();
+      // Cocokkan dengan ID atau nama (sebagian kata sudah cukup)
+      return t === skId.toLowerCase()
+        || t === skNama
+        || t.indexOf(skId.toLowerCase()) !== -1
+        || skNama.indexOf(t) !== -1
+        || t.indexOf(skNama.split(' ')[0]) !== -1; // kata pertama nama skema
+    });
+  }
+
+  var html = '';
+  var count = 0;
+  D.jalur.forEach(function(j) {
+    if (!jalurTersedia(j.tersedia_di, skemaId, skemaNama)) return;
+    count++;
+    var isKIPK = j.is_kipk === 'TRUE' || j.is_kipk === true;
+    var iconBg = isKIPK ? 'var(--accent)' : 'var(--navy)';
+    html += '<div class="jalur-card" id="jalurCard-'+j.id+'" onclick="pilihJalur(this,\''+j.id+'\',\''+j.nama+'\')" data-kipk="'+j.is_kipk+'">';
+    html += '<div class="jalur-icon" style="background:'+iconBg+';">📋</div>';
+    html += '<div><h4>'+j.nama+'</h4><p>'+j.deskripsi+'</p>';
+    if (j.exclusive_note) html += '<div class="jalur-exclusive">'+j.exclusive_note+'</div>';
+    html += '</div></div>';
+  });
+
+  if (count === 0) {
+    html = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:0.875rem;">Tidak ada jalur tersedia untuk skema ini.</div>';
+  }
+  document.getElementById('jalurGrid').innerHTML = html;
 }
 
 function pilihMitra(card, id, nama) {
