@@ -2093,14 +2093,12 @@ function updateEstimasi() {
     }
   }
 
-  // Anvulen
+  // SKS
+  document.getElementById('eSKS').textContent = hb.sksFinal === 0
     ? 'Rp 0 (Ditanggung)' : (hb.sksFinal < 0 ? '—' : fmt(hb.sksFinal)+'/SKS');
 
   // Anvulen
   document.getElementById('eAnv').textContent = hb.anvFinal === 0 ? '—' : fmt(hb.anvFinal)+'/SKS';
-
-  // SKS
-  document.getElementById('eSKS').textContent = hb.sksFinal === 0
 
   // Angsuran pertama & total
   var ang1Label = isSPANol && isSppBulan
