@@ -1233,21 +1233,31 @@ function renderCekBiayaSelect() {
 function labelWaktuCicilan(c) {
   var tgl = c.tanggal_tetap;
 
-  // Sheets bisa return: string 'YYYY-MM-DD', string teks '15 Desember 2026',
-  // atau sudah diformat api.gs jadi 'YYYY-MM-DD' dari Date object
-  if (tgl !== null && tgl !== undefined && tgl !== '' && tgl !== 0 && tgl !== '0') {
+  if (tgl !== null && tgl !== undefined) {
     var tglStr = String(tgl).trim();
-    if (tglStr !== '' && tglStr !== '0') {
-      // Coba parse sebagai YYYY-MM-DD dulu
+
+    // Abaikan nilai kosong atau nol
+    if (tglStr === '' || tglStr === '0' || tglStr === 'false' || tglStr === 'null') {
+      // lanjut ke fallback
+    } else {
+      // Format YYYY-MM-DD (dari api.gs konversi Date)
       if (/^\d{4}-\d{2}-\d{2}$/.test(tglStr)) {
-        return formatTanggal(tglStr); // "15 Desember 2026"
+        return formatTanggal(tglStr);
       }
-      // Jika sudah berupa teks (misal "15 Desember 2026"), tampilkan langsung
-      return tglStr;
+      // Format M/D/YYYY atau MM/DD/YYYY (Sheets US locale)
+      var parts = tglStr.split('/');
+      if (parts.length === 3) {
+        var y = parts[2].length === 4 ? parts[2] : '20'+parts[2];
+        var m = parts[0].padStart(2,'0');
+        var d = parts[1].padStart(2,'0');
+        return formatTanggal(y+'-'+m+'-'+d);
+      }
+      // Teks bebas (misal "15 Desember 2026") — tampil langsung
+      if (tglStr.length > 3) return tglStr;
     }
   }
 
-  // Fallback ke H+N
+  // Fallback ke H+N sejak pendaftaran
   var hari = Number(c.batas_hari_sejak_daftar) || 0;
   if (hari > 0) return 'H+'+hari+' sejak pendaftaran';
   return 'Saat pendaftaran';
