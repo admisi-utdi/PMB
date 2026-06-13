@@ -1231,11 +1231,23 @@ function renderCekBiayaSelect() {
 
 // ─── HELPER: label waktu cicilan ───────────────────────────
 function labelWaktuCicilan(c) {
-  // Prioritas: tanggal_tetap → batas_hari_sejak_daftar → 'Saat pendaftaran'
-  var tgl = c.tanggal_tetap ? String(c.tanggal_tetap).trim() : '';
-  if (tgl && tgl !== '' && tgl !== '0') {
-    return formatTanggal(tgl);          // misal: "15 Desember 2025"
+  var tgl = c.tanggal_tetap;
+
+  // Sheets bisa return: string 'YYYY-MM-DD', string teks '15 Desember 2026',
+  // atau sudah diformat api.gs jadi 'YYYY-MM-DD' dari Date object
+  if (tgl !== null && tgl !== undefined && tgl !== '' && tgl !== 0 && tgl !== '0') {
+    var tglStr = String(tgl).trim();
+    if (tglStr !== '' && tglStr !== '0') {
+      // Coba parse sebagai YYYY-MM-DD dulu
+      if (/^\d{4}-\d{2}-\d{2}$/.test(tglStr)) {
+        return formatTanggal(tglStr); // "15 Desember 2026"
+      }
+      // Jika sudah berupa teks (misal "15 Desember 2026"), tampilkan langsung
+      return tglStr;
+    }
   }
+
+  // Fallback ke H+N
   var hari = Number(c.batas_hari_sejak_daftar) || 0;
   if (hari > 0) return 'H+'+hari+' sejak pendaftaran';
   return 'Saat pendaftaran';
