@@ -657,58 +657,43 @@ footer{background:#040c1f;color:rgba(255,255,255,0.9);padding:48px 5% 24px;}
           </div>
         </div>
 
-        <!-- SEKSI: Kontak + Verifikasi -->
+        <!-- SEKSI: Kontak + Verifikasi WA -->
         <div class="submit-form">
           <h3 style="margin-bottom:16px;">📱 Kontak & Verifikasi</h3>
 
-          <!-- WhatsApp -->
+          <!-- WhatsApp + OTP -->
           <div class="form-group">
-            <label class="form-label">Nomor WhatsApp * <span style="font-size:0.72rem;color:var(--muted);font-weight:400;">(format: 628xxxxxxxxx)</span></label>
+            <label class="form-label">Nomor WhatsApp * <span style="font-size:0.72rem;color:var(--muted);font-weight:400;">(format: 628xxxxxxxxx atau 08xxxxxxxxx)</span></label>
             <div style="display:flex;gap:8px;">
-              <input type="tel" class="form-input" id="fWa" placeholder="628xxxxxxxxxx" style="flex:1;"
-                oninput="resetVerifWa()">
+              <input type="tel" class="form-input" id="fWa" placeholder="628xxxxxxxxxx" style="flex:1;" oninput="resetVerifWa()">
               <button type="button" onclick="kirimOtp('wa')" id="btnOtpWa"
-                style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;min-width:90px;">
+                style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 16px;font-size:0.75rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;min-width:100px;height:44px;">
                 Kirim Kode
               </button>
             </div>
-            <div id="waVerifRow" style="display:none;margin-top:10px;">
-              <label style="font-size:0.75rem;color:var(--navy);font-weight:500;margin-bottom:4px;display:block;">Masukkan kode yang dikirim via WhatsApp:</label>
+            <!-- Row input token — muncul setelah Kirim Kode -->
+            <div id="waVerifRow" style="display:none;margin-top:12px;background:rgba(30,42,68,0.04);border:1px solid var(--border);border-radius:12px;padding:16px;">
+              <div style="font-size:0.8rem;color:var(--navy);font-weight:600;margin-bottom:10px;">
+                📨 Kode dikirim ke WhatsApp kamu. Masukkan di sini:
+              </div>
               <div style="display:flex;gap:8px;align-items:center;">
-                <input type="text" class="form-input" id="fOtpWa" placeholder="6 karakter kode" maxlength="6"
-                  style="flex:1;letter-spacing:4px;font-weight:700;font-size:1rem;text-transform:uppercase;text-align:center;">
+                <input type="text" class="form-input" id="fOtpWa"
+                  placeholder="A B 3 X 7 K" maxlength="6"
+                  style="flex:1;letter-spacing:8px;font-weight:800;font-size:1.2rem;text-transform:uppercase;text-align:center;height:52px;border:2px solid var(--navy);">
                 <button type="button" onclick="verifikasiOtp('wa')" id="btnVerifWa"
-                  style="background:#22c55e;color:#fff;border:none;border-radius:10px;padding:0 16px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;height:42px;">
+                  style="background:#22c55e;color:#fff;border:none;border-radius:10px;padding:0 18px;font-size:0.8rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;height:52px;">
                   Verifikasi ✓
                 </button>
               </div>
-              <div id="statusWa" style="font-size:0.75rem;margin-top:6px;min-height:18px;"></div>
+              <div id="statusWa" style="font-size:0.78rem;margin-top:8px;min-height:20px;"></div>
             </div>
           </div>
 
-          <!-- Email -->
+          <!-- Email — tanpa verifikasi -->
           <div class="form-group">
-            <label class="form-label">Email *</label>
-            <div style="display:flex;gap:8px;">
-              <input type="email" class="form-input" id="fEmail" placeholder="email@gmail.com" style="flex:1;"
-                oninput="resetVerifEmail()">
-              <button type="button" onclick="kirimOtp('email')" id="btnOtpEmail"
-                style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;min-width:90px;">
-                Kirim Kode
-              </button>
-            </div>
-            <div id="emailVerifRow" style="display:none;margin-top:10px;">
-              <label style="font-size:0.75rem;color:var(--navy);font-weight:500;margin-bottom:4px;display:block;">Masukkan kode yang dikirim via Email:</label>
-              <div style="display:flex;gap:8px;align-items:center;">
-                <input type="text" class="form-input" id="fOtpEmail" placeholder="6 karakter kode" maxlength="6"
-                  style="flex:1;letter-spacing:4px;font-weight:700;font-size:1rem;text-transform:uppercase;text-align:center;">
-                <button type="button" onclick="verifikasiOtp('email')" id="btnVerifEmail"
-                  style="background:#22c55e;color:#fff;border:none;border-radius:10px;padding:0 16px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;height:42px;">
-                  Verifikasi ✓
-                </button>
-              </div>
-              <div id="statusEmail" style="font-size:0.75rem;margin-top:6px;min-height:18px;"></div>
-            </div>
+            <label class="form-label">Email <span style="font-size:0.72rem;color:var(--muted);font-weight:400;">(opsional)</span></label>
+            <input type="email" class="form-input" id="fEmail" placeholder="email@gmail.com">
+            <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Email tidak diverifikasi, hanya digunakan untuk notifikasi.</div>
           </div>
         </div>
 
@@ -798,12 +783,8 @@ footer{background:#040c1f;color:rgba(255,255,255,0.9);padding:48px 5% 24px;}
         <div class="ss-item"><span>Angsuran Pertama</span><strong id="ssAwal">—</strong></div>
         <div class="ss-total"><span>Bayar Saat Registrasi</span><strong id="ssBayarAwal">—</strong></div>
 
-        <!-- Status verifikasi -->
         <div style="margin-top:14px;padding:12px;background:var(--light);border-radius:10px;font-size:0.75rem;">
-          <div style="margin-bottom:6px;font-weight:500;color:var(--navy);">Status Verifikasi</div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-            <span>Email</span><span id="badgeEmail" style="color:var(--muted);">⬜ Belum</span>
-          </div>
+          <div style="margin-bottom:4px;font-weight:500;color:var(--navy);">Status Verifikasi</div>
           <div style="display:flex;justify-content:space-between;">
             <span>WhatsApp</span><span id="badgeWa" style="color:var(--muted);">⬜ Belum</span>
           </div>
@@ -2217,8 +2198,15 @@ function initFormStep5() {
     D.jurusan_sma.forEach(function(j){ jurSel.innerHTML += '<option value="'+j+'">'+j+'</option>'; });
   }
   if (D.verif_config) {
-    if (!D.verif_config.email_enabled) { verifState.email=true; updateBadgeVerif('email',true); }
-    if (!D.verif_config.wa_enabled)    { verifState.wa=true;    updateBadgeVerif('wa',true); }
+    // Email tidak diverifikasi — langsung set true
+    verifState.email = true;
+    // WA — cek config
+    if (!D.verif_config.wa_enabled) {
+      verifState.wa = true;
+      updateBadgeVerif('wa', true);
+    }
+  } else {
+    verifState.email = true; // default email tidak perlu verif
   }
 }
 
@@ -2388,14 +2376,13 @@ function toggleManualSekolah() {
 }
 
 function submitDaftar() {
-  var emailEnabled=D.verif_config?D.verif_config.email_enabled:true;
-  var waEnabled=D.verif_config?D.verif_config.wa_enabled:true;
-  if(emailEnabled&&!verifState.email){ alert('Email belum diverifikasi.'); return; }
-  if(waEnabled&&!verifState.wa){ alert('WhatsApp belum diverifikasi.'); return; }
-  var nama=(document.getElementById('fNama')||{}).value||'';
-  var email=(document.getElementById('fEmail')||{}).value||'';
-  var wa=(document.getElementById('fWa')||{}).value||'';
-  if(!nama||!email||!wa){ alert('Harap lengkapi Nama, Email, dan Nomor WhatsApp.'); return; }
+  var emailEnabled = false; // Email tidak diverifikasi
+  var waEnabled    = D.verif_config ? D.verif_config.wa_enabled : true;
+  if (waEnabled && !verifState.wa) { alert('WhatsApp belum diverifikasi. Kirim dan masukkan kode OTP terlebih dahulu.'); return; }
+
+  var nama = (document.getElementById('fNama')||{}).value||'';
+  var wa   = (document.getElementById('fWa')  ||{}).value||'';
+  if (!nama || !wa) { alert('Harap lengkapi Nama dan Nomor WhatsApp.'); return; }
   var npsn=document.getElementById('fNpsnHidden').value||(document.getElementById('fNpsn')||{}).value||'';
   var namaSekolah=document.getElementById('fNamaSekolahHidden').value||(document.getElementById('fNamaSekolah')||{}).value||'';
   var g=getGelData(); var b=getBiayaData(); var j=getJalurData();
