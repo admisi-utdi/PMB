@@ -1496,7 +1496,9 @@ function getGelData() {
 }
 function getBiayaData() {
   if (!D.biaya_spa || !sel.prodi || !sel.gel) return null;
-  return D.biaya_spa[sel.prodi] ? D.biaya_spa[sel.prodi][sel.gel] : null;
+  var pid = String(sel.prodi).trim();
+  var gid = String(sel.gel).trim();
+  return D.biaya_spa[pid] ? D.biaya_spa[pid][gid] : null;
 }
 function getProdiData() {
   if (!D.prodi || !sel.prodi) return null;
@@ -1647,7 +1649,7 @@ function cekBiaya() {
   var potLabelEl = document.getElementById('crPotLabel');
   if(potLabelEl) potLabelEl.textContent = 'Diskon '+selectedGel.label_potongan+' ('+selectedGel.nama+')';
 
-  var b = D.biaya_spa[prodiId] ? D.biaya_spa[prodiId][selectedGel.id] : null;
+  var b = D.biaya_spa[prodiId] ? D.biaya_spa[prodiId][String(selectedGel.id).trim()] : null;
   if (!b) return;
 
   var spaNorm = Number(b.spa_normal)||0;
