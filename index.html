@@ -671,39 +671,48 @@ footer{background:#040c1f;color:rgba(255,255,255,0.9);padding:48px 5% 24px;}
 <section class="cek-biaya-section" id="cek-biaya">
   <div class="section-label">CEK BIAYA</div>
   <h2 class="section-title">Cek Biaya Kuliah Kamu</h2>
-  <p class="section-sub" style="margin-bottom:36px;">Pilih prodi dan gelombang untuk melihat simulasi biaya lengkap beserta cicilan.</p>
+  <p class="section-sub" style="margin-bottom:36px;">Pilih prodi, gelombang, dan tipe jalur untuk melihat simulasi biaya lengkap beserta cicilan.</p>
   <div class="cek-layout">
     <div class="cek-form">
       <h3>Kalkulator Biaya PMB</h3>
-      <p>Pilih prodi dan gelombang untuk simulasi biaya.</p>
+      <p>Pilih kombinasi untuk simulasi biaya.</p>
       <div class="form-group">
+        <label class="form-label" style="margin-bottom:7px;display:block;">Tipe Jalur</label>
+        <select class="form-select" id="cekTipe" onchange="cekBiaya()" style="margin-bottom:0;">
+          <option value="reguler">Reguler / Smart Learning</option>
+          <option value="karyawan">Kelas Karyawan</option>
+          <option value="rpl_eksternal">RPL Eksternal</option>
+          <option value="rpl_alumni">RPL Alumni UTDI</option>
+          <option value="s2">Magister (S2 - MTI)</option>
+        </select>
+      </div>
+      <div class="form-group" id="cekProdiGroup">
         <label class="form-label" style="margin-bottom:7px;display:block;">Program Studi</label>
         <select class="form-select" id="cekProdi" onchange="cekBiaya()"></select>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="cekGelGroup">
         <label class="form-label" style="margin-bottom:7px;display:block;">Simulasi Gelombang</label>
         <select class="form-select" id="cekGelSelect" onchange="cekBiaya()" style="margin-bottom:0;"></select>
       </div>
       <div id="cekGelInfo" style="background:rgba(30,42,68,0.06);border:1px solid rgba(30,42,68,0.15);border-radius:10px;padding:12px 14px;font-size:0.75rem;color:var(--navy);margin-top:12px;margin-bottom:16px;line-height:1.6;">
         <span id="cekGelLabel">—</span>
       </div>
-      <div style="background:#fef9ec;border:1px solid rgba(245,176,65,0.3);border-radius:10px;padding:10px 14px;font-size:0.75rem;color:#92400e;">
-        📍 Kalkulator ini untuk jalur <strong>Non-RPL</strong>. Untuk RPL / S2, hubungi admisi.
-      </div>
+      <div id="cekTipeInfo" style="background:#fef9ec;border:1px solid rgba(245,176,65,0.3);border-radius:10px;padding:10px 14px;font-size:0.75rem;color:#92400e;display:none;"></div>
     </div>
     <div class="cek-result">
       <h3>Hasil Estimasi</h3>
       <p class="note">Estimasi indikatif sebelum validasi admisi.</p>
-      <div class="cr-row"><div class="cr-left"><h4>SPA Normal</h4><p>Sebelum potongan</p></div><div class="cr-val" id="crSNorm">—</div></div>
-      <div class="cr-row"><div class="cr-left"><h4>Potongan Gelombang</h4><p id="crPotLabel">—</p></div><div class="cr-val grn" id="crSPot">—</div></div>
-      <div class="cr-row"><div class="cr-left"><h4>SPA Dibayar</h4><p>Total setelah potongan</p></div><div class="cr-val acc" id="crSBayar">—</div></div>
-      <div class="cr-row"><div class="cr-left"><h4>SPP / Semester</h4><p>Per semester</p></div><div class="cr-val" id="crSPP">—</div></div>
+      <div class="cr-row" id="crSPANormRow"><div class="cr-left"><h4>SPA Normal</h4><p>Sebelum potongan</p></div><div class="cr-val" id="crSNorm">—</div></div>
+      <div class="cr-row" id="crSPAPotRow"><div class="cr-left"><h4>Potongan Gelombang</h4><p id="crPotLabel">—</p></div><div class="cr-val grn" id="crSPot">—</div></div>
+      <div class="cr-row" id="crSPAByrRow"><div class="cr-left"><h4>SPA Dibayar</h4><p>Total setelah potongan</p></div><div class="cr-val acc" id="crSBayar">—</div></div>
+      <div class="cr-row"><div class="cr-left"><h4>SPP</h4><p id="crSPPLabel">Per semester</p></div><div class="cr-val" id="crSPP">—</div></div>
       <div class="cr-row"><div class="cr-left"><h4>Biaya SKS</h4><p>Per SKS</p></div><div class="cr-val" id="crSKS">—</div></div>
-      <div class="cr-row"><div class="cr-left"><h4>Aanvullen</h4><p>Per SKS</p></div><div class="cr-val" id="crAnv">—</div></div>
+      <div class="cr-row"><div class="cr-left"><h4>Anvulen</h4><p>Per SKS</p></div><div class="cr-val" id="crAnv">—</div></div>
       <div class="cr-total">
         <div id="crCicilanRows"></div>
-        <div class="cr-total-row main"><span>Total SPA (setelah potongan)</span><strong id="crTotal">—</strong></div>
+        <div class="cr-total-row main" id="crTotalRow"><span id="crTotalLabel">Total SPA (setelah potongan)</span><strong id="crTotal">—</strong></div>
       </div>
+      <div id="crCatatanTipe" style="display:none;margin-top:12px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:10px;padding:10px 14px;font-size:0.75rem;color:#166534;"></div>
     </div>
   </div>
 </section>
@@ -1231,22 +1240,187 @@ function renderWizardProdi() {
 // ─── CEK BIAYA: SELECT ─────────────────────────────────────
 function renderCekBiayaSelect() {
   if (!D.prodi) return;
-  // Prodi select (exclude S2)
-  var html = '';
+  // Prodi S1 untuk reguler/karyawan/RPL
+  var htmlS1 = '';
   D.prodi.filter(function(p){ return p.jenjang !== 'S2'; }).forEach(function(p){
-    html += '<option value="'+p.id+'">'+p.nama+' – '+p.jenjang+'</option>';
+    htmlS1 += '<option value="'+p.id+'">'+p.nama+' – '+p.jenjang+'</option>';
   });
-  document.getElementById('cekProdi').innerHTML = html;
+  document.getElementById('cekProdi').innerHTML = htmlS1;
 
-  // Gelombang select — semua gelombang bisa dipilih untuk simulasi
+  // Gelombang select
   var gelHtml = '';
   D.gelombang.forEach(function(g){
     var isCurrent = isGelombangAktif(g);
-    var label = g.nama + ' — Potongan ' + g.label_potongan + (isCurrent ? ' ★ AKTIF' : '');
-    gelHtml += '<option value="'+String(g.id)+'"'+(isCurrent?' selected':'')+'>'+label+'</option>';
+    gelHtml += '<option value="'+String(g.id)+'"'+(isCurrent?' selected':'')+'>'+g.nama+' — Potongan '+g.label_potongan+(isCurrent?' ★ AKTIF':'')+'</option>';
   });
   document.getElementById('cekGelSelect').innerHTML = gelHtml;
   cekBiaya();
+}
+
+// ═══════════════════════════════════════════════════════
+//  CEK BIAYA — handle semua tipe jalur
+// ═══════════════════════════════════════════════════════
+function cekBiaya() {
+  if (!D.gelombang) return;
+
+  var tipe    = document.getElementById('cekTipe')      ? document.getElementById('cekTipe').value : 'reguler';
+  var prodiId = document.getElementById('cekProdi')     ? document.getElementById('cekProdi').value : null;
+  var gelSelId= document.getElementById('cekGelSelect') ? document.getElementById('cekGelSelect').value : null;
+
+  // Tampil/sembunyikan grup berdasarkan tipe
+  var showGel   = (tipe === 'reguler');
+  var showProdi = (tipe !== 's2');
+  if(document.getElementById('cekGelGroup'))  document.getElementById('cekGelGroup').style.display  = showGel ? '' : 'none';
+  if(document.getElementById('cekGelInfo'))   document.getElementById('cekGelInfo').style.display   = showGel ? '' : 'none';
+  if(document.getElementById('cekProdiGroup'))document.getElementById('cekProdiGroup').style.display= showProdi ? '' : 'none';
+
+  // Karyawan: update pilihan prodi sesuai tersedia_karyawan
+  if (tipe === 'karyawan' && D.prodi) {
+    var karyHtml = '';
+    D.prodi.filter(function(p){ return p.tersedia_karyawan==='TRUE'||p.tersedia_karyawan===true; }).forEach(function(p){
+      karyHtml += '<option value="'+p.id+'">'+p.nama+' – '+p.jenjang+'</option>';
+    });
+    if(document.getElementById('cekProdi')) document.getElementById('cekProdi').innerHTML = karyHtml || '<option>Tidak ada prodi tersedia</option>';
+  } else if (tipe !== 's2' && D.prodi) {
+    var s1Html = '';
+    D.prodi.filter(function(p){ return p.jenjang !== 'S2'; }).forEach(function(p){
+      s1Html += '<option value="'+p.id+'">'+p.nama+' – '+p.jenjang+'</option>';
+    });
+    if(document.getElementById('cekProdi')) document.getElementById('cekProdi').innerHTML = s1Html;
+  }
+
+  // Info tipe
+  var tipeInfoEl = document.getElementById('cekTipeInfo');
+  var catatanTipeEl = document.getElementById('crCatatanTipe');
+  var tipeInfoMap = {
+    reguler       : '',
+    karyawan      : '💼 Kelas Karyawan — SPP Rp1.200.000/bulan, SPA tidak berlaku.',
+    rpl_eksternal : '🔄 RPL Eksternal — SPP Rp1.200.000/bulan, Anvulen Rp50.000/SKS, SPA tidak berlaku.',
+    rpl_alumni    : '🎓 RPL Alumni UTDI — SPP Rp1.200.000/bulan, Anvulen Rp25.000/SKS, SPA tidak berlaku.',
+    s2            : '🎓 Magister MTI — SPP Rp1.700.000/bulan, SPA tidak berlaku.'
+  };
+  if (tipeInfoEl) {
+    tipeInfoEl.style.display = tipeInfoMap[tipe] ? 'block' : 'none';
+    tipeInfoEl.textContent   = tipeInfoMap[tipe] || '';
+  }
+
+  // ── KALKULASI ──
+  var crSPANormRow = document.getElementById('crSPANormRow');
+  var crSPAPotRow  = document.getElementById('crSPAPotRow');
+  var crSPAByrRow  = document.getElementById('crSPAByrRow');
+  var crSPPLabel   = document.getElementById('crSPPLabel');
+  var crTotalLabel = document.getElementById('crTotalLabel');
+
+  if (tipe === 'karyawan') {
+    // SPP Rp1.200.000/bulan, no SPA
+    if(crSPANormRow) crSPANormRow.style.display='none';
+    if(crSPAPotRow)  crSPAPotRow.style.display='none';
+    if(crSPAByrRow)  crSPAByrRow.style.display='none';
+    if(crSPPLabel)   crSPPLabel.textContent='Per bulan';
+    if(crTotalLabel) crTotalLabel.textContent='Total per bulan';
+    document.getElementById('crSPP').textContent  = 'Rp 1.200.000/bulan';
+    document.getElementById('crSKS').textContent  = 'Rp 150.000/SKS';
+    document.getElementById('crAnv').textContent  = '—';
+    document.getElementById('crSNorm').textContent= '—';
+    document.getElementById('crSPot').textContent = '—';
+    document.getElementById('crSBayar').textContent='—';
+    document.getElementById('crTotal').textContent= 'Rp 1.200.000/bulan';
+    document.getElementById('crCicilanRows').innerHTML='<div style="opacity:0.6;font-size:0.8rem;padding:6px 0;">Dibayar setiap bulan, tidak ada cicilan SPA.</div>';
+    if(catatanTipeEl){ catatanTipeEl.style.display='block'; catatanTipeEl.textContent='SPA tidak berlaku untuk Kelas Karyawan.'; }
+    return;
+  }
+
+  if (tipe === 'rpl_eksternal' || tipe === 'rpl_alumni') {
+    var anv = tipe==='rpl_eksternal' ? 50000 : 25000;
+    if(crSPANormRow) crSPANormRow.style.display='none';
+    if(crSPAPotRow)  crSPAPotRow.style.display='none';
+    if(crSPAByrRow)  crSPAByrRow.style.display='none';
+    if(crSPPLabel)   crSPPLabel.textContent='Per bulan';
+    if(crTotalLabel) crTotalLabel.textContent='Estimasi per bulan';
+    document.getElementById('crSPP').textContent  = 'Rp 1.200.000/bulan';
+    document.getElementById('crSKS').textContent  = '—';
+    document.getElementById('crAnv').textContent  = fmt(anv)+'/SKS';
+    document.getElementById('crSNorm').textContent= '—';
+    document.getElementById('crSPot').textContent = '—';
+    document.getElementById('crSBayar').textContent='—';
+    document.getElementById('crTotal').textContent= 'Rp 1.200.000/bulan + Anvulen';
+    document.getElementById('crCicilanRows').innerHTML='<div style="opacity:0.6;font-size:0.8rem;padding:6px 0;">SPP dibayar per bulan. Anvulen '+fmt(anv)+'/SKS dibayar per semester.</div>';
+    if(catatanTipeEl){ catatanTipeEl.style.display='block'; catatanTipeEl.textContent='SPA tidak berlaku untuk jalur RPL. '+(tipe==='rpl_alumni'?'Anvulen lebih ringan untuk alumni UTDI/STMIK AKAKOM.':''); }
+    return;
+  }
+
+  if (tipe === 's2') {
+    if(crSPANormRow) crSPANormRow.style.display='none';
+    if(crSPAPotRow)  crSPAPotRow.style.display='none';
+    if(crSPAByrRow)  crSPAByrRow.style.display='none';
+    if(crSPPLabel)   crSPPLabel.textContent='Per bulan';
+    if(crTotalLabel) crTotalLabel.textContent='SPP per bulan';
+    document.getElementById('crSPP').textContent  = 'Rp 1.700.000/bulan';
+    document.getElementById('crSKS').textContent  = '—';
+    document.getElementById('crAnv').textContent  = '—';
+    document.getElementById('crSNorm').textContent= '—';
+    document.getElementById('crSPot').textContent = '—';
+    document.getElementById('crSBayar').textContent='—';
+    document.getElementById('crTotal').textContent= 'Rp 1.700.000/bulan';
+    document.getElementById('crCicilanRows').innerHTML='<div style="opacity:0.6;font-size:0.8rem;padding:6px 0;">SPP Magister dibayar per bulan. Tidak ada SPA.</div>';
+    if(catatanTipeEl){ catatanTipeEl.style.display='block'; catatanTipeEl.textContent='SPA tidak berlaku untuk Program Magister (S2).'; }
+    return;
+  }
+
+  // ── REGULER / SMART LEARNING ──
+  if(crSPANormRow) crSPANormRow.style.display='';
+  if(crSPAPotRow)  crSPAPotRow.style.display='';
+  if(crSPAByrRow)  crSPAByrRow.style.display='';
+  if(crSPPLabel)   crSPPLabel.textContent='Per semester';
+  if(crTotalLabel) crTotalLabel.textContent='Total SPA (setelah potongan)';
+  if(catatanTipeEl) catatanTipeEl.style.display='none';
+
+  if (!prodiId || !D.biaya_spa) return;
+
+  var selectedGel = null;
+  D.gelombang.forEach(function(g){ if(String(g.id)===String(gelSelId)) selectedGel=g; });
+  if (!selectedGel) { D.gelombang.forEach(function(g){ if(isGelombangAktif(g)) selectedGel=g; }); }
+  if (!selectedGel && D.gelombang.length) selectedGel=D.gelombang[0];
+  if (!selectedGel) return;
+
+  var isActive = isGelombangAktif(selectedGel);
+  var infoEl   = document.getElementById('cekGelLabel');
+  if(infoEl) infoEl.innerHTML='📅 <strong>'+selectedGel.nama+'</strong> &nbsp;·&nbsp; Potongan SPA <strong style="color:var(--accent)">'+selectedGel.label_potongan+'</strong>'+(isActive?' &nbsp;<span style="color:#22c55e;font-weight:500;">● Aktif sekarang</span>':'');
+  var potLabelEl=document.getElementById('crPotLabel');
+  if(potLabelEl) potLabelEl.textContent='Diskon '+selectedGel.label_potongan+' ('+selectedGel.nama+')';
+
+  var b = D.biaya_spa[prodiId] ? D.biaya_spa[prodiId][String(selectedGel.id).trim()] : null;
+  if (!b) return;
+
+  var spaNorm=Number(b.spa_normal)||0, spaAft=Number(b.spa_setelah_potongan)||0;
+  var potAmt=spaNorm-spaAft, spp=Number(b.spp_tetap)||0;
+  var sks=Number(b.spp_per_sks)||0, anv2=Number(b.aanvullen)||0;
+
+  document.getElementById('crSNorm').textContent  = fmt(spaNorm);
+  document.getElementById('crSPot').textContent   = spaNorm===0?'—':'– '+fmt(potAmt);
+  document.getElementById('crSBayar').textContent = fmt(spaAft);
+  document.getElementById('crSPP').textContent    = fmt(spp)+'/sem';
+  document.getElementById('crSKS').textContent    = sks===0?'—':fmt(sks)+'/SKS';
+  document.getElementById('crAnv').textContent    = anv2===0?'—':fmt(anv2)+'/SKS';
+  document.getElementById('crTotal').textContent  = fmt(spaAft);
+
+  var rowsHtml='';
+  if(D.cicilan && D.cicilan.length && spaAft>0){
+    var sudahBayar=0;
+    D.cicilan.forEach(function(c,i){
+      var pct=Number(c.persen_bayar)/100;
+      var isLast=(i===D.cicilan.length-1);
+      var spaAmt=isLast?(spaAft-sudahBayar):Math.round(spaAft*pct);
+      sudahBayar+=spaAmt;
+      var extra=(i===0)?spp:0;
+      rowsHtml+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.07);">'
+        +'<span style="font-size:0.8rem;opacity:0.8;">'+c.label+(i===0?' <span style="font-size:0.7rem;opacity:0.6;">(+SPP)</span>':'')+'</span>'
+        +'<strong style="font-size:0.875rem;">'+fmt(spaAmt+extra)+'</strong></div>';
+    });
+  } else if(spaAft===0){
+    rowsHtml='<div style="opacity:0.6;font-size:0.8rem;padding:6px 0;">SPA tidak berlaku.</div>';
+  }
+  document.getElementById('crCicilanRows').innerHTML=rowsHtml;
 }
 
 // ─── HELPER: label waktu cicilan ───────────────────────────
@@ -1693,46 +1867,61 @@ function updateEstimasi() {
   var hb    = hitungBiaya(b, j);
   var ang1  = Math.round(hb.spaFinal * dpPct) + hb.sppFinal;
 
-  var isKIPK = sel.jalur && sel.jalur.isKIPK;
+  var isKIPK      = sel.jalur && sel.jalur.isKIPK;
+  var isSPANol    = hb.spaFinal === 0; // karyawan, RPL, KIPK
+  var isSppBulan  = hb.isSppBulanan;
 
-  document.getElementById('sumGel').textContent   = isKIPK ? g.nama + ' (Potongan tidak berlaku)' : g.nama + ' (Potongan '+g.label_potongan+')';
+  // Label gelombang di summary
+  document.getElementById('sumGel').textContent   = (isKIPK || isSPANol)
+    ? g.nama + ' (SPA tidak berlaku)'
+    : g.nama + ' (Potongan '+g.label_potongan+')';
   document.getElementById('sumSkema').textContent = sel.skema ? sel.skema.nama : '—';
-  document.getElementById('sumJalur').textContent = sel.jalur ? sel.jalur.nama : '—';
+  document.getElementById('sumJalur').textContent = sel.jalur
+    ? sel.jalur.nama + (sel.jalur.rplSubtipe ? ' — '+sel.jalur.rplSubtipe.nama : '') : '—';
   document.getElementById('sumProdi').textContent = p.nama + ' – ' + p.jenjang;
 
+  // Baris SPA Normal — sembunyikan jika SPA tidak berlaku
+  var spaNormRow = document.getElementById('eSPANorm').closest('.biaya-item');
+  if (spaNormRow) spaNormRow.style.display = isSPANol ? 'none' : '';
   document.getElementById('eSPANorm').textContent = fmt(hb.spaNorm);
 
-  // Baris potongan gelombang: sembunyikan jika KIPK
+  // Baris Potongan — sembunyikan jika KIPK atau SPA tidak berlaku
   var potRow = document.getElementById('eSPAPot').closest('.biaya-item');
-  if (potRow) potRow.style.display = isKIPK ? 'none' : '';
+  if (potRow) potRow.style.display = (isKIPK || isSPANol) ? 'none' : '';
   document.getElementById('eSPAPot').textContent = hb.spaNorm===0 ? '—' : '– '+fmt(hb.potAmt);
-  // Jika ada override SPA, tampilkan label berbeda
-  var eSPABayarEl = document.getElementById('eSPABayar');
-  if (hb.adaOverride && hb.spaFinal === 0) {
-    eSPABayarEl.textContent = 'Rp 0 (Ditanggung)';
-    eSPABayarEl.style.color = '#4ade80';
-  } else if (hb.adaOverride) {
-    eSPABayarEl.textContent = fmt(hb.spaFinal) + ' (Disesuaikan)';
-    eSPABayarEl.style.color = 'var(--accent)';
-  } else {
-    eSPABayarEl.textContent = fmt(hb.spaFinal);
-    eSPABayarEl.style.color = '';
+
+  // Baris SPA Dibayar — sembunyikan jika SPA tidak berlaku
+  var eSPABayarEl  = document.getElementById('eSPABayar');
+  var spaBayarRow  = eSPABayarEl.closest('.biaya-item');
+  if (spaBayarRow) spaBayarRow.style.display = isSPANol ? 'none' : '';
+  if (!isSPANol) {
+    if (hb.adaOverride && hb.spaFinal === 0) {
+      eSPABayarEl.textContent = 'Rp 0 (Ditanggung)'; eSPABayarEl.style.color = '#4ade80';
+    } else if (hb.adaOverride) {
+      eSPABayarEl.textContent = fmt(hb.spaFinal)+' (Disesuaikan)'; eSPABayarEl.style.color = 'var(--accent)';
+    } else {
+      eSPABayarEl.textContent = fmt(hb.spaFinal); eSPABayarEl.style.color = '';
+    }
   }
+
+  // SPP
   document.getElementById('eSPP').textContent = hb.sppFinal === 0
     ? 'Rp 0 (Ditanggung)'
-    : hb.isSppBulanan
-      ? fmt(hb.sppFinal)+'/bulan'
-      : fmt(hb.sppFinal)+'/semester';
+    : isSppBulan ? fmt(hb.sppFinal)+'/bulan' : fmt(hb.sppFinal)+'/semester';
+
+  // SKS
   document.getElementById('eSKS').textContent = hb.sksFinal === 0
     ? 'Rp 0 (Ditanggung)' : (hb.sksFinal < 0 ? '—' : fmt(hb.sksFinal)+'/SKS');
+
+  // Anvulen
   document.getElementById('eAnv').textContent = hb.anvFinal === 0 ? '—' : fmt(hb.anvFinal)+'/SKS';
 
-  // SPA & angsuran — untuk RPL/Karyawan SPA = 0 jadi angsuran = 0 juga
-  var ang1Label = hb.spaFinal === 0 && hb.isSppBulanan
+  // Angsuran pertama & total
+  var ang1Label = isSPANol && isSppBulan
     ? fmt(hb.sppFinal)+' (SPP bulan pertama)'
     : fmt(ang1);
   document.getElementById('eBayarAwal').textContent = ang1Label;
-  document.getElementById('eTotalSPA').textContent  = hb.spaFinal === 0 ? 'Tidak ada SPA' : fmt(hb.spaFinal);
+  document.getElementById('eTotalSPA').textContent  = isSPANol ? 'Tidak ada SPA' : fmt(hb.spaFinal);
 
   // Tampilkan catatan biaya jalur jika ada
   var catatanEl = document.getElementById('eCatatanJalur');
@@ -1763,74 +1952,6 @@ function updateSubmitSummary() {
   document.getElementById('ssBayarAwal').textContent = ang1 === 0 ? 'Rp 0 (Bebas Biaya)' : fmt(ang1);
 }
 
-// ═══════════════════════════════════════════════════════
-//  CEK BIAYA MANDIRI
-// ═══════════════════════════════════════════════════════
-function cekBiaya() {
-  var prodiId = document.getElementById('cekProdi') ? document.getElementById('cekProdi').value : null;
-  var gelSelEl = document.getElementById('cekGelSelect');
-  var gelSelId = gelSelEl ? gelSelEl.value : null;
-  if (!prodiId || !D.biaya_spa || !D.gelombang) return;
-
-  // Cari gelombang yang dipilih dari select — String() karena Sheets bisa return number
-  var selectedGel = null;
-  D.gelombang.forEach(function(g){ if(String(g.id) === String(gelSelId)) selectedGel = g; });
-  // Fallback: gelombang aktif hari ini
-  if (!selectedGel) {
-    D.gelombang.forEach(function(g){
-      if(isGelombangAktif(g)) selectedGel=g;
-    });
-  }
-  if (!selectedGel && D.gelombang.length) selectedGel = D.gelombang[0];
-  if (!selectedGel) return;
-
-  // Update info label gelombang
-  var isActive = isGelombangAktif(selectedGel);
-  var infoEl = document.getElementById('cekGelLabel');
-  if(infoEl) infoEl.innerHTML = '📅 <strong>'+selectedGel.nama+'</strong> &nbsp;·&nbsp; Potongan SPA <strong style="color:var(--accent)">'+selectedGel.label_potongan+'</strong>'
-    +(isActive?' &nbsp;<span style="color:#22c55e;font-weight:500;">● Aktif sekarang</span>':'');
-  var potLabelEl = document.getElementById('crPotLabel');
-  if(potLabelEl) potLabelEl.textContent = 'Diskon '+selectedGel.label_potongan+' ('+selectedGel.nama+')';
-
-  var b = D.biaya_spa[prodiId] ? D.biaya_spa[prodiId][String(selectedGel.id).trim()] : null;
-  if (!b) return;
-
-  var spaNorm = Number(b.spa_normal)||0;
-  var spaAft  = Number(b.spa_setelah_potongan)||0;
-  var potAmt  = spaNorm - spaAft;
-  var spp     = Number(b.spp_tetap)||0;
-  var sks     = Number(b.spp_per_sks)||0;
-  var anv     = Number(b.aanvullen)||0;
-
-  document.getElementById('crSNorm').textContent  = fmt(spaNorm);
-  document.getElementById('crSPot').textContent   = spaNorm===0 ? '—' : '– '+fmt(potAmt);
-  document.getElementById('crSBayar').textContent = fmt(spaAft);
-  document.getElementById('crSPP').textContent    = fmt(spp)+'/sem';
-  document.getElementById('crSKS').textContent    = sks===0 ? '—' : fmt(sks)+'/SKS';
-  document.getElementById('crAnv').textContent    = anv===0 ? '—' : fmt(anv)+'/SKS';
-  document.getElementById('crTotal').textContent  = fmt(spaAft);
-
-  // Cicilan rows — tiap angsuran pada baris sendiri, angsuran 1 include SPP
-  var rowsHtml = '';
-  if (D.cicilan && D.cicilan.length && spaAft > 0) {
-    var sudahBayar = 0;
-    D.cicilan.forEach(function(c, i){
-      var pct = Number(c.persen_bayar) / 100;
-      var isLast = (i === D.cicilan.length - 1);
-      var spaAmt = isLast ? (spaAft - sudahBayar) : Math.round(spaAft * pct);
-      sudahBayar += spaAmt;
-      var extraSPP = (i === 0) ? spp : 0;
-      var totalAmt = spaAmt + extraSPP;
-      rowsHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.07);">'
-        + '<span style="font-size:0.8rem;opacity:0.8;">'+c.label+(i===0?' <span style="font-size:0.7rem;opacity:0.6;">(+SPP Rp'+spp.toLocaleString('id-ID')+')</span>':'')+'</span>'
-        + '<strong style="font-size:0.875rem;">'+fmt(totalAmt)+'</strong>'
-        + '</div>';
-    });
-  } else if (spaAft === 0) {
-    rowsHtml = '<div style="opacity:0.6;font-size:0.8rem;padding:6px 0;">SPA tidak berlaku untuk program ini.</div>';
-  }
-  document.getElementById('crCicilanRows').innerHTML = rowsHtml;
-}
 
 // ═══════════════════════════════════════════════════════
 //  SUBMIT PENDAFTARAN → KIRIM KE API
