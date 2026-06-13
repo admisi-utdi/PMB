@@ -809,31 +809,42 @@ function cfg(key, fallback){ return (D.config && D.config[key]) ? D.config[key] 
 function txt(key, fallback){ return (D.teks_ui && D.teks_ui[key]) ? D.teks_ui[key] : (fallback||''); }
 
 // ─── ICON HELPER ─────────────────────────────────────────
-// Prioritas: icon_url (PNG transparan putih) → icon_emoji → fallback
+// Prioritas: icon_url → icon_emoji → fallback
 function renderIcon(iconUrl, iconEmoji, fallbackEmoji, size, bgColor, borderRadius) {
   size         = size         || 40;
   bgColor      = bgColor      || 'var(--navy)';
   borderRadius = borderRadius || '10px';
 
-  // Bersihkan nilai dari Sheets — bisa ada spasi, newline, karakter tersembunyi
-  var cleanUrl = iconUrl ? String(iconUrl).replace(/\s/g,'').trim() : '';
+  // Sheets kadang return hyperlink object {url, label} atau plain string
+  // Bersihkan semua kemungkinan format
+  var rawUrl = '';
+  if (iconUrl) {
+    if (typeof iconUrl === 'object' && iconUrl !== null) {
+      rawUrl = iconUrl.url || iconUrl.href || String(iconUrl) || '';
+    } else {
+      rawUrl = String(iconUrl);
+    }
+  }
+  // Hapus spasi, newline, karakter tersembunyi
+  rawUrl = rawUrl.replace(/[\s\r\n\t]/g, '').trim();
 
   var wrapStyle = 'width:'+size+'px;height:'+size+'px;'
+    + 'min-width:'+size+'px;'          // cegah flex shrink
     + 'border-radius:'+borderRadius+';'
     + 'background:'+bgColor+';'
     + 'display:flex;align-items:center;justify-content:center;'
-    + 'flex-shrink:0;overflow:hidden;';
+    + 'flex-shrink:0;';                // hilangkan overflow:hidden agar tidak terpotong
 
-  if (cleanUrl !== '' && cleanUrl.indexOf('http') === 0) {
-    // PNG putih transparan: img lebih kecil dari div (62%) + padding visual
-    var imgSize = Math.round(size * 0.62) + 'px';
-    var fallbackEm = iconEmoji || fallbackEmoji || '📌';
+  if (rawUrl.length > 4 && (rawUrl.indexOf('http') === 0 || rawUrl.indexOf('//') === 0)) {
+    var imgSize = Math.round(size * 0.65) + 'px';
+    var fallbackEm = (iconEmoji && String(iconEmoji).trim()) ? String(iconEmoji).trim() : (fallbackEmoji || '📌');
     return '<div style="'+wrapStyle+'">'
-      + '<img src="'+cleanUrl+'" '
-      + 'style="width:'+imgSize+';height:'+imgSize+';object-fit:contain;display:block;'
+      + '<img src="'+rawUrl+'" '
+      + 'width="'+imgSize+'" height="'+imgSize+'" '
+      + 'style="object-fit:contain;display:block;'
       + 'filter:brightness(0) invert(1);" '
-      + 'onerror="this.style.display=\'none\';this.insertAdjacentHTML(\'afterend\',\'<span style=\\"font-size:'
-      + Math.round(size*0.45)+'px\\">'+fallbackEm+'</span>\')">'
+      + 'onerror="this.parentNode.innerHTML=\'<span style=\\"font-size:'
+      + Math.round(size*0.45)+'px\\">'+fallbackEm+'</span>\'">'
       + '</div>';
   }
 
