@@ -1229,6 +1229,18 @@ function renderCekBiayaSelect() {
   cekBiaya();
 }
 
+// ─── HELPER: label waktu cicilan ───────────────────────────
+function labelWaktuCicilan(c) {
+  // Prioritas: tanggal_tetap → batas_hari_sejak_daftar → 'Saat pendaftaran'
+  var tgl = c.tanggal_tetap ? String(c.tanggal_tetap).trim() : '';
+  if (tgl && tgl !== '' && tgl !== '0') {
+    return formatTanggal(tgl);          // misal: "15 Desember 2025"
+  }
+  var hari = Number(c.batas_hari_sejak_daftar) || 0;
+  if (hari > 0) return 'H+'+hari+' sejak pendaftaran';
+  return 'Saat pendaftaran';
+}
+
 // ─── CICILAN STRUKTUR ──────────────────────────────────────
 function renderCicilanStruktur() {
   if (!D.cicilan) return;
@@ -1236,7 +1248,10 @@ function renderCicilanStruktur() {
   var html = '';
   D.cicilan.forEach(function(c,i){
     html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--white);border-radius:8px;font-size:0.875rem;">';
+    html += '<div style="display:flex;flex-direction:column;">';
     html += '<span style="font-weight:500;color:var(--navy);">'+c.label+'</span>';
+    html += '<span style="font-size:0.75rem;color:var(--muted);margin-top:1px;">'+labelWaktuCicilan(c)+'</span>';
+    html += '</div>';
     html += '<span style="font-weight:500;color:'+(colors[i]||'var(--navy)')+';">'+c.persen_bayar+'% SPA</span>';
     html += '</div>';
   });
@@ -1253,7 +1268,7 @@ function renderCicilanTimeline() {
     html += '<div class="tl-item">';
     html += '<div class="tl-dot" style="background:'+dotColors[i%dotColors.length]+';border:2px solid var(--white);">💰</div>';
     html += '<div class="tl-content">';
-    html += '<div class="tl-when">'+(c.batas_hari_sejak_daftar ? 'H+'+c.batas_hari_sejak_daftar+' sejak pendaftaran' : 'Saat pendaftaran')+'</div>';
+    html += '<div class="tl-when">'+labelWaktuCicilan(c)+'</div>';
     html += '<h4>'+c.label+'</h4>';
     html += '<p>'+c.deskripsi+'</p>';
     if(c.catatan) html += '<p style="margin-top:4px;color:var(--accent);">'+c.catatan+'</p>';
