@@ -2383,13 +2383,43 @@ function toggleManualSekolah() {
 }
 
 function submitDaftar() {
-  var emailEnabled = false; // Email tidak diverifikasi
-  var waEnabled    = D.verif_config ? D.verif_config.wa_enabled : true;
+  var waEnabled = D.verif_config ? D.verif_config.wa_enabled : true;
   if (waEnabled && !verifState.wa) { alert('WhatsApp belum diverifikasi. Kirim dan masukkan kode OTP terlebih dahulu.'); return; }
 
-  var nama = (document.getElementById('fNama')||{}).value||'';
-  var wa   = (document.getElementById('fWa')  ||{}).value||'';
-  if (!nama || !wa) { alert('Harap lengkapi Nama dan Nomor WhatsApp.'); return; }
+  // Ambil semua nilai
+  var nama    = (document.getElementById('fNama')    ||{}).value||'';
+  var nik     = (document.getElementById('fNik')     ||{}).value||'';
+  var ttl     = (document.getElementById('fTtl')     ||{}).value||'';
+  var tgl     = (document.getElementById('fTgl')     ||{}).value||'';
+  var jk      = (document.getElementById('fJk')      ||{}).value||'';
+  var agama   = (document.getElementById('fAgama')   ||{}).value||'';
+  var wa      = (document.getElementById('fWa')      ||{}).value||'';
+  var email   = (document.getElementById('fEmail')   ||{}).value||'';
+  var provinsi= (document.getElementById('fProvinsi')||{}).value||'';
+  var kota    = (document.getElementById('fKota')    ||{}).value||'';
+
+  // Validasi field wajib
+  var missing = [];
+  if (!nama)     missing.push('Nama Lengkap');
+  if (!nik)      missing.push('NIK');
+  if (!ttl)      missing.push('Tempat Lahir');
+  if (!tgl)      missing.push('Tanggal Lahir');
+  if (!jk)       missing.push('Jenis Kelamin');
+  if (!agama)    missing.push('Agama');
+  if (!wa)       missing.push('Nomor WhatsApp');
+  if (!email)    missing.push('Email');
+  if (!provinsi) missing.push('Provinsi');
+  if (!kota)     missing.push('Kota/Kabupaten');
+
+  if (missing.length > 0) {
+    alert('Harap lengkapi field berikut:\n• ' + missing.join('\n• '));
+    return;
+  }
+
+  // Validasi format email
+  if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    alert('Format email tidak valid.'); return;
+  }
   var npsn=document.getElementById('fNpsnHidden').value||(document.getElementById('fNpsn')||{}).value||'';
   var namaSekolah=document.getElementById('fNamaSekolahHidden').value||(document.getElementById('fNamaSekolah')||{}).value||'';
   var g=getGelData(); var b=getBiayaData(); var j=getJalurData();
@@ -2402,20 +2432,17 @@ function submitDaftar() {
     jalur:sel.jalur?sel.jalur.nama:'',
     jalur_subtipe:(sel.jalur&&sel.jalur.rplSubtipe)?sel.jalur.rplSubtipe.nama:'',
     mitra:sel.mitra?sel.mitra.nama:'', prodi:sel.prodi||'',
-    nama_lengkap:nama, nik:(document.getElementById('fNik')||{}).value||'',
-    tempat_lahir:(document.getElementById('fTtl')||{}).value||'',
-    tanggal_lahir:(document.getElementById('fTgl')||{}).value||'',
-    jenis_kelamin:(document.getElementById('fJk')||{}).value||'',
-    agama:(document.getElementById('fAgama')||{}).value||'',
+    nama_lengkap:nama, nik:nik,
+    tempat_lahir:ttl, tanggal_lahir:tgl,
+    jenis_kelamin:jk, agama:agama,
     email:email, email_verified:verifState.email,
     no_wa:wa, wa_verified:verifState.wa,
-    alamat_jalan:(document.getElementById('fAlamat')||{}).value||'',
-    rt:(document.getElementById('fRt')||{}).value||'',
-    rw:(document.getElementById('fRw')||{}).value||'',
-    desa_kelurahan:(document.getElementById('fDesa')||{}).value||'',
-    kecamatan:(document.getElementById('fKecamatan')||{}).value||'',
-    kota_kabupaten:(document.getElementById('fKota')||{}).value||'',
-    provinsi:(document.getElementById('fProvinsi')||{}).value||'',
+    alamat_jalan:(document.getElementById('fAlamat')    ||{}).value||'',
+    rt           :(document.getElementById('fRt')        ||{}).value||'',
+    rw           :(document.getElementById('fRw')        ||{}).value||'',
+    desa_kelurahan:(document.getElementById('fDesa')     ||{}).value||'',
+    kecamatan    :(document.getElementById('fKecamatan') ||{}).value||'',
+    kota_kabupaten:kota, provinsi:provinsi,
     nisn:(document.getElementById('fNisn')||{}).value||'',
     npsn:npsn, nama_sekolah:namaSekolah,
     jurusan_sekolah:(document.getElementById('fJurusanSekolah')||{}).value||'',
