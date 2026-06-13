@@ -2464,10 +2464,25 @@ function submitDaftar() {
     spa_normal:hb.spaNorm||0, spa_bayar:hb.spaFinal||0, spp:hb.sppFinal||0, ang_pertama:ang1
   };
   var btn=document.getElementById('btnSubmitFinal');
-  if(btn){ btn.disabled=true; btn.textContent='Mengirim...'; }
-  fetch(API_URL,{method:'POST',body:JSON.stringify(payload)})
+  if(btn){
+    if(btn.dataset.submitting==='true') return; // cegah double submit
+    btn.dataset.submitting='true';
+    btn.disabled=true;
+    btn.textContent='Mengirim...';
+  }
+
+  // Timeout 30 detik
+  var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timeoutId  = controller ? setTimeout(function(){ controller.abort(); }, 30000) : null;
+
+  fetch(API_URL, {
+    method : 'POST',
+    body   : JSON.stringify(payload),
+    signal : controller ? controller.signal : undefined
+  })
     .then(function(r){ return r.json(); })
     .then(function(res){
+      if(timeoutId) clearTimeout(timeoutId);
       if(res.success){
         var nama_daftar = (document.getElementById('fNama')||{}).value||'Pendaftar';
         var mt=document.getElementById('modalTitle');
@@ -2483,7 +2498,6 @@ function submitDaftar() {
           +'<p style="font-size:0.85rem;color:var(--muted);">Segera periksa <strong>WhatsApp</strong> dan/atau <strong>Email</strong> kamu, '
           +'dan segera aktifkan akun kamu dengan klik tautan yang dikirimkan.</p>';
         document.getElementById('modalSuccess').classList.add('show');
-        // Countdown otomatis tutup 10 detik
         var sisa = 10;
         var cd = document.getElementById('modalCountdown');
         if(cd) cd.textContent = 'Halaman akan otomatis kembali dalam '+sisa+' detik...';
@@ -2492,8 +2506,17 @@ function submitDaftar() {
           if(cd) cd.textContent = 'Halaman akan otomatis kembali dalam '+sisa+' detik...';
           if(sisa <= 0){ clearInterval(cdTimer); tutupModal(); }
         }, 1000);
-      } else { alert('Gagal: '+(res.error||'Coba lagi.')); if(btn){ btn.disabled=false; btn.textContent='🚀 Kirim Pendaftaran'; } }
-    }).catch(function(){ document.getElementById('modalSuccess').classList.add('show'); });
+      } else {
+        alert('Gagal: '+(res.error||'Coba lagi.'));
+        if(btn){ btn.disabled=false; btn.textContent='🚀 Kirim Pendaftaran'; btn.dataset.submitting='false'; }
+      }
+    })
+    .catch(function(err){
+      if(timeoutId) clearTimeout(timeoutId);
+      var msg = err && err.name==='AbortError' ? 'Timeout — server terlalu lama merespon. Coba lagi.' : 'Gagal terhubung ke server. Coba lagi.';
+      alert(msg);
+      if(btn){ btn.disabled=false; btn.textContent='🚀 Kirim Pendaftaran'; btn.dataset.submitting='false'; }
+    });
 }
 </script>
 </body>
