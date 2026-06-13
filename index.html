@@ -815,28 +815,30 @@ function renderIcon(iconUrl, iconEmoji, fallbackEmoji, size, bgColor, borderRadi
   bgColor      = bgColor      || 'var(--navy)';
   borderRadius = borderRadius || '10px';
 
+  // Bersihkan nilai dari Sheets — bisa ada spasi, newline, karakter tersembunyi
+  var cleanUrl = iconUrl ? String(iconUrl).replace(/\s/g,'').trim() : '';
+
   var wrapStyle = 'width:'+size+'px;height:'+size+'px;'
     + 'border-radius:'+borderRadius+';'
     + 'background:'+bgColor+';'
     + 'display:flex;align-items:center;justify-content:center;'
     + 'flex-shrink:0;overflow:hidden;';
 
-  if (iconUrl && iconUrl.trim() !== '') {
+  if (cleanUrl !== '' && cleanUrl.indexOf('http') === 0) {
     // PNG putih transparan: img lebih kecil dari div (62%) + padding visual
-    // Background div (navy/accent) tetap terlihat di sekitar gambar
     var imgSize = Math.round(size * 0.62) + 'px';
     var fallbackEm = iconEmoji || fallbackEmoji || '📌';
     return '<div style="'+wrapStyle+'">'
-      + '<img src="'+iconUrl.trim()+'" '
+      + '<img src="'+cleanUrl+'" '
       + 'style="width:'+imgSize+';height:'+imgSize+';object-fit:contain;display:block;'
       + 'filter:brightness(0) invert(1);" '
-      + 'onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<span style=\\"font-size:'
-      + Math.round(size*0.45)+'px\\">'+fallbackEm+'</span>\'">'
+      + 'onerror="this.style.display=\'none\';this.insertAdjacentHTML(\'afterend\',\'<span style=\\"font-size:'
+      + Math.round(size*0.45)+'px\\">'+fallbackEm+'</span>\')">'
       + '</div>';
   }
 
   // Emoji fallback
-  var em = (iconEmoji && iconEmoji.trim()) ? iconEmoji.trim() : (fallbackEmoji || '📌');
+  var em = (iconEmoji && String(iconEmoji).trim()) ? String(iconEmoji).trim() : (fallbackEmoji || '📌');
   return '<div style="'+wrapStyle+'font-size:'+Math.round(size*0.45)+'px;">'+em+'</div>';
 }
 // Parse 'YYYY-MM-DD' dari Sheets sebagai local date (hindari UTC shift)
@@ -883,8 +885,6 @@ function loadData() {
     .then(function(r){ return r.json(); })
     .then(function(data){
       D = data;
-      // DEBUG: cek icon_url skema — hapus baris ini setelah confirmed
-      if(D.skema) D.skema.forEach(function(s){ console.log('[SKEMA]', s.nama, '| icon_url:', s.icon_url, '| icon_emoji:', s.icon_emoji); });
       initAll();
       // Sembunyikan loading screen
       var loader = document.getElementById('pmb-loading');
