@@ -628,41 +628,191 @@ footer{background:#040c1f;color:rgba(255,255,255,0.9);padding:48px 5% 24px;}
   <!-- STEP 5: SUBMIT -->
   <div class="wizard-panel" id="panel5">
     <div class="step-title">Langkah 6 dari 6 — Lengkapi Data Diri</div>
-    <p class="step-sub">Isi data dirimu dengan benar. Tim admisi akan menghubungimu untuk proses selanjutnya.</p>
-    <div class="submit-layout">
-      <div class="submit-form">
-        <h3>✏️ Data Calon Mahasiswa</h3>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Nama Lengkap *</label><input type="text" class="form-input" id="fNama" placeholder="Sesuai KTP/Akte"></div>
-          <div class="form-group"><label class="form-label">Tempat Lahir *</label><input type="text" class="form-input" id="fTtl" placeholder="Kota"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Tanggal Lahir *</label><input type="date" class="form-input" id="fTgl"></div>
-          <div class="form-group"><label class="form-label">Jenis Kelamin *</label>
-            <select class="form-input" id="fJk"><option value="">Pilih</option><option>Laki-laki</option><option>Perempuan</option></select>
+    <p class="step-sub">Isi data dirimu dengan benar dan verifikasi kontak sebelum mengirim pendaftaran.</p>
+
+    <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:start;">
+
+      <!-- KIRI: FORM -->
+      <div style="display:flex;flex-direction:column;gap:18px;">
+
+        <!-- SEKSI: Data Diri -->
+        <div class="submit-form">
+          <h3 style="margin-bottom:16px;">👤 Data Diri</h3>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Nama Lengkap *</label><input type="text" class="form-input" id="fNama" placeholder="Sesuai KTP/Akte"></div>
+            <div class="form-group"><label class="form-label">NIK *</label><input type="text" class="form-input" id="fNik" placeholder="16 digit NIK KTP" maxlength="16"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Tempat Lahir *</label><input type="text" class="form-input" id="fTtl" placeholder="Kota lahir"></div>
+            <div class="form-group"><label class="form-label">Tanggal Lahir *</label><input type="date" class="form-input" id="fTgl"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Jenis Kelamin *</label>
+              <select class="form-input" id="fJk"><option value="">Pilih</option><option>Laki-laki</option><option>Perempuan</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Agama *</label>
+              <select class="form-input" id="fAgama"><option value="">Pilih</option><option>Islam</option><option>Kristen</option><option>Katolik</option><option>Hindu</option><option>Buddha</option><option>Konghucu</option></select>
+            </div>
           </div>
         </div>
-        <div class="form-group"><label class="form-label">Nomor HP / WhatsApp *</label><input type="tel" class="form-input" id="fHp" placeholder="08xxxxxxxxxx"></div>
-        <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-input" id="fEmail" placeholder="email@gmail.com"></div>
-        <div class="form-group"><label class="form-label">Asal Sekolah *</label><input type="text" class="form-input" id="fSekolah" placeholder="Nama SMA/SMK/sederajat"></div>
-        <div class="form-group"><label class="form-label">Tahun Lulus</label>
-          <select class="form-input" id="fLulus"><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>Sebelumnya</option></select>
+
+        <!-- SEKSI: Kontak + Verifikasi -->
+        <div class="submit-form">
+          <h3 style="margin-bottom:16px;">📱 Kontak & Verifikasi</h3>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <div style="display:flex;gap:8px;">
+              <input type="email" class="form-input" id="fEmail" placeholder="email@gmail.com" style="flex:1;">
+              <button type="button" onclick="kirimOtp('email')" id="btnOtpEmail"
+                style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;">
+                Kirim Kode
+              </button>
+            </div>
+            <div id="emailVerifRow" style="display:none;margin-top:8px;display:none;">
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input type="text" class="form-input" id="fOtpEmail" placeholder="Masukkan 6 digit kode" maxlength="6"
+                  style="flex:1;letter-spacing:3px;font-weight:600;text-transform:uppercase;">
+                <button type="button" onclick="verifikasiOtp('email')" id="btnVerifEmail"
+                  style="background:var(--success);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;">
+                  Verifikasi
+                </button>
+              </div>
+              <div id="statusEmail" style="font-size:0.75rem;margin-top:4px;"></div>
+            </div>
+          </div>
+
+          <!-- WhatsApp -->
+          <div class="form-group">
+            <label class="form-label">Nomor WhatsApp *</label>
+            <div style="display:flex;gap:8px;">
+              <input type="tel" class="form-input" id="fWa" placeholder="08xxxxxxxxxx" style="flex:1;">
+              <button type="button" onclick="kirimOtp('wa')" id="btnOtpWa"
+                style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;">
+                Kirim Kode
+              </button>
+            </div>
+            <div id="waVerifRow" style="display:none;margin-top:8px;">
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input type="text" class="form-input" id="fOtpWa" placeholder="Masukkan 6 digit kode" maxlength="6"
+                  style="flex:1;letter-spacing:3px;font-weight:600;text-transform:uppercase;">
+                <button type="button" onclick="verifikasiOtp('wa')" id="btnVerifWa"
+                  style="background:var(--success);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;">
+                  Verifikasi
+                </button>
+              </div>
+              <div id="statusWa" style="font-size:0.75rem;margin-top:4px;"></div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="submit-summary">
+
+        <!-- SEKSI: Alamat -->
+        <div class="submit-form">
+          <h3 style="margin-bottom:16px;">🏠 Alamat</h3>
+          <div class="form-group"><label class="form-label">Alamat Jalan *</label>
+            <input type="text" class="form-input" id="fAlamat" placeholder="Nama jalan, nomor rumah, RT/RW">
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">RT</label><input type="text" class="form-input" id="fRt" placeholder="001"></div>
+            <div class="form-group"><label class="form-label">RW</label><input type="text" class="form-input" id="fRw" placeholder="001"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Desa / Kelurahan</label><input type="text" class="form-input" id="fDesa" placeholder="Nama desa/kelurahan"></div>
+            <div class="form-group"><label class="form-label">Kecamatan</label><input type="text" class="form-input" id="fKecamatan" placeholder="Nama kecamatan"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Provinsi *</label>
+              <select class="form-input" id="fProvinsi" onchange="updateKabupaten()">
+                <option value="">— Pilih Provinsi —</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Kota / Kabupaten *</label>
+              <select class="form-input" id="fKota">
+                <option value="">— Pilih Provinsi dulu —</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEKSI: Data Sekolah -->
+        <div class="submit-form">
+          <h3 style="margin-bottom:16px;">🏫 Data Sekolah</h3>
+          <div class="form-group"><label class="form-label">NISN</label>
+            <input type="text" class="form-input" id="fNisn" placeholder="Nomor Induk Siswa Nasional">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cari Sekolah via NPSN / Nama</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" class="form-input" id="fCariSekolah" placeholder="Ketik NPSN atau nama sekolah..." style="flex:1;"
+                oninput="cariSekolahDebounce(this.value)">
+              <button type="button" onclick="toggleManualSekolah()"
+                style="background:var(--light);color:var(--navy);border:1.5px solid var(--border);border-radius:10px;padding:0 12px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;">
+                Input Manual
+              </button>
+            </div>
+            <!-- Hasil pencarian -->
+            <div id="hasilCariSekolah" style="display:none;border:1.5px solid var(--border);border-radius:10px;margin-top:6px;max-height:200px;overflow-y:auto;background:#fff;"></div>
+          </div>
+          <!-- Field manual (tersembunyi default) -->
+          <div id="manualSekolahGroup" style="display:none;">
+            <div class="form-group"><label class="form-label">NPSN</label>
+              <input type="text" class="form-input" id="fNpsn" placeholder="Nomor Pokok Sekolah Nasional">
+            </div>
+            <div class="form-group"><label class="form-label">Nama Sekolah *</label>
+              <input type="text" class="form-input" id="fNamaSekolah" placeholder="Nama SMA/SMK/MA/sederajat">
+            </div>
+          </div>
+          <!-- Field tersembunyi untuk sekolah terpilih -->
+          <input type="hidden" id="fNpsnHidden">
+          <input type="hidden" id="fNamaSekolahHidden">
+          <div id="sekolahTerpilih" style="display:none;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:10px 14px;font-size:0.75rem;color:#166534;margin-top:6px;"></div>
+
+          <div class="form-group" style="margin-top:12px;">
+            <label class="form-label">Jurusan Sekolah *</label>
+            <select class="form-input" id="fJurusanSekolah">
+              <option value="">— Pilih Jurusan —</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Siapa yang merekomendasikan kamu kuliah di UTDI?</label>
+            <input type="text" class="form-input" id="fReferral" placeholder="Nama orang / sumber informasi">
+          </div>
+        </div>
+
+      </div><!-- end kiri -->
+
+      <!-- KANAN: RINGKASAN -->
+      <div class="submit-summary" style="position:sticky;top:80px;">
         <h3>📋 Ringkasan Pendaftaran</h3>
         <div class="ss-item"><span>Gelombang</span><strong id="ssGel">—</strong></div>
         <div class="ss-item"><span>Skema</span><strong id="ssSkema">—</strong></div>
         <div class="ss-item"><span>Jalur</span><strong id="ssJalur">—</strong></div>
         <div class="ss-item"><span>Program Studi</span><strong id="ssProdi">—</strong></div>
         <div class="ss-item"><span>SPA (setelah potongan)</span><strong id="ssSPA">—</strong></div>
-        <div class="ss-item"><span>SPP per Semester</span><strong id="ssSPP">—</strong></div>
+        <div class="ss-item"><span>SPP</span><strong id="ssSPP">—</strong></div>
         <div class="ss-item"><span>Angsuran Pertama</span><strong id="ssAwal">—</strong></div>
         <div class="ss-total"><span>Bayar Saat Registrasi</span><strong id="ssBayarAwal">—</strong></div>
-        <button class="btn-submit" style="width:100%;margin-top:16px;" onclick="submitDaftar()">🚀 Kirim Pendaftaran</button>
-        <p style="font-size:0.74rem;color:var(--muted);text-align:center;margin-top:10px;" id="modalSubText">Tim admisi akan menghubungi dalam 1×24 jam kerja.</p>
+
+        <!-- Status verifikasi -->
+        <div style="margin-top:14px;padding:12px;background:var(--light);border-radius:10px;font-size:0.75rem;">
+          <div style="margin-bottom:6px;font-weight:500;color:var(--navy);">Status Verifikasi</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span>Email</span><span id="badgeEmail" style="color:var(--muted);">⬜ Belum</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span>WhatsApp</span><span id="badgeWa" style="color:var(--muted);">⬜ Belum</span>
+          </div>
+        </div>
+
+        <button class="btn-submit" style="width:100%;margin-top:16px;" onclick="submitDaftar()" id="btnSubmitFinal">
+          🚀 Kirim Pendaftaran
+        </button>
+        <p style="font-size:0.74rem;color:var(--muted);text-align:center;margin-top:10px;" id="modalSubText">
+          Tim admisi akan menghubungi dalam 1×24 jam kerja.
+        </p>
       </div>
-    </div>
+
+    </div><!-- end grid -->
     <div class="wizard-nav"><button class="btn-prev" onclick="prevStep(4)">← Kembali</button><div></div></div>
   </div>
 </section>
@@ -1626,8 +1776,9 @@ function nextStep(n) {
   currentStep = n;
   document.getElementById('wc'+n).classList.add('active');
   document.getElementById('wl'+n).classList.add('active');
-  if(n===3) renderWizardProdi(); // render ulang agar filter jalur (karyawan dll) aktif
+  if(n===3) renderWizardProdi();
   if(n===4) updateEstimasi();
+  if(n===5) { updateSubmitSummary(); initFormStep5(); }
   if(n===5) updateSubmitSummary();
   var el=document.getElementById('pendaftaran');
   if(el){ var top=el.getBoundingClientRect().top+window.pageYOffset-80; window.scrollTo({top:top,behavior:'smooth'}); }
@@ -1972,54 +2123,6 @@ function updateSubmitSummary() {
 // ═══════════════════════════════════════════════════════
 //  SUBMIT PENDAFTARAN → KIRIM KE API
 // ═══════════════════════════════════════════════════════
-function submitDaftar() {
-  var nama   = document.getElementById('fNama').value.trim();
-  var hp     = document.getElementById('fHp').value.trim();
-  var email  = document.getElementById('fEmail').value.trim();
-  if (!nama||!hp||!email) { alert('Harap lengkapi Nama, Nomor HP, dan Email terlebih dahulu.'); return; }
-
-  var g = getGelData(); var b = getBiayaData();
-  var dpPct  = getCicilanDP()/100;
-  var spaAft = b ? Number(b.spa_setelah_potongan)||0 : 0;
-  var spp    = b ? Number(b.spp_tetap)||0 : 0;
-  var ang1   = Math.round(spaAft*dpPct)+spp;
-
-  var payload = {
-    nama          : nama,
-    tempat_lahir  : document.getElementById('fTtl').value.trim(),
-    tgl_lahir     : document.getElementById('fTgl').value,
-    jenis_kelamin : document.getElementById('fJk').value,
-    no_hp         : hp,
-    email         : email,
-    sekolah       : document.getElementById('fSekolah').value.trim(),
-    tahun_lulus   : document.getElementById('fLulus').value,
-    gelombang     : g ? g.nama : '',
-    skema         : sel.skema ? sel.skema.nama : '',
-    mitra         : sel.mitra ? sel.mitra.nama : '',
-    jalur         : sel.jalur ? sel.jalur.nama : '',
-    prodi         : sel.prodi || '',
-    spa_bayar     : spaAft,
-    spp           : spp,
-    ang_pertama   : ang1
-  };
-
-  fetch(API_URL, {
-    method : 'POST',
-    body   : JSON.stringify(payload)
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(res){
-    if (res.success) {
-      document.getElementById('modalSuccess').classList.add('show');
-    } else {
-      alert('Terjadi kesalahan: '+res.error);
-    }
-  })
-  .catch(function(){
-    // Tetap tampilkan modal meski network error (GAS kadang no-CORS)
-    document.getElementById('modalSuccess').classList.add('show');
-  });
-}
 
 // ═══════════════════════════════════════════════════════
 //  HELPER: EXPAND PRODI, FILTER PRODI
@@ -2065,3 +2168,171 @@ loadData();
 </script>
 </body>
 </html>
+
+// ═══════════════════════════════════════════════════════
+//  STATE VERIFIKASI
+// ═══════════════════════════════════════════════════════
+var verifState = { email: false, wa: false };
+
+function initFormStep5() {
+  var provSel = document.getElementById('fProvinsi');
+  if (provSel && D.prov_kab) {
+    var provs = Object.keys(D.prov_kab).sort();
+    provSel.innerHTML = '<option value="">— Pilih Provinsi —</option>';
+    provs.forEach(function(p){ provSel.innerHTML += '<option value="'+p+'">'+p+'</option>'; });
+  }
+  var jurSel = document.getElementById('fJurusanSekolah');
+  if (jurSel && D.jurusan_sma) {
+    jurSel.innerHTML = '<option value="">— Pilih Jurusan —</option>';
+    D.jurusan_sma.forEach(function(j){ jurSel.innerHTML += '<option value="'+j+'">'+j+'</option>'; });
+  }
+  if (D.verif_config) {
+    if (!D.verif_config.email_enabled) { verifState.email=true; updateBadgeVerif('email',true); }
+    if (!D.verif_config.wa_enabled)    { verifState.wa=true;    updateBadgeVerif('wa',true); }
+  }
+}
+
+function updateKabupaten() {
+  var prov=document.getElementById('fProvinsi').value;
+  var sel2=document.getElementById('fKota');
+  if(!prov||!D.prov_kab||!D.prov_kab[prov]){ sel2.innerHTML='<option value="">— Pilih Provinsi dulu —</option>'; return; }
+  var kabs=D.prov_kab[prov].sort();
+  sel2.innerHTML='<option value="">— Pilih Kota/Kabupaten —</option>';
+  kabs.forEach(function(k){ sel2.innerHTML+='<option value="'+k+'">'+k+'</option>'; });
+}
+
+function kirimOtp(tipe) {
+  var target,btnId,rowId;
+  if(tipe==='email'){
+    target=(document.getElementById('fEmail')||{}).value||'';
+    btnId='btnOtpEmail'; rowId='emailVerifRow';
+    if(!target.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)){ alert('Masukkan email yang valid.'); return; }
+  } else {
+    target=(document.getElementById('fWa')||{}).value||'';
+    btnId='btnOtpWa'; rowId='waVerifRow';
+    if(!target.match(/^0[0-9]{8,12}$/)){ alert('Masukkan nomor WhatsApp yang valid (contoh: 08123456789).'); return; }
+  }
+  var btn=document.getElementById(btnId);
+  if(btn){ btn.disabled=true; btn.textContent='Mengirim...'; }
+  var body=tipe==='email'
+    ? {action:'kirim_otp_email',email:target}
+    : {action:'kirim_otp_wa',phone:target};
+  fetch(API_URL,{method:'POST',body:JSON.stringify(body)})
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if(res.success||res.skipped){
+        var row=document.getElementById(rowId);
+        if(row) row.style.display='block';
+        if(btn){ btn.textContent='Kirim Ulang'; btn.disabled=false; }
+        if(res.skipped){ verifState[tipe]=true; updateBadgeVerif(tipe,true); }
+        else alert('Kode dikirim! Cek '+(tipe==='email'?'email':'WhatsApp')+' kamu.');
+      } else {
+        alert('Gagal: '+(res.error||'Coba lagi.'));
+        if(btn){ btn.disabled=false; btn.textContent='Kirim Kode'; }
+      }
+    }).catch(function(){ alert('Gagal terhubung.'); if(btn){ btn.disabled=false; btn.textContent='Kirim Kode'; } });
+}
+
+function verifikasiOtp(tipe) {
+  var target,tokenId,statusId,btnId;
+  if(tipe==='email'){ target=(document.getElementById('fEmail')||{}).value||''; tokenId='fOtpEmail'; statusId='statusEmail'; btnId='btnVerifEmail'; }
+  else { target=(document.getElementById('fWa')||{}).value||''; target=target.replace(/^0/,'62').replace(/^\+/,''); tokenId='fOtpWa'; statusId='statusWa'; btnId='btnVerifWa'; }
+  var token=(document.getElementById(tokenId)||{}).value||'';
+  var btn=document.getElementById(btnId); var status=document.getElementById(statusId);
+  if(!token||token.length<6){ alert('Masukkan kode 6 karakter.'); return; }
+  if(btn){ btn.disabled=true; btn.textContent='Memeriksa...'; }
+  fetch(API_URL,{method:'POST',body:JSON.stringify({action:'verif_otp',target:target,tipe:tipe,token:token.toUpperCase()})})
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if(res.valid){ verifState[tipe]=true; updateBadgeVerif(tipe,true); if(status){ status.textContent='✅ Berhasil!'; status.style.color='var(--success)'; } if(btn) btn.style.display='none'; }
+      else{ if(status){ status.textContent='❌ '+(res.error||'Kode tidak valid.'); status.style.color='var(--error)'; } if(btn){ btn.disabled=false; btn.textContent='Verifikasi'; } }
+    }).catch(function(){ if(status){ status.textContent='❌ Gagal terhubung.'; status.style.color='var(--error)'; } if(btn){ btn.disabled=false; btn.textContent='Verifikasi'; } });
+}
+
+function updateBadgeVerif(tipe,ok) {
+  var el=document.getElementById(tipe==='email'?'badgeEmail':'badgeWa');
+  if(el) el.innerHTML=ok?'✅ <span style="color:var(--success);font-weight:500;">Terverifikasi</span>':'⬜ Belum';
+}
+
+var _sekolahTimer=null;
+function cariSekolahDebounce(q){ clearTimeout(_sekolahTimer); _sekolahTimer=setTimeout(function(){ cariSekolahApi(q); },400); }
+function cariSekolahApi(q) {
+  var hasil=document.getElementById('hasilCariSekolah');
+  if(!q||q.length<3){ if(hasil) hasil.style.display='none'; return; }
+  fetch(API_URL+'?action=cari_sekolah&q='+encodeURIComponent(q))
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data||!data.length){ hasil.innerHTML='<div style="padding:12px;font-size:0.75rem;color:var(--muted);">Tidak ditemukan. Gunakan Input Manual.</div>'; }
+      else { hasil.innerHTML=data.map(function(s){ return '<div onclick="pilihSekolah(\''+s.npsn+'\',\''+s.nama_sekolah.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\');" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);font-size:0.8rem;" onmouseover="this.style.background=\'var(--light)\'" onmouseout="this.style.background=\'\'"><strong>'+s.nama_sekolah+'</strong><br><span style="color:var(--muted);">NPSN: '+s.npsn+' · '+s.kabupaten+', '+s.provinsi+'</span></div>'; }).join(''); }
+      hasil.style.display='block';
+    }).catch(function(){ if(hasil) hasil.style.display='none'; });
+}
+function pilihSekolah(npsn,nama) {
+  document.getElementById('fNpsnHidden').value=npsn;
+  document.getElementById('fNamaSekolahHidden').value=nama;
+  var t=document.getElementById('sekolahTerpilih');
+  t.textContent='✅ '+nama+' (NPSN: '+npsn+')'; t.style.display='block';
+  document.getElementById('hasilCariSekolah').style.display='none';
+  document.getElementById('fCariSekolah').value=nama;
+  document.getElementById('manualSekolahGroup').style.display='none';
+}
+function toggleManualSekolah() {
+  var grp=document.getElementById('manualSekolahGroup');
+  var vis=grp.style.display!=='none'; grp.style.display=vis?'none':'block';
+  if(!vis){ document.getElementById('fNpsnHidden').value=''; document.getElementById('fNamaSekolahHidden').value=''; document.getElementById('sekolahTerpilih').style.display='none'; }
+}
+
+function submitDaftar() {
+  var emailEnabled=D.verif_config?D.verif_config.email_enabled:true;
+  var waEnabled=D.verif_config?D.verif_config.wa_enabled:true;
+  if(emailEnabled&&!verifState.email){ alert('Email belum diverifikasi.'); return; }
+  if(waEnabled&&!verifState.wa){ alert('WhatsApp belum diverifikasi.'); return; }
+  var nama=(document.getElementById('fNama')||{}).value||'';
+  var email=(document.getElementById('fEmail')||{}).value||'';
+  var wa=(document.getElementById('fWa')||{}).value||'';
+  if(!nama||!email||!wa){ alert('Harap lengkapi Nama, Email, dan Nomor WhatsApp.'); return; }
+  var npsn=document.getElementById('fNpsnHidden').value||(document.getElementById('fNpsn')||{}).value||'';
+  var namaSekolah=document.getElementById('fNamaSekolahHidden').value||(document.getElementById('fNamaSekolah')||{}).value||'';
+  var g=getGelData(); var b=getBiayaData(); var j=getJalurData();
+  var hb=(b&&j)?hitungBiaya(b,j):{spaFinal:0,sppFinal:0,spaNorm:0};
+  var dpPct=getCicilanDP()/100;
+  var ang1=Math.round((hb.spaFinal||0)*dpPct)+(hb.sppFinal||0);
+  var payload={
+    action:'daftar',
+    gelombang:g?g.nama:'', skema:sel.skema?sel.skema.nama:'',
+    jalur:sel.jalur?sel.jalur.nama:'',
+    jalur_subtipe:(sel.jalur&&sel.jalur.rplSubtipe)?sel.jalur.rplSubtipe.nama:'',
+    mitra:sel.mitra?sel.mitra.nama:'', prodi:sel.prodi||'',
+    nama_lengkap:nama, nik:(document.getElementById('fNik')||{}).value||'',
+    tempat_lahir:(document.getElementById('fTtl')||{}).value||'',
+    tanggal_lahir:(document.getElementById('fTgl')||{}).value||'',
+    jenis_kelamin:(document.getElementById('fJk')||{}).value||'',
+    agama:(document.getElementById('fAgama')||{}).value||'',
+    email:email, email_verified:verifState.email,
+    no_wa:wa, wa_verified:verifState.wa,
+    alamat_jalan:(document.getElementById('fAlamat')||{}).value||'',
+    rt:(document.getElementById('fRt')||{}).value||'',
+    rw:(document.getElementById('fRw')||{}).value||'',
+    desa_kelurahan:(document.getElementById('fDesa')||{}).value||'',
+    kecamatan:(document.getElementById('fKecamatan')||{}).value||'',
+    kota_kabupaten:(document.getElementById('fKota')||{}).value||'',
+    provinsi:(document.getElementById('fProvinsi')||{}).value||'',
+    nisn:(document.getElementById('fNisn')||{}).value||'',
+    npsn:npsn, nama_sekolah:namaSekolah,
+    jurusan_sekolah:(document.getElementById('fJurusanSekolah')||{}).value||'',
+    rekomendasi:(document.getElementById('fReferral')||{}).value||'',
+    spa_normal:hb.spaNorm||0, spa_bayar:hb.spaFinal||0, spp:hb.sppFinal||0, ang_pertama:ang1
+  };
+  var btn=document.getElementById('btnSubmitFinal');
+  if(btn){ btn.disabled=true; btn.textContent='Mengirim...'; }
+  fetch(API_URL,{method:'POST',body:JSON.stringify(payload)})
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if(res.success){
+        var mt=document.getElementById('modalTitle'); var mb=document.getElementById('modalBody');
+        if(mt) mt.textContent='Pendaftaran Berhasil! 🎉';
+        if(mb) mb.innerHTML='Nomor pendaftaranmu: <strong style="font-size:1.1rem;color:var(--navy);">'+res.no_daftar+'</strong><br><br>Tim admisi akan menghubungi dalam 1×24 jam kerja.';
+        document.getElementById('modalSuccess').classList.add('show');
+      } else { alert('Gagal: '+(res.error||'Coba lagi.')); if(btn){ btn.disabled=false; btn.textContent='🚀 Kirim Pendaftaran'; } }
+    }).catch(function(){ document.getElementById('modalSuccess').classList.add('show'); });
+}
