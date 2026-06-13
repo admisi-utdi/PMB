@@ -991,6 +991,16 @@ function hasKolomKaryawan() {
     return typeof x.tersedia_karyawan !== 'undefined' && x.tersedia_karyawan !== '';
   });
 }
+function isTersediaRpl(p) {
+  var v = p.tersedia_rpl;
+  return (v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1');
+}
+function hasKolomRpl() {
+  if (!D.prodi || !D.prodi.length) return false;
+  return D.prodi.some(function(x){
+    return typeof x.tersedia_rpl !== 'undefined' && x.tersedia_rpl !== '';
+  });
+}
 // Prioritas: icon_url → icon_emoji → fallback
 function renderIcon(iconUrl, iconEmoji, fallbackEmoji, size, bgColor, borderRadius) {
   size         = size         || 40;
@@ -1376,14 +1386,20 @@ function renderWizardJalur() {
 function renderWizardProdi() {
   if (!D.prodi) return;
   var isKaryawan = sel.jalur && sel.jalur.isKaryawan;
+  var isRpl      = sel.jalur && sel.jalur.id === 'rpl';
   var html = '';
   D.prodi.forEach(function(p) {
-  // Filter: karyawan hanya tampilkan prodi dengan tersedia_karyawan=TRUE
-  // Fallback: jika kolom belum ada di sheet, pakai IF dan SI saja
+  // Filter karyawan
   if (isKaryawan) {
-    // tersedia_karyawan dari Sheets = boolean true/false
-    // Cek eksplisit: hanya tampilkan jika benar-benar true
     if (p.tersedia_karyawan !== true && p.tersedia_karyawan !== 'TRUE' && p.tersedia_karyawan !== 'true') return;
+  }
+  // Filter RPL — MR dan MTI tidak tersedia
+  if (isRpl) {
+    var adaKolomR = hasKolomRpl();
+    var bolehRpl  = adaKolomR
+      ? isTersediaRpl(p)
+      : (p.id==='IF'||p.id==='SI'||p.id==='TK'||p.id==='BD'); // fallback
+    if (!bolehRpl) return;
   }
 
     var sppBiaya = D.biaya_spa && D.biaya_spa[p.id] ? (D.biaya_spa[p.id][activeGelId]||D.biaya_spa[p.id]['1']||{}) : {};
