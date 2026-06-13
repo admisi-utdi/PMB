@@ -1214,8 +1214,15 @@ function renderWizardProdi() {
   var isKaryawan = sel.jalur && sel.jalur.isKaryawan;
   var html = '';
   D.prodi.forEach(function(p) {
-    // Filter: karyawan hanya tampilkan prodi dengan tersedia_karyawan=TRUE
-    if (isKaryawan && !(p.tersedia_karyawan==='TRUE'||p.tersedia_karyawan===true)) return;
+  // Filter: karyawan hanya tampilkan prodi dengan tersedia_karyawan=TRUE
+  // Fallback: jika kolom belum ada di sheet, pakai IF dan SI saja
+  if (isKaryawan) {
+    var adaKolom = D.prodi.some(function(x){ return x.tersedia_karyawan !== undefined && x.tersedia_karyawan !== ''; });
+    var bolehKaryawan = adaKolom
+      ? (p.tersedia_karyawan==='TRUE'||p.tersedia_karyawan===true)
+      : (p.id==='IF'||p.id==='SI'); // fallback jika kolom belum ada
+    if (!bolehKaryawan) return;
+  }
 
     var sppBiaya = D.biaya_spa && D.biaya_spa[p.id] ? (D.biaya_spa[p.id][activeGelId]||D.biaya_spa[p.id]['1']||{}) : {};
     // Karyawan: tampil SPP per bulan dari sel.jalur
@@ -1276,8 +1283,13 @@ function cekBiaya() {
 
   // Karyawan: update pilihan prodi sesuai tersedia_karyawan
   if (tipe === 'karyawan' && D.prodi) {
+    var adaKolomK = D.prodi.some(function(x){ return x.tersedia_karyawan !== undefined && x.tersedia_karyawan !== ''; });
     var karyHtml = '';
-    D.prodi.filter(function(p){ return p.tersedia_karyawan==='TRUE'||p.tersedia_karyawan===true; }).forEach(function(p){
+    D.prodi.filter(function(p){
+      return adaKolomK
+        ? (p.tersedia_karyawan==='TRUE'||p.tersedia_karyawan===true)
+        : (p.id==='IF'||p.id==='SI'); // fallback
+    }).forEach(function(p){
       karyHtml += '<option value="'+p.id+'">'+p.nama+' – '+p.jenjang+'</option>';
     });
     if(document.getElementById('cekProdi')) document.getElementById('cekProdi').innerHTML = karyHtml || '<option>Tidak ada prodi tersedia</option>';
