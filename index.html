@@ -808,34 +808,36 @@ function goTo(id){ var el=document.getElementById(id); if(!el) return; var top=e
 function cfg(key, fallback){ return (D.config && D.config[key]) ? D.config[key] : (fallback||''); }
 function txt(key, fallback){ return (D.teks_ui && D.teks_ui[key]) ? D.teks_ui[key] : (fallback||''); }
 
-// ─── TIMEZONE FIX (WIB = GMT+7) ─────────────────────────
 // ─── ICON HELPER ─────────────────────────────────────────
-// Prioritas: icon_url (gambar dari GitHub raw) → icon_emoji → fallback
+// Prioritas: icon_url (PNG transparan putih) → icon_emoji → fallback
 function renderIcon(iconUrl, iconEmoji, fallbackEmoji, size, bgColor, borderRadius) {
   size         = size         || 40;
   bgColor      = bgColor      || 'var(--navy)';
   borderRadius = borderRadius || '10px';
 
+  var wrapStyle = 'width:'+size+'px;height:'+size+'px;'
+    + 'border-radius:'+borderRadius+';'
+    + 'background:'+bgColor+';'
+    + 'display:flex;align-items:center;justify-content:center;'
+    + 'flex-shrink:0;overflow:hidden;';
+
   if (iconUrl && iconUrl.trim() !== '') {
-    // PNG solid — background putih, gambar fill penuh
-    var style = 'width:'+size+'px;height:'+size+'px;border-radius:'+borderRadius
-              + ';background:#ffffff;display:flex;align-items:center;'
-              + 'justify-content:center;flex-shrink:0;overflow:hidden;';
-    return '<div style="'+style+'">'
-         + '<img src="'+iconUrl.trim()+'" alt="icon" '
-         + 'style="width:100%;height:100%;object-fit:cover;" '
-         + 'onerror="this.parentNode.style.background=\''+bgColor+'\';'
-         + 'this.parentNode.innerHTML=\''+(iconEmoji||fallbackEmoji||'📌')+'\'">'
-         + '</div>';
+    // PNG putih transparan: img lebih kecil dari div (62%) + padding visual
+    // Background div (navy/accent) tetap terlihat di sekitar gambar
+    var imgSize = Math.round(size * 0.62) + 'px';
+    var fallbackEm = iconEmoji || fallbackEmoji || '📌';
+    return '<div style="'+wrapStyle+'">'
+      + '<img src="'+iconUrl.trim()+'" '
+      + 'style="width:'+imgSize+';height:'+imgSize+';object-fit:contain;display:block;'
+      + 'filter:brightness(0) invert(1);" '
+      + 'onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<span style=\\"font-size:'
+      + Math.round(size*0.45)+'px\\">'+fallbackEm+'</span>\'">'
+      + '</div>';
   }
 
   // Emoji fallback
-  var em       = (iconEmoji && iconEmoji.trim()) ? iconEmoji.trim() : (fallbackEmoji||'📌');
-  var fontSize = Math.round(size * 0.45)+'px';
-  var styleEm  = 'width:'+size+'px;height:'+size+'px;border-radius:'+borderRadius
-               + ';background:'+bgColor+';display:flex;align-items:center;'
-               + 'justify-content:center;flex-shrink:0;font-size:'+fontSize+';';
-  return '<div style="'+styleEm+'">'+em+'</div>';
+  var em = (iconEmoji && iconEmoji.trim()) ? iconEmoji.trim() : (fallbackEmoji || '📌');
+  return '<div style="'+wrapStyle+'font-size:'+Math.round(size*0.45)+'px;">'+em+'</div>';
 }
 // Parse 'YYYY-MM-DD' dari Sheets sebagai local date (hindari UTC shift)
 function parseDate(str) {
