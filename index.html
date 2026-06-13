@@ -610,6 +610,7 @@ footer{background:#040c1f;color:rgba(255,255,255,0.9);padding:48px 5% 24px;}
         <div class="biaya-item"><div class="bi-left"><h4>Potongan Gelombang</h4><p>Diskon SPA sesuai gelombang</p></div><div class="bi-val green" id="eSPAPot">—</div></div>
         <div class="biaya-item"><div class="bi-left"><h4>SPA yang Dibayar</h4><p>Total setelah potongan</p></div><div class="bi-val accent" id="eSPABayar">—</div></div>
         <div class="biaya-item"><div class="bi-left"><h4>SPP / Semester</h4><p>Sumbangan Penyelenggaraan Pendidikan</p></div><div class="bi-val" id="eSPP">—</div></div>
+        <div class="biaya-item" id="eKemahasiswaanRow" style="display:none;"><div class="bi-left"><h4>Biaya Kemahasiswaan</h4><p>Dibayar satu kali saat registrasi</p></div><div class="bi-val" id="eKemahasiswaan">—</div></div>
         <div class="biaya-item"><div class="bi-left"><h4>Biaya SKS</h4><p>Per satuan kredit semester</p></div><div class="bi-val" id="eSKS">—</div></div>
         <div class="biaya-item"><div class="bi-left"><h4>Aanvullen</h4><p>Biaya tambahan per SKS</p></div><div class="bi-val" id="eAnv">—</div></div>
         <div class="total-box">
@@ -660,49 +661,53 @@ footer{background:#040c1f;color:rgba(255,255,255,0.9);padding:48px 5% 24px;}
         <div class="submit-form">
           <h3 style="margin-bottom:16px;">📱 Kontak & Verifikasi</h3>
 
+          <!-- WhatsApp -->
+          <div class="form-group">
+            <label class="form-label">Nomor WhatsApp * <span style="font-size:0.72rem;color:var(--muted);font-weight:400;">(format: 628xxxxxxxxx)</span></label>
+            <div style="display:flex;gap:8px;">
+              <input type="tel" class="form-input" id="fWa" placeholder="628xxxxxxxxxx" style="flex:1;"
+                oninput="resetVerifWa()">
+              <button type="button" onclick="kirimOtp('wa')" id="btnOtpWa"
+                style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;min-width:90px;">
+                Kirim Kode
+              </button>
+            </div>
+            <div id="waVerifRow" style="display:none;margin-top:10px;">
+              <label style="font-size:0.75rem;color:var(--navy);font-weight:500;margin-bottom:4px;display:block;">Masukkan kode yang dikirim via WhatsApp:</label>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input type="text" class="form-input" id="fOtpWa" placeholder="6 karakter kode" maxlength="6"
+                  style="flex:1;letter-spacing:4px;font-weight:700;font-size:1rem;text-transform:uppercase;text-align:center;">
+                <button type="button" onclick="verifikasiOtp('wa')" id="btnVerifWa"
+                  style="background:#22c55e;color:#fff;border:none;border-radius:10px;padding:0 16px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;height:42px;">
+                  Verifikasi ✓
+                </button>
+              </div>
+              <div id="statusWa" style="font-size:0.75rem;margin-top:6px;min-height:18px;"></div>
+            </div>
+          </div>
+
           <!-- Email -->
           <div class="form-group">
             <label class="form-label">Email *</label>
             <div style="display:flex;gap:8px;">
-              <input type="email" class="form-input" id="fEmail" placeholder="email@gmail.com" style="flex:1;">
+              <input type="email" class="form-input" id="fEmail" placeholder="email@gmail.com" style="flex:1;"
+                oninput="resetVerifEmail()">
               <button type="button" onclick="kirimOtp('email')" id="btnOtpEmail"
-                style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;">
+                style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;min-width:90px;">
                 Kirim Kode
               </button>
             </div>
-            <div id="emailVerifRow" style="display:none;margin-top:8px;">
+            <div id="emailVerifRow" style="display:none;margin-top:10px;">
+              <label style="font-size:0.75rem;color:var(--navy);font-weight:500;margin-bottom:4px;display:block;">Masukkan kode yang dikirim via Email:</label>
               <div style="display:flex;gap:8px;align-items:center;">
-                <input type="text" class="form-input" id="fOtpEmail" placeholder="Masukkan 6 digit kode" maxlength="6"
-                  style="flex:1;letter-spacing:3px;font-weight:600;text-transform:uppercase;">
+                <input type="text" class="form-input" id="fOtpEmail" placeholder="6 karakter kode" maxlength="6"
+                  style="flex:1;letter-spacing:4px;font-weight:700;font-size:1rem;text-transform:uppercase;text-align:center;">
                 <button type="button" onclick="verifikasiOtp('email')" id="btnVerifEmail"
-                  style="background:var(--success);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;">
-                  Verifikasi
+                  style="background:#22c55e;color:#fff;border:none;border-radius:10px;padding:0 16px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;height:42px;">
+                  Verifikasi ✓
                 </button>
               </div>
-              <div id="statusEmail" style="font-size:0.75rem;margin-top:4px;"></div>
-            </div>
-          </div>
-
-          <!-- WhatsApp -->
-          <div class="form-group">
-            <label class="form-label">Nomor WhatsApp *</label>
-            <div style="display:flex;gap:8px;">
-              <input type="tel" class="form-input" id="fWa" placeholder="08xxxxxxxxxx" style="flex:1;">
-              <button type="button" onclick="kirimOtp('wa')" id="btnOtpWa"
-                style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;">
-                Kirim Kode
-              </button>
-            </div>
-            <div id="waVerifRow" style="display:none;margin-top:8px;">
-              <div style="display:flex;gap:8px;align-items:center;">
-                <input type="text" class="form-input" id="fOtpWa" placeholder="Masukkan 6 digit kode" maxlength="6"
-                  style="flex:1;letter-spacing:3px;font-weight:600;text-transform:uppercase;">
-                <button type="button" onclick="verifikasiOtp('wa')" id="btnVerifWa"
-                  style="background:var(--success);color:#fff;border:none;border-radius:10px;padding:0 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;font-family:inherit;">
-                  Verifikasi
-                </button>
-              </div>
-              <div id="statusWa" style="font-size:0.75rem;margin-top:4px;"></div>
+              <div id="statusEmail" style="font-size:0.75rem;margin-top:6px;min-height:18px;"></div>
             </div>
           </div>
         </div>
@@ -2018,6 +2023,7 @@ function hitungBiaya(b, jalurData) {
     spaNorm:spaNorm, spaAft:spaAft, spaFinal:spaFinal, potAmt:potAmt,
     sppFinal:sppFinal, sppPerBulan:sppPerBulan, isSppBulanan:isSppBulanan,
     sksFinal:sksFinal, anvFinal:aanvulenRPL>0?aanvulenRPL:anvBase,
+    biayaKemahasiswaan: jalurData ? (Number(jalurData.biaya_kemahasiswaan)||0) : 0,
     catatan:catatanJalur, adaOverride:(overrideSPA>=0||overrideSPP>=0||overrideSKS>=0||isSppBulanan)
   };
 }
@@ -2076,12 +2082,25 @@ function updateEstimasi() {
     ? 'Rp 0 (Ditanggung)'
     : isSppBulan ? fmt(hb.sppFinal)+'/bulan' : fmt(hb.sppFinal)+'/semester';
 
-  // SKS
-  document.getElementById('eSKS').textContent = hb.sksFinal === 0
+  // Biaya Kemahasiswaan
+  var kemRow = document.getElementById('eKemahasiswaanRow');
+  if (kemRow) {
+    if (hb.biayaKemahasiswaan > 0) {
+      kemRow.style.display = '';
+      document.getElementById('eKemahasiswaan').textContent = fmt(hb.biayaKemahasiswaan) + ' (sekali bayar)';
+    } else {
+      kemRow.style.display = 'none';
+    }
+  }
+
+  // Anvulen
     ? 'Rp 0 (Ditanggung)' : (hb.sksFinal < 0 ? '—' : fmt(hb.sksFinal)+'/SKS');
 
   // Anvulen
   document.getElementById('eAnv').textContent = hb.anvFinal === 0 ? '—' : fmt(hb.anvFinal)+'/SKS';
+
+  // SKS
+  document.getElementById('eSKS').textContent = hb.sksFinal === 0
 
   // Angsuran pertama & total
   var ang1Label = isSPANol && isSppBulan
@@ -2198,28 +2217,53 @@ function updateKabupaten() {
   kabs.forEach(function(k){ sel2.innerHTML+='<option value="'+k+'">'+k+'</option>'; });
 }
 
+function resetVerifWa() {
+  verifState.wa = false;
+  updateBadgeVerif('wa', false);
+  var row = document.getElementById('waVerifRow');
+  if (row) row.style.display = 'none';
+  var st = document.getElementById('statusWa');
+  if (st) st.textContent = '';
+}
+function resetVerifEmail() {
+  verifState.email = false;
+  updateBadgeVerif('email', false);
+  var row = document.getElementById('emailVerifRow');
+  if (row) row.style.display = 'none';
+  var st = document.getElementById('statusEmail');
+  if (st) st.textContent = '';
+}
+
 function kirimOtp(tipe) {
   var target, btnId, rowId, labelKontak;
   if (tipe === 'email') {
-    target     = (document.getElementById('fEmail')||{}).value||'';
-    btnId      = 'btnOtpEmail';
-    rowId      = 'emailVerifRow';
-    labelKontak= 'email';
+    target      = (document.getElementById('fEmail')||{}).value||'';
+    btnId       = 'btnOtpEmail';
+    rowId       = 'emailVerifRow';
+    labelKontak = 'Email';
     if (!target.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       alert('Masukkan email yang valid terlebih dahulu.'); return;
     }
   } else {
-    target     = (document.getElementById('fWa')||{}).value||'';
-    btnId      = 'btnOtpWa';
-    rowId      = 'waVerifRow';
-    labelKontak= 'WhatsApp';
-    if (!target.match(/^0[0-9]{8,12}$/)) {
-      alert('Masukkan nomor WhatsApp yang valid (contoh: 08123456789).'); return;
+    target      = (document.getElementById('fWa')||{}).value||'';
+    btnId       = 'btnOtpWa';
+    rowId       = 'waVerifRow';
+    labelKontak = 'WhatsApp';
+    // Terima format 08xx atau 628xx
+    target = target.replace(/[\s\-]/g,'');
+    if (target.startsWith('0'))   target = '62' + target.slice(1);
+    if (target.startsWith('+62')) target = target.slice(1);
+    if (target.startsWith('8'))   target = '62' + target;
+    if (!target.match(/^628[0-9]{8,11}$/)) {
+      alert('Nomor WhatsApp tidak valid.\nFormat: 628xxxxxxxxx atau 08xxxxxxxxx'); return;
     }
+    // Update nilai input ke format yang sudah dinormalisasi
+    var waEl = document.getElementById('fWa');
+    if (waEl) waEl.value = target;
   }
 
   var btn = document.getElementById(btnId);
-  if (btn && btn.disabled) return; // cegah double klik
+  if (btn && btn.disabled) return;
   if (btn) { btn.disabled = true; btn.textContent = 'Mengirim...'; }
 
   var body = tipe === 'email'
@@ -2230,34 +2274,30 @@ function kirimOtp(tipe) {
     .then(function(r){ return r.json(); })
     .then(function(res){
       if (res.success || res.skipped) {
-        // Tampilkan baris input kode
         var row = document.getElementById(rowId);
-        if (row) row.style.display = 'block';
-
+        if (row) { row.style.display = 'block'; }
         if (res.skipped) {
-          // Verifikasi dinonaktifkan — langsung tandai verified
           verifState[tipe] = true;
           updateBadgeVerif(tipe, true);
           if (btn) { btn.textContent = 'Terverifikasi ✅'; btn.disabled = true; }
         } else {
-          // Mulai countdown 60 detik
           startCountdown(btn, 60);
-          // Fokus ke input kode
           var inputId = tipe === 'email' ? 'fOtpEmail' : 'fOtpWa';
           var inp = document.getElementById(inputId);
-          if (inp) { inp.value = ''; setTimeout(function(){ inp.focus(); }, 300); }
-          // Notif
+          if (inp) { inp.value = ''; setTimeout(function(){ inp.focus(); }, 200); }
           var statusId = tipe === 'email' ? 'statusEmail' : 'statusWa';
           var st = document.getElementById(statusId);
-          if (st) { st.textContent = '📨 Kode dikirim ke '+labelKontak+' kamu. Cek dan masukkan kode.'; st.style.color = 'var(--navy)'; }
+          if (st) { st.textContent = '📨 Kode dikirim ke '+labelKontak+'. Masukkan kode di atas.'; st.style.color='var(--navy)'; }
         }
       } else {
-        alert('Gagal kirim kode: ' + (res.error || 'Coba lagi.'));
+        var msg = res.error || 'Coba lagi.';
+        if (res.cooldown) msg = '⏳ ' + msg;
+        alert(msg);
         if (btn) { btn.disabled = false; btn.textContent = 'Kirim Kode'; }
       }
     })
     .catch(function(){
-      alert('Gagal terhubung ke server. Coba lagi.');
+      alert('Gagal terhubung ke server.');
       if (btn) { btn.disabled = false; btn.textContent = 'Kirim Kode'; }
     });
 }
@@ -2280,7 +2320,14 @@ function startCountdown(btn, secs) {
 function verifikasiOtp(tipe) {
   var target,tokenId,statusId,btnId;
   if(tipe==='email'){ target=(document.getElementById('fEmail')||{}).value||''; tokenId='fOtpEmail'; statusId='statusEmail'; btnId='btnVerifEmail'; }
-  else { target=(document.getElementById('fWa')||{}).value||''; target=target.replace(/^0/,'62').replace(/^\+/,''); tokenId='fOtpWa'; statusId='statusWa'; btnId='btnVerifWa'; }
+  else {
+    target=(document.getElementById('fWa')||{}).value||'';
+    target=target.replace(/[\s\-]/g,'');
+    if(target.startsWith('0'))   target='62'+target.slice(1);
+    if(target.startsWith('+62')) target=target.slice(1);
+    if(target.startsWith('8'))   target='62'+target;
+    tokenId='fOtpWa'; statusId='statusWa'; btnId='btnVerifWa';
+  }
   var token=(document.getElementById(tokenId)||{}).value||'';
   var btn=document.getElementById(btnId); var status=document.getElementById(statusId);
   if(!token||token.length<6){ alert('Masukkan kode 6 karakter.'); return; }
