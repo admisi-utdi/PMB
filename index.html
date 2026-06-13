@@ -2268,6 +2268,13 @@ function kirimOtp(tipe) {
   if (btn && btn.disabled) return;
   if (btn) { btn.disabled = true; btn.textContent = 'Mengirim...'; }
 
+  // Tampilkan row input token segera agar user siap memasukkan kode
+  var row = document.getElementById(rowId);
+  if (row) row.style.display = 'block';
+  var statusId2 = tipe === 'email' ? 'statusEmail' : 'statusWa';
+  var st2 = document.getElementById(statusId2);
+  if (st2) { st2.textContent = '⏳ Mengirim kode...'; st2.style.color = 'var(--muted)'; }
+
   var body = tipe === 'email'
     ? { action: 'kirim_otp_email', email: target }
     : { action: 'kirim_otp_wa',   phone: target };
