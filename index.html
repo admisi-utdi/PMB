@@ -883,6 +883,8 @@ function loadData() {
     .then(function(r){ return r.json(); })
     .then(function(data){
       D = data;
+      // DEBUG: cek icon_url skema — hapus baris ini setelah confirmed
+      if(D.skema) D.skema.forEach(function(s){ console.log('[SKEMA]', s.nama, '| icon_url:', s.icon_url, '| icon_emoji:', s.icon_emoji); });
       initAll();
       // Sembunyikan loading screen
       var loader = document.getElementById('pmb-loading');
