@@ -1820,7 +1820,9 @@ function filterProdi(tab, cat) {
 function formatTanggal(dateStr) {
   if (!dateStr) return '';
   var d = parseDate(dateStr);
-  var months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  if (!d || isNaN(d.getTime())) return dateStr;
+  var months = ['Januari','Februari','Maret','April','Mei','Juni',
+                'Juli','Agustus','September','Oktober','November','Desember'];
   return d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
 }
 
