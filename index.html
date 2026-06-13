@@ -2291,7 +2291,7 @@ function kirimOtp(tipe) {
           updateBadgeVerif(tipe, true);
           if (btn) { btn.textContent = 'Terverifikasi ✅'; btn.disabled = true; }
         } else {
-          startCountdown(btn, 60);
+          startCountdown(btn, 30);
           var inputId = tipe === 'email' ? 'fOtpEmail' : 'fOtpWa';
           var inp = document.getElementById(inputId);
           if (inp) { inp.value = ''; setTimeout(function(){ inp.focus(); }, 200); }
@@ -2507,7 +2507,22 @@ function submitDaftar() {
           if(sisa <= 0){ clearInterval(cdTimer); tutupModal(); }
         }, 1000);
       } else {
-        alert('Gagal: '+(res.error||'Coba lagi.'));
+        var errMsg = res.error || 'Coba lagi.';
+        if (errMsg.indexOf('sudah terdaftar') !== -1) {
+          // Error duplikat — tampilkan di modal bukan alert
+          var mt = document.getElementById('modalTitle');
+          var mb = document.getElementById('modalBody');
+          if(mt) mt.textContent = '⚠️ Sudah Terdaftar';
+          if(mb) mb.innerHTML = '<p style="color:var(--navy);">'+errMsg+'</p>';
+          var cd = document.getElementById('modalCountdown');
+          if(cd) cd.textContent = '';
+          document.getElementById('modalSuccess').classList.add('show');
+          // Ganti tombol tutup
+          var tutupBtn = document.querySelector('#modalSuccess .modal-btn');
+          if(tutupBtn) tutupBtn.textContent = 'Tutup';
+        } else {
+          alert('Gagal: ' + errMsg);
+        }
         if(btn){ btn.disabled=false; btn.textContent='🚀 Kirim Pendaftaran'; btn.dataset.submitting='false'; }
       }
     })
