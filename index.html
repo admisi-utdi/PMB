@@ -1073,6 +1073,9 @@ function loadData() {
     .then(function(r){ return r.json(); })
     .then(function(data){
       D = data;
+      console.log('[DEBUG] prov_kab keys:', D.prov_kab ? Object.keys(D.prov_kab).length : 'NULL');
+      console.log('[DEBUG] jurusan_sma length:', D.jurusan_sma ? D.jurusan_sma.length : 'NULL');
+      console.log('[DEBUG] verif_config:', JSON.stringify(D.verif_config));
       initAll();
       // Sembunyikan loading screen
       var loader = document.getElementById('pmb-loading');
