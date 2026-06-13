@@ -1212,7 +1212,7 @@ function renderCekBiayaSelect() {
   D.gelombang.forEach(function(g){
     var isCurrent = isGelombangAktif(g);
     var label = g.nama + ' — Potongan ' + g.label_potongan + (isCurrent ? ' ★ AKTIF' : '');
-    gelHtml += '<option value="'+g.id+'"'+(isCurrent?' selected':'')+'>'+label+'</option>';
+    gelHtml += '<option value="'+String(g.id)+'"'+(isCurrent?' selected':'')+'>'+label+'</option>';
   });
   document.getElementById('cekGelSelect').innerHTML = gelHtml;
   cekBiaya();
@@ -1629,9 +1629,9 @@ function cekBiaya() {
   var gelSelId = gelSelEl ? gelSelEl.value : null;
   if (!prodiId || !D.biaya_spa || !D.gelombang) return;
 
-  // Cari gelombang yang dipilih dari select
+  // Cari gelombang yang dipilih dari select — String() karena Sheets bisa return number
   var selectedGel = null;
-  D.gelombang.forEach(function(g){ if(g.id === gelSelId) selectedGel = g; });
+  D.gelombang.forEach(function(g){ if(String(g.id) === String(gelSelId)) selectedGel = g; });
   // Fallback: gelombang aktif hari ini
   if (!selectedGel) {
     D.gelombang.forEach(function(g){
