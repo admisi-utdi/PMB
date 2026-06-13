@@ -1226,8 +1226,9 @@ function renderWizardProdi() {
   // Filter: karyawan hanya tampilkan prodi dengan tersedia_karyawan=TRUE
   // Fallback: jika kolom belum ada di sheet, pakai IF dan SI saja
   if (isKaryawan) {
-    var bolehKaryawan = hasKolomKaryawan() ? isTersediaKaryawan(p) : (p.id==='IF'||p.id==='SI');
-    if (!bolehKaryawan) return;
+    // tersedia_karyawan dari Sheets = boolean true/false
+    // Cek eksplisit: hanya tampilkan jika benar-benar true
+    if (p.tersedia_karyawan !== true && p.tersedia_karyawan !== 'TRUE' && p.tersedia_karyawan !== 'true') return;
   }
 
     var sppBiaya = D.biaya_spa && D.biaya_spa[p.id] ? (D.biaya_spa[p.id][activeGelId]||D.biaya_spa[p.id]['1']||{}) : {};
