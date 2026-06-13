@@ -831,9 +831,9 @@ function isTersediaKaryawan(p) {
   return (v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1');
 }
 function hasKolomKaryawan() {
-  // Cek kolom ada dengan memeriksa tipe data — bukan nilai truthy
-  return D.prodi && D.prodi.some(function(x){
-    return x.tersedia_karyawan !== undefined && x.tersedia_karyawan !== '';
+  if (!D.prodi || !D.prodi.length) return false;
+  return D.prodi.some(function(x){
+    return typeof x.tersedia_karyawan !== 'undefined' && x.tersedia_karyawan !== '';
   });
 }
 // Prioritas: icon_url → icon_emoji → fallback
@@ -1232,9 +1232,8 @@ function renderWizardProdi() {
   }
 
     var sppBiaya = D.biaya_spa && D.biaya_spa[p.id] ? (D.biaya_spa[p.id][activeGelId]||D.biaya_spa[p.id]['1']||{}) : {};
-    // Karyawan: tampil SPP per bulan dari sel.jalur
     var sppLabel;
-    if (isKaryawan && sel.jalur.sppPerBulan > 0) {
+    if (isKaryawan && sel.jalur && sel.jalur.sppPerBulan > 0) {
       sppLabel = fmt(sel.jalur.sppPerBulan)+'/bulan';
     } else {
       sppLabel = sppBiaya.spp_tetap ? fmt(sppBiaya.spp_tetap)+'/sem' : fmt(p.spp_per_sem)+'/sem';
@@ -1627,6 +1626,7 @@ function nextStep(n) {
   currentStep = n;
   document.getElementById('wc'+n).classList.add('active');
   document.getElementById('wl'+n).classList.add('active');
+  if(n===3) renderWizardProdi(); // render ulang agar filter jalur (karyawan dll) aktif
   if(n===4) updateEstimasi();
   if(n===5) updateSubmitSummary();
   var el=document.getElementById('pendaftaran');
