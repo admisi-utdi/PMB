@@ -828,8 +828,13 @@ function txt(key, fallback){ return (D.teks_ui && D.teks_ui[key]) ? D.teks_ui[ke
 
 function isTersediaKaryawan(p) {
   var v = p.tersedia_karyawan;
-  if (v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1') return true;
-  return false;
+  return (v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1');
+}
+function hasKolomKaryawan() {
+  // Cek kolom ada dengan memeriksa tipe data — bukan nilai truthy
+  return D.prodi && D.prodi.some(function(x){
+    return x.tersedia_karyawan !== undefined && x.tersedia_karyawan !== '';
+  });
 }
 // Prioritas: icon_url → icon_emoji → fallback
 function renderIcon(iconUrl, iconEmoji, fallbackEmoji, size, bgColor, borderRadius) {
@@ -918,7 +923,6 @@ function loadData() {
     .then(function(r){ return r.json(); })
     .then(function(data){
       D = data;
-      if(D.prodi) D.prodi.forEach(function(p){ console.log('[PRODI]',p.id,'tersedia_karyawan:',p.tersedia_karyawan, typeof p.tersedia_karyawan); });
       initAll();
       // Sembunyikan loading screen
       var loader = document.getElementById('pmb-loading');
@@ -1222,8 +1226,7 @@ function renderWizardProdi() {
   // Filter: karyawan hanya tampilkan prodi dengan tersedia_karyawan=TRUE
   // Fallback: jika kolom belum ada di sheet, pakai IF dan SI saja
   if (isKaryawan) {
-    var adaKolom = D.prodi.some(function(x){ return x.tersedia_karyawan !== undefined && x.tersedia_karyawan !== ''; });
-    var bolehKaryawan = adaKolom ? isTersediaKaryawan(p) : (p.id==='IF'||p.id==='SI');
+    var bolehKaryawan = hasKolomKaryawan() ? isTersediaKaryawan(p) : (p.id==='IF'||p.id==='SI');
     if (!bolehKaryawan) return;
   }
 
@@ -1286,10 +1289,9 @@ function cekBiaya() {
 
   // Karyawan: update pilihan prodi sesuai tersedia_karyawan
   if (tipe === 'karyawan' && D.prodi) {
-    var adaKolomK = D.prodi.some(function(x){ return x.tersedia_karyawan !== undefined && x.tersedia_karyawan !== ''; });
     var karyHtml = '';
     D.prodi.filter(function(p){
-      return adaKolomK ? isTersediaKaryawan(p) : (p.id==='IF'||p.id==='SI');
+      return hasKolomKaryawan() ? isTersediaKaryawan(p) : (p.id==='IF'||p.id==='SI');
     }).forEach(function(p){
       karyHtml += '<option value="'+p.id+'">'+p.nama+' – '+p.jenjang+'</option>';
     });
