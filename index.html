@@ -934,9 +934,10 @@ footer{background:#040c1f;color:rgba(255,255,255,0.9);padding:48px 5% 24px;}
 <div class="modal-overlay" id="modalSuccess">
   <div class="modal-box">
     <div class="modal-icon">🎉</div>
-    <h2 id="modalTitle">Pendaftaran Terkirim!</h2>
-    <p id="modalBody">Tim admisi UTDI akan menghubungi kamu melalui WhatsApp/Email dalam 1×24 jam kerja.</p>
-    <button class="modal-btn" onclick="document.getElementById('modalSuccess').classList.remove('show')">Tutup</button>
+    <h2 id="modalTitle">Yeeeey!</h2>
+    <div id="modalBody" style="font-size:0.875rem;line-height:1.7;margin-bottom:16px;color:var(--muted);"></div>
+    <button class="modal-btn" onclick="tutupModal()">Tutup & Kembali ke Halaman Utama</button>
+    <div id="modalCountdown" style="font-size:0.72rem;color:var(--muted);margin-top:10px;"></div>
   </div>
 </div>
 
@@ -2349,6 +2350,19 @@ function verifikasiOtp(tipe) {
     }).catch(function(){ if(status){ status.textContent='❌ Gagal terhubung.'; status.style.color='var(--error)'; } if(btn){ btn.disabled=false; btn.textContent='Verifikasi'; } });
 }
 
+function tutupModal() {
+  document.getElementById('modalSuccess').classList.remove('show');
+  verifState = { email: false, wa: false };
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  try {
+    sel = { gel: null, skema: null, jalur: null, mitra: null, prodi: null, rplSubtipe: null };
+    document.querySelectorAll('.wizard-panel').forEach(function(p){ p.classList.remove('active'); });
+    var p0 = document.getElementById('panel0');
+    if (p0) p0.classList.add('active');
+    updateProgress(0);
+  } catch(e) {}
+}
+
 function updateBadgeVerif(tipe,ok) {
   var el=document.getElementById(tipe==='email'?'badgeEmail':'badgeWa');
   if(el) el.innerHTML=ok?'✅ <span style="color:var(--success);font-weight:500;">Terverifikasi</span>':'⬜ Belum';
@@ -2455,10 +2469,29 @@ function submitDaftar() {
     .then(function(r){ return r.json(); })
     .then(function(res){
       if(res.success){
-        var mt=document.getElementById('modalTitle'); var mb=document.getElementById('modalBody');
-        if(mt) mt.textContent='Pendaftaran Berhasil! 🎉';
-        if(mb) mb.innerHTML='Nomor pendaftaranmu: <strong style="font-size:1.1rem;color:var(--navy);">'+res.no_daftar+'</strong><br><br>Tim admisi akan menghubungi dalam 1×24 jam kerja.';
+        var nama_daftar = (document.getElementById('fNama')||{}).value||'Pendaftar';
+        var mt=document.getElementById('modalTitle');
+        var mb=document.getElementById('modalBody');
+        if(mt) mt.textContent='Yeeeey! 🎉';
+        if(mb) mb.innerHTML=
+          '<p style="font-size:1rem;color:var(--navy);margin-bottom:12px;">'
+          +'<strong>'+nama_daftar+'</strong>... Pendaftaranmu di UTDI telah berhasil!</p>'
+          +'<div style="background:rgba(245,176,65,0.1);border:2px solid var(--accent);border-radius:12px;padding:14px 18px;margin-bottom:14px;text-align:center;">'
+          +'<div style="font-size:0.8rem;color:var(--muted);margin-bottom:4px;">Nomor Pendaftaran</div>'
+          +'<div style="font-size:1.4rem;font-weight:800;color:var(--navy);letter-spacing:2px;">'+res.no_daftar+'</div>'
+          +'</div>'
+          +'<p style="font-size:0.85rem;color:var(--muted);">Segera periksa <strong>WhatsApp</strong> dan/atau <strong>Email</strong> kamu, '
+          +'dan segera aktifkan akun kamu dengan klik tautan yang dikirimkan.</p>';
         document.getElementById('modalSuccess').classList.add('show');
+        // Countdown otomatis tutup 10 detik
+        var sisa = 10;
+        var cd = document.getElementById('modalCountdown');
+        if(cd) cd.textContent = 'Halaman akan otomatis kembali dalam '+sisa+' detik...';
+        var cdTimer = setInterval(function(){
+          sisa--;
+          if(cd) cd.textContent = 'Halaman akan otomatis kembali dalam '+sisa+' detik...';
+          if(sisa <= 0){ clearInterval(cdTimer); tutupModal(); }
+        }, 1000);
       } else { alert('Gagal: '+(res.error||'Coba lagi.')); if(btn){ btn.disabled=false; btn.textContent='🚀 Kirim Pendaftaran'; } }
     }).catch(function(){ document.getElementById('modalSuccess').classList.add('show'); });
 }
