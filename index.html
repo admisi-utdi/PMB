@@ -1449,7 +1449,19 @@ function cekBiaya() {
       karyHtml += '<option value="'+p.id+'">'+p.nama+' – '+p.jenjang+'</option>';
     });
     if(document.getElementById('cekProdi')) document.getElementById('cekProdi').innerHTML = karyHtml || '<option>Tidak ada prodi tersedia</option>';
+  } else if (tipe === 'rpl_eksternal' || tipe === 'rpl_alumni') {
+    // RPL: filter prodi yang tersedia_rpl=TRUE, fallback IF/SI/TK/BD
+    var rplHtml = '';
+    D.prodi.filter(function(p){
+      return hasKolomRpl()
+        ? isTersediaRpl(p)
+        : (p.id==='IF'||p.id==='SI'||p.id==='TK'||p.id==='BD');
+    }).forEach(function(p){
+      rplHtml += '<option value="'+p.id+'">'+p.nama+' – '+p.jenjang+'</option>';
+    });
+    if(document.getElementById('cekProdi')) document.getElementById('cekProdi').innerHTML = rplHtml || '<option>Tidak ada prodi tersedia</option>';
   } else if (tipe !== 's2' && D.prodi) {
+    // Reguler / alumni / kemitraan — semua prodi S1
     var s1Html = '';
     D.prodi.filter(function(p){ return p.jenjang !== 'S2'; }).forEach(function(p){
       s1Html += '<option value="'+p.id+'">'+p.nama+' – '+p.jenjang+'</option>';
@@ -1480,21 +1492,23 @@ function cekBiaya() {
   var crTotalLabel = document.getElementById('crTotalLabel');
 
   if (tipe === 'karyawan') {
-    // SPP Rp1.200.000/bulan, no SPA
     if(crSPANormRow) crSPANormRow.style.display='none';
     if(crSPAPotRow)  crSPAPotRow.style.display='none';
     if(crSPAByrRow)  crSPAByrRow.style.display='none';
+    // SKS tidak berlaku untuk karyawan
+    var crSKSEl  = document.getElementById('crSKS');
+    var crSKSRow = crSKSEl ? crSKSEl.closest('.cr-row') : null;
+    if(crSKSRow) crSKSRow.style.display='none';
     if(crSPPLabel)   crSPPLabel.textContent='Per bulan';
     if(crTotalLabel) crTotalLabel.textContent='Total per bulan';
-    document.getElementById('crSPP').textContent  = 'Rp 1.200.000/bulan';
-    document.getElementById('crSKS').textContent  = 'Rp 150.000/SKS';
-    document.getElementById('crAnv').textContent  = '—';
-    document.getElementById('crSNorm').textContent= '—';
-    document.getElementById('crSPot').textContent = '—';
-    document.getElementById('crSBayar').textContent='—';
-    document.getElementById('crTotal').textContent= 'Rp 1.200.000/bulan';
+    document.getElementById('crSPP').textContent   = 'Rp 1.200.000/bulan';
+    document.getElementById('crAnv').textContent   = '—';
+    document.getElementById('crSNorm').textContent = '—';
+    document.getElementById('crSPot').textContent  = '—';
+    document.getElementById('crSBayar').textContent= '—';
+    document.getElementById('crTotal').textContent = 'Rp 1.200.000/bulan';
     document.getElementById('crCicilanRows').innerHTML='<div style="opacity:0.6;font-size:0.8rem;padding:6px 0;">Dibayar setiap bulan, tidak ada cicilan SPA.</div>';
-    if(catatanTipeEl){ catatanTipeEl.style.display='block'; catatanTipeEl.textContent='SPA tidak berlaku untuk Kelas Karyawan.'; }
+    if(catatanTipeEl){ catatanTipeEl.style.display='block'; catatanTipeEl.textContent='SPA dan Biaya SKS tidak berlaku untuk Kelas Karyawan.'; }
     return;
   }
 
@@ -1539,6 +1553,10 @@ function cekBiaya() {
   if(crSPANormRow) crSPANormRow.style.display='';
   if(crSPAPotRow)  crSPAPotRow.style.display='';
   if(crSPAByrRow)  crSPAByrRow.style.display='';
+  // Tampilkan kembali baris SKS yang mungkin disembunyikan oleh tipe lain
+  var crSKSElR  = document.getElementById('crSKS');
+  var crSKSRowR = crSKSElR ? crSKSElR.closest('.cr-row') : null;
+  if(crSKSRowR) crSKSRowR.style.display='';
   if(crSPPLabel)   crSPPLabel.textContent='Per semester';
   if(crTotalLabel) crTotalLabel.textContent='Total SPA (setelah potongan)';
   if(catatanTipeEl) catatanTipeEl.style.display='none';
