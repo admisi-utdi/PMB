@@ -1492,23 +1492,27 @@ function cekBiaya() {
   var crTotalLabel = document.getElementById('crTotalLabel');
 
   if (tipe === 'karyawan') {
+    // Cek ada_biaya_sks dari sheet jalur
+    var jalurKaryawan = D.jalur ? D.jalur.find(function(j){ return j.id==='karyawan'; }) : null;
+    var adaSKS = jalurKaryawan && (jalurKaryawan.ada_biaya_sks===true || jalurKaryawan.ada_biaya_sks==='TRUE');
     if(crSPANormRow) crSPANormRow.style.display='none';
     if(crSPAPotRow)  crSPAPotRow.style.display='none';
     if(crSPAByrRow)  crSPAByrRow.style.display='none';
-    // SKS tidak berlaku untuk karyawan
     var crSKSEl  = document.getElementById('crSKS');
     var crSKSRow = crSKSEl ? crSKSEl.closest('.cr-row') : null;
-    if(crSKSRow) crSKSRow.style.display='none';
+    if(crSKSRow) crSKSRow.style.display = adaSKS ? '' : 'none';
     if(crSPPLabel)   crSPPLabel.textContent='Per bulan';
     if(crTotalLabel) crTotalLabel.textContent='Total per bulan';
     document.getElementById('crSPP').textContent   = 'Rp 1.200.000/bulan';
+    if(crSKSEl)      crSKSEl.textContent            = adaSKS ? 'Rp 150.000/SKS' : '—';
     document.getElementById('crAnv').textContent   = '—';
     document.getElementById('crSNorm').textContent = '—';
     document.getElementById('crSPot').textContent  = '—';
     document.getElementById('crSBayar').textContent= '—';
     document.getElementById('crTotal').textContent = 'Rp 1.200.000/bulan';
     document.getElementById('crCicilanRows').innerHTML='<div style="opacity:0.6;font-size:0.8rem;padding:6px 0;">Dibayar setiap bulan, tidak ada cicilan SPA.</div>';
-    if(catatanTipeEl){ catatanTipeEl.style.display='block'; catatanTipeEl.textContent='SPA dan Biaya SKS tidak berlaku untuk Kelas Karyawan.'; }
+    var catatan = 'SPA tidak berlaku untuk Kelas Karyawan.' + (adaSKS ? '' : ' Biaya SKS tidak berlaku.');
+    if(catatanTipeEl){ catatanTipeEl.style.display='block'; catatanTipeEl.textContent=catatan; }
     return;
   }
 
@@ -2109,9 +2113,16 @@ function updateEstimasi() {
     }
   }
 
-  // SKS
-  document.getElementById('eSKS').textContent = hb.sksFinal === 0
-    ? 'Rp 0 (Ditanggung)' : (hb.sksFinal < 0 ? '—' : fmt(hb.sksFinal)+'/SKS');
+  // SKS — cek ada_biaya_sks dari jalur
+  var jalurDataSKS = sel.jalur ? D.jalur && D.jalur.find(function(x){ return x.id===sel.jalur.id; }) : null;
+  var adaBiayaSKS  = jalurDataSKS
+    ? (jalurDataSKS.ada_biaya_sks === true || jalurDataSKS.ada_biaya_sks === 'TRUE')
+    : true; // default: ada
+  var eSKSRow = document.getElementById('eSKS') ? document.getElementById('eSKS').closest('.biaya-item') : null;
+  if (eSKSRow) eSKSRow.style.display = adaBiayaSKS ? '' : 'none';
+  document.getElementById('eSKS').textContent = !adaBiayaSKS ? '—'
+    : hb.sksFinal === 0 ? 'Rp 0 (Ditanggung)'
+    : (hb.sksFinal < 0 ? '—' : fmt(hb.sksFinal)+'/SKS');
 
   // Anvulen
   document.getElementById('eAnv').textContent = hb.anvFinal === 0 ? '—' : fmt(hb.anvFinal)+'/SKS';
